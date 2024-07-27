@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("v1/api")
+@RequestMapping("/v1/api/eventz")
 public class EventController {
 
     @GetMapping
