@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Meeting with Client A",
+    "description": "Discuss project requirements and timeline",
+    "location": "Conference Room 1",
+    "date": 1671289200000,
+    "createdAt": 1671200000000
+  },
+  {
+    "title": "Team Lunch",
+    "description": "Monthly team lunch to celebrate achievements",
+    "location": "Office cafeteria",
+    "date": 1671548400000,
+    "createdAt": 1671530000000
+  },
+  {
+    "title": "Product Launch Event",
+    "description": "Launch of new product line X",
+    "location": "City Convention Center",
+    "date": 1671894000000,
+    "createdAt": 1671800000000
+  },
+  {
+    "title": "Training Workshop",
+    "description": "Training session on new software tools",
+    "location": "Training Room 3",
+    "date": 1672153200000,
+    "createdAt": 1672140000000
+  },
+  {
+    "title": "Company Town Hall",
+    "description": "Quarterly town hall meeting for all employees",
+    "location": "Main Auditorium",
+    "date": 1672502400000,
+    "createdAt": 1672400000000
+  },
+  {
+    "title": "Team Building Activity",
+    "description": "Outdoor team building exercises and games",
+    "location": "Local Park",
+    "date": 1672761600000,
+    "createdAt": 1672750000000
+  },
+  {
+    "title": "Client Demo",
+    "description": "Demo of prototype to Client B",
+    "location": "Client B's Office",
+    "date": 1673110800000,
+    "createdAt": 1673100000000
+  },
+  {
+    "title": "Internal Hackathon",
+    "description": "24-hour hackathon to promote innovation",
+    "location": "Innovation Lab",
+    "date": 1673370000000,
+    "createdAt": 1673360000000
+  },
+  {
+    "title": "Annual Company Picnic",
+    "description": "Company-wide picnic and outdoor games",
+    "location": "Local Park",
+    "date": 1673719200000,
+    "createdAt": 1673700000000
+  },
+  {
+    "title": "Board of Directors Meeting",
+    "description": "Quarterly meeting of the Board of Directors",
+    "location": "Board Room",
+    "date": 1673982000000,
+    "createdAt": 1673970000000
+  }
+]
