@@ -14,7 +14,7 @@ public class Event {
     private Integer id;
     private String title;
     private String description;
-    private String local;
+    private String location;
     private Date date;
     private Date createdAt;
 
@@ -24,7 +24,7 @@ public class Event {
     public Event(String title, String description, String local, Date date, Date createdAt) {
         this.title = title;
         this.description = description;
-        this.local = local;
+        this.location = local;
         this.date = date;
         this.createdAt = createdAt;
     }
@@ -47,11 +47,11 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
-    public String getLocal() {
-        return local;
+    public String getLocation() {
+        return location;
     }
-    public void setLocal(String local) {
-        this.local = local;
+    public void setLocation(String local) {
+        this.location = local;
     }
     public Date getDate() {
         return date;
