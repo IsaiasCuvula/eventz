@@ -11,12 +11,12 @@ import jakarta.persistence.Table;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String title;
-    String description;
-    String local;
-    Date date;
-    Date createdAt;
+    private Integer id;
+    private String title;
+    private String description;
+    private String local;
+    private Date date;
+    private Date createdAt;
 
     
     public Event() {}
