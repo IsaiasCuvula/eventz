@@ -1,9 +1,7 @@
 package com.bersyte.eventz.services;
 import java.util.*;
-
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.models.Event;
@@ -50,5 +48,25 @@ public class EventService {
                 event. getCreatedAt()
             )
         ).toList();
+    }
+
+    public EventResponseDTO getEventById(Integer id){
+        Optional<Event> eventOptional = repository.findById(id);
+
+        if(!eventOptional.isPresent()){
+            throw new IllegalArgumentException("Event not found");
+        }
+
+        Event event = eventOptional.get();
+
+        return new EventResponseDTO(
+            event.getId(),
+            event.getTitle(),
+            event.getDescription(),
+            event.getLocation(),
+            event.getDate(),
+            event. getCreatedAt()
+        );
+
     }
 }
