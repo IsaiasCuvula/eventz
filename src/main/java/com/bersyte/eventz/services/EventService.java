@@ -1,10 +1,13 @@
-package com.beryste.eventz.services;
+package com.bersyte.eventz.services;
 import java.util.*;
+
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import com.beryste.eventz.dto.EventRequestDTO;
-import com.beryste.eventz.dto.EventResponseDTO;
-import com.beryste.eventz.models.Event;
-import com.beryste.eventz.repositories.EventRepository;
+
+import com.bersyte.eventz.dto.EventRequestDTO;
+import com.bersyte.eventz.dto.EventResponseDTO;
+import com.bersyte.eventz.models.Event;
+import com.bersyte.eventz.repositories.EventRepository;
 
 @Service
 public class EventService {
@@ -26,17 +29,18 @@ public class EventService {
         newEvent.setCreatedAt(new Date(data.createdAt()));
 
         try {
-            repository.save(newEvent);
+           repository.save(newEvent);
         } catch (Exception e) {
            System.out.println("Something went wrong: " + e.getLocalizedMessage());
         }
         return newEvent;
     }
 
-    public List<EventResponseDTO> getAllEvents(){
-        List<Event> result = repository.findAll();
+    public List<EventResponseDTO> getAllEvents(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventsPerPage = repository.findAll(pageable);
         
-        return result.stream().map(event ->  
+        return eventsPerPage.stream().map(event ->  
             new EventResponseDTO(
                 event.getId(),
                 event.getTitle(),

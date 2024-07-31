@@ -1,4 +1,4 @@
-package com.beryste.eventz;
+package com.bersyte.eventz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

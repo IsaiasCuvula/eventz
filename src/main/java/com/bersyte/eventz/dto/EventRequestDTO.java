@@ -1,4 +1,4 @@
-package com.beryste.eventz.dto;
+package com.bersyte.eventz.dto;
 import java.util.Date;
 
 public record EventRequestDTO(

@@ -1,4 +1,4 @@
-package com.beryste.eventz.models;
+package com.bersyte.eventz.models;
 import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
