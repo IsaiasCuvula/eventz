@@ -4,13 +4,17 @@
 
 ## Endpoints 
 
-GET: `http://localhost:8080/v1/eventz?page=1&size=10`
+HTTP Method − GET
+URL − `http://localhost:8080/v1/eventz?page=1&size=10`
 
-POST: `http://localhost:8080/v1/eventz` //include the body
+HTTP Method − POST: 
+URL − `http://localhost:8080/v1/eventz` //include the body
 
-UPDATE: `http://localhost:8080/v1/eventz/{id}`
+HTTP Method − UPDATE:
+URL − `http://localhost:8080/v1/eventz/{id}`
 
-DELETE: `http://localhost:8080/v1/eventz/{id}`
+HTTP Method − DELETE: 
+URL − `http://localhost:8080/v1/eventz/{id}`
 
 
 ### Search Events
