@@ -21,10 +21,10 @@ public class Event {
     
     public Event() {}
 
-    public Event(String title, String description, String local, Date date, Date createdAt) {
+    public Event(String title, String description, String location, Date date, Date createdAt) {
         this.title = title;
         this.description = description;
-        this.location = local;
+        this.location = location;
         this.date = date;
         this.createdAt = createdAt;
     }
