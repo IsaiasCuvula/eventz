@@ -1,7 +1,8 @@
 package com.beryste.eventz.services;
-import java.util.Date;
+import java.util.*;
 import org.springframework.stereotype.Service;
 import com.beryste.eventz.dto.EventRequestDTO;
+import com.beryste.eventz.dto.EventResponseDTO;
 import com.beryste.eventz.models.Event;
 import com.beryste.eventz.repositories.EventRepository;
 
@@ -20,7 +21,7 @@ public class EventService {
         Event newEvent = new Event();
         newEvent.setTitle(data.title());
         newEvent.setDescription(data.description());
-        newEvent.setLocation(data.local());
+        newEvent.setLocation(data.location());
         newEvent.setDate(new Date(data.date()));
         newEvent.setCreatedAt(new Date(data.createdAt()));
 
@@ -30,5 +31,20 @@ public class EventService {
            System.out.println("Something went wrong: " + e.getLocalizedMessage());
         }
         return newEvent;
+    }
+
+    public List<EventResponseDTO> getAllEvents(){
+        List<Event> result = repository.findAll();
+        
+        return result.stream().map(event ->  
+            new EventResponseDTO(
+                event.getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getLocation(),
+                event.getDate(),
+                event. getCreatedAt()
+            )
+        ).toList();
     }
 }
