@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -46,6 +48,12 @@ public class EventController {
    public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Integer id) {
         EventResponseDTO response = this.service.getEventById(id);
        return ResponseEntity.ok(response);
+   }
+
+   @PutMapping("{id}")
+   public ResponseEntity<Event> updateEvent(@PathVariable Integer id, @RequestBody EventRequestDTO data) {
+        Event event = this.service.updateEvent(id, data);
+        return ResponseEntity.ok(event);
    }
    
 }

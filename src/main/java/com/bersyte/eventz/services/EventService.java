@@ -37,7 +37,7 @@ public class EventService {
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-        
+        //TODO - CREATE an EntityToDtoMapper
         return eventsPerPage.stream().map(event ->  
             new EventResponseDTO(
                 event.getId(),
@@ -45,28 +45,55 @@ public class EventService {
                 event.getDescription(),
                 event.getLocation(),
                 event.getDate(),
-                event. getCreatedAt()
+                event.getCreatedAt()
             )
         ).toList();
     }
 
     public EventResponseDTO getEventById(Integer id){
-        Optional<Event> eventOptional = repository.findById(id);
-
-        if(!eventOptional.isPresent()){
-            throw new IllegalArgumentException("Event not found");
-        }
-
-        Event event = eventOptional.get();
-
+        Event event = this.findEventById(id);
+        //TODO - CREATE an EntityToDtoMapper
         return new EventResponseDTO(
             event.getId(),
             event.getTitle(),
             event.getDescription(),
             event.getLocation(),
             event.getDate(),
-            event. getCreatedAt()
+            event.getCreatedAt()
         );
+    }
 
+    public Event updateEvent(Integer id, EventRequestDTO data){
+         Event event = this.findEventById(id);
+
+         //TODO - Improve this validation - find the best way to do this
+         if(data.title() != null ){
+           event.setTitle(data.title());
+         }
+         if(data.description() != null ){
+            event.setDescription(data.description());
+         }
+         if(data.location() != null ){
+           event.setLocation(data.location());
+         }
+         if(data.date() != null ){
+           event.setDate(new Date(data.date()));
+         }
+
+         try {
+            repository.save(event);
+         } catch (Exception e) {
+            System.out.println("Something went wrong: " + e.getLocalizedMessage());
+         }
+         return event;
+    }
+
+    private Event findEventById(Integer id){
+        Optional<Event> eventOptional = repository.findById(id);
+
+        if(!eventOptional.isPresent()){
+            throw new IllegalArgumentException("Event not found");
+        }
+       return eventOptional.get();
     }
 }
