@@ -1,14 +1,18 @@
 package com.bersyte.eventz.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.services.EventService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -54,6 +58,12 @@ public class EventController {
    public ResponseEntity<Event> updateEvent(@PathVariable Integer id, @RequestBody EventRequestDTO data) {
         Event event = this.service.updateEvent(id, data);
         return ResponseEntity.ok(event);
+   }
+
+   @ResponseStatus(HttpStatus.NO_CONTENT)
+   @DeleteMapping("{id}")
+   public void deleteEvent(@PathVariable Integer id) {
+       this.service.deleteEvent(id);
    }
    
 }

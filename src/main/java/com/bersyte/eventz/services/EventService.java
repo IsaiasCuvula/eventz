@@ -88,6 +88,12 @@ public class EventService {
          return event;
     }
 
+
+    public void deleteEvent(Integer id){
+        Event eventOptional = this.findEventById(id);
+        repository.delete(eventOptional);
+    }
+
     private Event findEventById(Integer id){
         Optional<Event> eventOptional = repository.findById(id);
 
