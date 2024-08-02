@@ -102,4 +102,34 @@ public class EventService {
         }
        return eventOptional.get();
     }
+
+    public List<EventResponseDTO> filterEvents(
+        int page, 
+        int size,
+        String title, 
+        String location, 
+        Date date
+    ){
+
+        title = (title != null) ? title : " ";
+        location = (location != null) ? location : " ";
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Event> eventsPerPage = this.repository.findFilteredEvents(
+            title, location, date, pageable
+        );
+
+        //TODO - CREATE an EntityToDtoMapper
+        return eventsPerPage.stream().map(event ->  
+            new EventResponseDTO(
+                event.getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getLocation(),
+                event.getDate(),
+                event.getCreatedAt()
+            )
+        ).toList();
+    }
 }

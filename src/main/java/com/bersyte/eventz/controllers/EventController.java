@@ -8,6 +8,7 @@ import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.services.EventService;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.*;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -65,5 +65,18 @@ public class EventController {
    public void deleteEvent(@PathVariable Integer id) {
        this.service.deleteEvent(id);
    }
+
+   @GetMapping("/filter")
+   public ResponseEntity<List<EventResponseDTO>> filterEvents(
+     @RequestParam(defaultValue = "0") int page,
+     @RequestParam(defaultValue = "10") int size,
+     @RequestParam(required = false) String title,
+     @RequestParam(required = false) String location,
+     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date
+   ) {
+     List<EventResponseDTO> allEvents = this.service.filterEvents(page, size, title, location, date);
+     return ResponseEntity.ok(allEvents);
+   }
+   
    
 }
