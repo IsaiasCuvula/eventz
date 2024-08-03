@@ -107,8 +107,7 @@ public class EventService {
         int page, 
         int size,
         String title, 
-        String location, 
-        Date date
+        String location
     ){
 
         title = (title != null) ? title : " ";
@@ -117,7 +116,7 @@ public class EventService {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Event> eventsPerPage = this.repository.findFilteredEvents(
-            title, location, date, pageable
+            title, location, pageable
         );
 
         //TODO - CREATE an EntityToDtoMapper

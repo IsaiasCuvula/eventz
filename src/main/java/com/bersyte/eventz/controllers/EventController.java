@@ -7,8 +7,6 @@ import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.services.EventService;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,10 +69,9 @@ public class EventController {
      @RequestParam(defaultValue = "0") int page,
      @RequestParam(defaultValue = "10") int size,
      @RequestParam(required = false) String title,
-     @RequestParam(required = false) String location,
-     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date
+     @RequestParam(required = false) String location
    ) {
-     List<EventResponseDTO> allEvents = this.service.filterEvents(page, size, title, location, date);
+     List<EventResponseDTO> allEvents = this.service.filterEvents(page, size, title, location);
      return ResponseEntity.ok(allEvents);
    }
    
