@@ -4,6 +4,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
+import com.bersyte.eventz.mapper.AppMapper;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.repositories.EventRepository;
 
@@ -37,30 +38,14 @@ public class EventService {
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-        //TODO - CREATE an EntityToDtoMapper
         return eventsPerPage.stream().map(event ->  
-            new EventResponseDTO(
-                event.getId(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getLocation(),
-                event.getDate(),
-                event.getCreatedAt()
-            )
+            AppMapper.toResponseDTO(event)
         ).toList();
     }
 
     public EventResponseDTO getEventById(Integer id){
         Event event = this.findEventById(id);
-        //TODO - CREATE an EntityToDtoMapper
-        return new EventResponseDTO(
-            event.getId(),
-            event.getTitle(),
-            event.getDescription(),
-            event.getLocation(),
-            event.getDate(),
-            event.getCreatedAt()
-        );
+        return AppMapper.toResponseDTO(event);
     }
 
     public Event updateEvent(Integer id, EventRequestDTO data){
@@ -118,17 +103,8 @@ public class EventService {
         Page<Event> eventsPerPage = this.repository.findFilteredEvents(
             title, location, pageable
         );
-
-        //TODO - CREATE an EntityToDtoMapper
         return eventsPerPage.stream().map(event ->  
-            new EventResponseDTO(
-                event.getId(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getLocation(),
-                event.getDate(),
-                event.getCreatedAt()
-            )
+            AppMapper.toResponseDTO(event)
         ).toList();
     }
 }
