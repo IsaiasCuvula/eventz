@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.*;
 import org.springframework.web.bind.annotation.PutMapping;
-
+import  jakarta.validation.Valid;
 
 
 
@@ -29,7 +29,7 @@ public class EventController {
    private final EventService service;
 
    @PostMapping
-   public ResponseEntity<Event> create(@RequestBody EventRequestDTO data) {
+   public ResponseEntity<Event> create(@Valid @RequestBody EventRequestDTO data) {
        Event event = this.service.createEvent(data);
        return ResponseEntity.ok(event);
    }
@@ -50,7 +50,7 @@ public class EventController {
    }
 
    @PutMapping("{id}")
-   public ResponseEntity<Event> updateEvent(@PathVariable Integer id, @RequestBody EventRequestDTO data) {
+   public ResponseEntity<Event> updateEvent(@PathVariable Integer id,@Valid @RequestBody EventRequestDTO data) {
         Event event = this.service.updateEvent(id, data);
         return ResponseEntity.ok(event);
    }
