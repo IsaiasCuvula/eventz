@@ -1,12 +1,14 @@
 package com.bersyte.eventz.models;
 import java.util.Date;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "events")
 public class Event {
     @Id
@@ -17,52 +19,4 @@ public class Event {
     private String location;
     private Date date;
     private Date createdAt;
-
-    
-    public Event() {}
-
-    public Event(String title, String description, String location, Date date, Date createdAt) {
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.date = date;
-        this.createdAt = createdAt;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public String getLocation() {
-        return location;
-    }
-    public void setLocation(String local) {
-        this.location = local;
-    }
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(Date date) {
-        this.date = date;
-    }
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 }

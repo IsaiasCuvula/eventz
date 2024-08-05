@@ -1,5 +1,7 @@
 package com.bersyte.eventz.services;
 import java.util.*;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import com.bersyte.eventz.dto.EventRequestDTO;
@@ -9,14 +11,11 @@ import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.repositories.EventRepository;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository repository;
 
-
-    public EventService(EventRepository repository) {
-        this.repository = repository;
-    }
 
     public Event createEvent(EventRequestDTO data){
 
@@ -38,8 +37,7 @@ public class EventService {
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-        return eventsPerPage.stream().map(event ->  
-            AppMapper.toResponseDTO(event)
+        return eventsPerPage.stream().map(AppMapper::toResponseDTO
         ).toList();
     }
 
@@ -82,7 +80,7 @@ public class EventService {
     private Event findEventById(Integer id){
         Optional<Event> eventOptional = repository.findById(id);
 
-        if(!eventOptional.isPresent()){
+        if(eventOptional.isEmpty()){
             throw new IllegalArgumentException("Event not found");
         }
        return eventOptional.get();
@@ -103,8 +101,6 @@ public class EventService {
         Page<Event> eventsPerPage = this.repository.findFilteredEvents(
             title, location, pageable
         );
-        return eventsPerPage.stream().map(event ->  
-            AppMapper.toResponseDTO(event)
-        ).toList();
+        return eventsPerPage.stream().map(AppMapper::toResponseDTO).toList();
     }
 }

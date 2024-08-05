@@ -1,4 +1,5 @@
 package com.bersyte.eventz.controllers;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,16 +21,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 
-
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/eventz")
 public class EventController {
 
    private final EventService service;
-
-   public EventController(EventService service){
-    this.service = service;
-   }
 
    @PostMapping
    public ResponseEntity<Event> create(@RequestBody EventRequestDTO data) {
@@ -74,6 +71,4 @@ public class EventController {
      List<EventResponseDTO> allEvents = this.service.filterEvents(page, size, title, location);
      return ResponseEntity.ok(allEvents);
    }
-   
-   
 }
