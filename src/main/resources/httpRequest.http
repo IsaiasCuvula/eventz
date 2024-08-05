@@ -1,6 +1,18 @@
 GET http://localhost:8080/v1/eventz?page=0&size=10
 
 ###
+POST http://localhost:8080/v1/eventz
+Content-Type: application/json
+Cookie: key=first-value
+
+{
+    "title": "Meeting with Client A",
+    "description": "Discuss project requirements and timeline",
+    "location": "Conference Room 1",
+    "date": 1671289200000
+}
+
+###
 PUT http://localhost:8080/v1/eventz/{id}
 
 ###
