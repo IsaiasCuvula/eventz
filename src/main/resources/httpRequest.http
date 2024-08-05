@@ -1,0 +1,28 @@
+GET http://localhost:8080/v1/eventz?page=0&size=10
+
+###
+PUT http://localhost:8080/v1/eventz/{id}
+
+###
+DELETE http://localhost:8080/v1/eventz/{id}
+
+###
+#Search Events
+GET http://localhost:8080/v1/eventz/filter?title=concert&page=0&size=10
+
+###
+GET http://localhost:8080/v1/eventz/filter?date=2024-08-01&page=0&size=10
+
+###
+GET http://localhost:8080/v1/eventz/filter?location=New%20York&page=0&size=10
+
+###
+GET Example: http://localhost:8080/v1/eventz/filter?title=concert&date=2024-08-01&location=New%20York&page=0&size=10
+
+###
+#Filter Events by Category
+GET http://localhost:8080/v1/eventz?category=music&page=0&size=10
+
+###
+#Upcoming Events:
+GET http://localhost:8080/v1/eventz/upcoming?page=0&size=10
