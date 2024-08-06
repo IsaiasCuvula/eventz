@@ -1,15 +1,30 @@
-GET http://localhost:8080/v1/eventz?page=0&size=10
+GET http://localhost:8080/v1/eventz?page=2&size=10
 
+###
+#Get by id
+GET http://localhost:8080/v1/eventz/22
 ###
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-    "title": "Meeting with Client A",
-    "description": "Discuss project requirements and timeline",
-    "location": "Conference Room 1",
-    "date": 1671289200000
+  "title": "Product Launch Event",
+  "description": "Launch of new product line X",
+  "location": "City Convention Center",
+  "date": 1671894000000
+}
+
+###
+PUT http://localhost:8080/v1/eventz/22
+Content-Type: application/json
+Cookie: key=first-value
+
+{
+  "title": "Product Launch Event",
+  "description": "Launch of new product line X",
+  "location": "City Convention Center",
+  "date": 1671894000000
 }
 
 ###
@@ -19,17 +34,19 @@ PUT http://localhost:8080/v1/eventz/{id}
 DELETE http://localhost:8080/v1/eventz/{id}
 
 ###
-#Search Events
+#Search Events by title
 GET http://localhost:8080/v1/eventz/filter?title=concert&page=0&size=10
 
 ###
 GET http://localhost:8080/v1/eventz/filter?date=2024-08-01&page=0&size=10
 
 ###
+#Search Events by location
 GET http://localhost:8080/v1/eventz/filter?location=New%20York&page=0&size=10
 
 ###
-GET Example: http://localhost:8080/v1/eventz/filter?title=concert&date=2024-08-01&location=New%20York&page=0&size=10
+#Search Events by title and location
+GET Example: http://localhost:8080/v1/eventz/filter?title=concert&location=New%20York&page=0&size=10
 
 ###
 #Filter Events by Category
