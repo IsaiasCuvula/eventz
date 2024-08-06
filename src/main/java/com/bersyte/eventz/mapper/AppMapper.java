@@ -27,15 +27,4 @@ public class AppMapper {
         entity.setCreatedAt(new Date(dto.createdAt()));
         return  entity;
     }
-
-    public static Event  toEventEntity(EventResponseDTO dto){
-        return  new Event(
-                dto.id(),
-                dto.title(),
-                dto.description(),
-                dto.location(),
-                dto.date(),
-                dto.createdAt()
-        );
-    }
 }
