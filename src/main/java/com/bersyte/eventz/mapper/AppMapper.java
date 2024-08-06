@@ -16,7 +16,7 @@ public class AppMapper {
                entity.getDate(),
                entity.getCreatedAt()
        );
-   };
+   }
 
     public static Event  toEventEntity(EventRequestDTO dto){
         Event entity = new Event();
@@ -26,7 +26,7 @@ public class AppMapper {
         entity.setDate(new Date(dto.date()));
         entity.setCreatedAt(new Date(dto.createdAt()));
         return  entity;
-    };
+    }
 
     public static Event  toEventEntity(EventResponseDTO dto){
         return  new Event(
@@ -37,5 +37,5 @@ public class AppMapper {
                 dto.date(),
                 dto.createdAt()
         );
-    };
+    }
 }
