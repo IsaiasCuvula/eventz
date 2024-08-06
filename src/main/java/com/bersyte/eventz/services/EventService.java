@@ -1,6 +1,5 @@
 package com.bersyte.eventz.services;
 import java.util.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,7 @@ public class EventService {
 
 
     public Event createEvent(EventRequestDTO data){
-
-        Event newEvent = new Event();
-        newEvent.setTitle(data.title());
-        newEvent.setDescription(data.description());
-        newEvent.setLocation(data.location());
-        newEvent.setDate(new Date(data.date()));
-        newEvent.setCreatedAt(new Date(data.createdAt()));
-
+        Event newEvent = AppMapper.toEventEntity(data);
         try {
            repository.save(newEvent);
         } catch (Exception e) {
@@ -37,13 +29,12 @@ public class EventService {
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-        return eventsPerPage.stream().map(AppMapper::toResponseDTO
-        ).toList();
+         return  eventsPerPage.stream().map(AppMapper::toResponseDTO).toList();
     }
 
     public EventResponseDTO getEventById(Integer id){
         Event event = this.findEventById(id);
-        return AppMapper.toResponseDTO(event);
+       return AppMapper.toResponseDTO(event);
     }
 
     public Event updateEvent(Integer id, EventRequestDTO data){
@@ -92,7 +83,6 @@ public class EventService {
         String title, 
         String location
     ){
-
         title = (title != null) ? title : " ";
         location = (location != null) ? location : " ";
 
