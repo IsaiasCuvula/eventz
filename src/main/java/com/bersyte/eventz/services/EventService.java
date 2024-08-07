@@ -1,13 +1,19 @@
 package com.bersyte.eventz.services;
-import java.util.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
+
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.mapper.EventMappers;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.repositories.EventRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,22 +47,22 @@ public class EventService {
     public Event updateEvent(Integer id, EventRequestDTO data){
          Event event = this.findEventById(id);
 
-         //TODO - Improve this validation - find the best way to do this
-         if(data.title() != null ){
-           event.setTitle(data.title());
-         }
-         if(data.description() != null ){
-            event.setDescription(data.description());
-         }
-         if(data.location() != null ){
-           event.setLocation(data.location());
-         }
-         if(data.date() != null ){
-           event.setDate(new Date(data.date()));
-         }
+        try {
+            if (data.title() != null) {
+                event.setTitle(data.title());
+            }
+            if (data.description() != null) {
+                event.setDescription(data.description());
+            }
+            if (data.location() != null) {
+                event.setLocation(data.location());
+            }
+            if (data.date() != null) {
+                event.setDate(new Date(data.date()));
+            }
 
-         try {
             repository.save(event);
+            //
          } catch (Exception e) {
             String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
             throw new IllegalArgumentException(errorMsg);
