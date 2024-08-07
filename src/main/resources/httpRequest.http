@@ -1,34 +1,31 @@
-GET http://localhost:8080/v1/eventz?page=2&size=10
+GET http://localhost:8080/v1/eventz?page=0&size=50
 
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/22
+GET http://localhost:8080/v1/eventz/21
 ###
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Product Launch Event",
-  "description": "Launch of new product line X",
-  "location": "City Convention Center",
-  "date": 1671894000000
+  "title": "Office lunch",
+  "description": "Monthly team lunch to celebrate achievements",
+  "location": "Office cafeteria",
+  "date": 1723073140000
 }
 
 ###
-PUT http://localhost:8080/v1/eventz/22
+PUT http://localhost:8080/v1/eventz/21
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Product Launch Event",
-  "description": "Launch of new product line X",
-  "location": "City Convention Center",
-  "date": 1671894000000
+  "title": "Company Town Hall",
+  "description": "Quarterly town hall meeting for all employees",
+  "location": "Main Auditorium",
+  "date": 1723072951000
 }
-
-###
-PUT http://localhost:8080/v1/eventz/{id}
 
 ###
 DELETE http://localhost:8080/v1/eventz/{id}
@@ -38,7 +35,8 @@ DELETE http://localhost:8080/v1/eventz/{id}
 GET http://localhost:8080/v1/eventz/filter?title=concert&page=0&size=10
 
 ###
-GET http://localhost:8080/v1/eventz/filter?date=2024-08-01&page=0&size=10
+#Search by date
+GET http://localhost:8080/v1/eventz/date?eventDate=1723073140000
 
 ###
 #Search Events by location
