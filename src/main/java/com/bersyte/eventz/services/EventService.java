@@ -5,7 +5,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
-import com.bersyte.eventz.mapper.AppMapper;
+import com.bersyte.eventz.mapper.EventMappers;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.repositories.EventRepository;
 
@@ -17,7 +17,7 @@ public class EventService {
 
 
     public Event createEvent(EventRequestDTO data){
-        Event newEvent = AppMapper.toEventEntity(data);
+        Event newEvent = EventMappers.toEventEntity(data);
         try {
            repository.save(newEvent);
         } catch (Exception e) {
@@ -30,12 +30,12 @@ public class EventService {
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-         return  eventsPerPage.stream().map(AppMapper::toResponseDTO).toList();
+         return  eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
     }
 
     public EventResponseDTO getEventById(Integer id){
        Event event = this.findEventById(id);
-       return AppMapper.toResponseDTO(event);
+       return EventMappers.toResponseDTO(event);
     }
 
     public Event updateEvent(Integer id, EventRequestDTO data){
@@ -93,6 +93,6 @@ public class EventService {
         Page<Event> eventsPerPage = this.repository.findFilteredEvents(
             title, location, pageable
         );
-        return eventsPerPage.stream().map(AppMapper::toResponseDTO).toList();
+        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
     }
 }

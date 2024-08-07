@@ -5,7 +5,7 @@ import com.bersyte.eventz.models.Event;
 import java.util.Date;
 
 
-public class AppMapper {
+public class EventMappers {
 
    public static EventResponseDTO toResponseDTO(Event entity){
        return new EventResponseDTO(
