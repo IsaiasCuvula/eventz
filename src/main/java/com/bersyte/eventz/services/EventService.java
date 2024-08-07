@@ -101,4 +101,15 @@ public class EventService {
         );
         return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
     }
+
+    public List<EventResponseDTO> getEventsByDate(int page, int size, Long date) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Date dateEvent = (date != null) ? new Date(date) : new Date();
+        Page<Event> eventsPerPage = this.repository.getEventsByDate(dateEvent, pageable);
+        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+    }
+
+
 }
