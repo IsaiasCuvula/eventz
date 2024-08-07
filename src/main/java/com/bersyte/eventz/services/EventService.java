@@ -21,7 +21,8 @@ public class EventService {
         try {
            repository.save(newEvent);
         } catch (Exception e) {
-           System.out.println("Something went wrong: " + e.getLocalizedMessage());
+            String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
+            throw new IllegalArgumentException(errorMsg);
         }
         return newEvent;
     }
@@ -33,7 +34,7 @@ public class EventService {
     }
 
     public EventResponseDTO getEventById(Integer id){
-        Event event = this.findEventById(id);
+       Event event = this.findEventById(id);
        return AppMapper.toResponseDTO(event);
     }
 
@@ -57,7 +58,8 @@ public class EventService {
          try {
             repository.save(event);
          } catch (Exception e) {
-            System.out.println("Something went wrong: " + e.getLocalizedMessage());
+            String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
+            throw new IllegalArgumentException(errorMsg);
          }
          return event;
     }
