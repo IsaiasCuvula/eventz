@@ -9,22 +9,23 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Office lunch",
-  "description": "Monthly team lunch to celebrate achievements",
-  "location": "Office cafeteria",
-  "date": 1723073140000
+  "title": "Team Building Activity",
+  "description": "Outdoor team building exercises and games",
+  "location": "Local Park",
+  "date": 1672761600000
 }
 
 ###
-PUT http://localhost:8080/v1/eventz/21
+#Update existing event
+PUT http://localhost:8080/v1/eventz/29
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Company Town Hall",
-  "description": "Quarterly town hall meeting for all employees",
-  "location": "Main Auditorium",
-  "date": 1723072951000
+  "title": "Team Building Activity",
+  "description": "Outdoor team building exercises & games",
+  "location": "Local Park",
+  "date": 1672761600000
 }
 
 ###
