@@ -2,14 +2,14 @@ GET http://localhost:8080/v1/eventz?page=0&size=50
 
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/21
+GET http://localhost:8080/v1/eventz/210
 ###
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Team Building Activity",
+  "title": "",
   "description": "Outdoor team building exercises and games",
   "location": "Local Park",
   "date": 1672761600000
