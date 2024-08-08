@@ -20,7 +20,6 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception,
             HttpServletRequest request
     ){
-
         //get the default msg defined in the [Event] entity
         AtomicReference<String> defaultMessage = new AtomicReference<>("");
         for (ObjectError objectError : exception.getBindingResult().getAllErrors()) {
@@ -34,5 +33,18 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(DatabaseOperationException.class)
+    public ResponseEntity<ApiError> handleDatabaseExceptions(DatabaseOperationException e) {
+        ApiError error = new ApiError(
+                "eventz/",
+                e.getLocalizedMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
