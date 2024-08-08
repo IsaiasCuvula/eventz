@@ -2,10 +2,12 @@ package com.bersyte.eventz.services;
 
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
+import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.mapper.EventMappers;
 import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +28,9 @@ public class EventService {
         Event newEvent = EventMappers.toEventEntity(data);
         try {
            repository.save(newEvent);
-        } catch (Exception e) {
-            String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
-            throw new IllegalArgumentException(errorMsg);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error creating new event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
         }
         return EventMappers.toResponseDTO(newEvent);
     }
@@ -63,9 +65,9 @@ public class EventService {
 
             repository.save(event);
             //
-         } catch (Exception e) {
-            String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
-            throw new IllegalArgumentException(errorMsg);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
          }
         return EventMappers.toResponseDTO(event);
     }
@@ -73,14 +75,27 @@ public class EventService {
 
     public void deleteEvent(Integer id){
         Event eventOptional = this.findEventById(id);
-        repository.delete(eventOptional);
+        try {
+            repository.delete(eventOptional);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
     private Event findEventById(Integer id){
-        Optional<Event> eventOptional = repository.findById(id);
+        Optional<Event> eventOptional;
 
-        if(eventOptional.isEmpty()){
-            throw new IllegalArgumentException("Event not found");
+        try {
+            eventOptional = repository.findById(id);
+
+            if (eventOptional.isEmpty()) {
+                String errorMsg = String.format("Event with id: %s not found", id);
+                throw new DatabaseOperationException(errorMsg);
+            }
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to get event by id %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
         }
        return eventOptional.get();
     }

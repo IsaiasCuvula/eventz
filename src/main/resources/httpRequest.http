@@ -2,17 +2,17 @@ GET http://localhost:8080/v1/eventz?page=0&size=50
 
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/210
+GET http://localhost:8080/v1/eventz/2009
 ###
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "",
-  "description": "Outdoor team building exercises and games",
-  "location": "Local Park",
-  "date": 1672761600000
+  "title": "Internal Hackathon",
+  "description": "24-hour hackathon to promote innovation",
+  "location": "Innovation Lab",
+  "date": 1673370000000
 }
 
 ###
@@ -37,15 +37,15 @@ GET http://localhost:8080/v1/eventz/filter?title=concert&page=0&size=10
 
 ###
 #Search by date
-GET http://localhost:8080/v1/eventz/date?eventDate=1723073140000
+GET http://localhost:8080/v1/eventz/date?eventDate=1673370000000
 
 ###
 #Search Events by location
-GET http://localhost:8080/v1/eventz/filter?location=New%20York&page=0&size=10
+GET http://localhost:8080/v1/eventz/filter?location=room&page=0&size=10
 
 ###
 #Search Events by title and location
-GET Example: http://localhost:8080/v1/eventz/filter?title=concert&location=New%20York&page=0&size=10
+GET http://localhost:8080/v1/eventz/filter?title=hackaton&location=room&page=0&size=10
 
 ###
 #Filter Events by Category
