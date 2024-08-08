@@ -22,7 +22,7 @@ public class EventService {
     private final EventRepository repository;
 
 
-    public Event createEvent(EventRequestDTO data){
+    public EventResponseDTO createEvent(EventRequestDTO data) {
         Event newEvent = EventMappers.toEventEntity(data);
         try {
            repository.save(newEvent);
@@ -30,13 +30,13 @@ public class EventService {
             String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
             throw new IllegalArgumentException(errorMsg);
         }
-        return newEvent;
+        return EventMappers.toResponseDTO(newEvent);
     }
 
     public List<EventResponseDTO> getAllEvents(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPerPage = repository.findAll(pageable);
-         return  eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
     }
 
     public EventResponseDTO getEventById(Integer id){
@@ -44,7 +44,7 @@ public class EventService {
        return EventMappers.toResponseDTO(event);
     }
 
-    public Event updateEvent(Integer id, EventRequestDTO data){
+    public EventResponseDTO updateEvent(Integer id, EventRequestDTO data) {
          Event event = this.findEventById(id);
 
         try {
@@ -67,7 +67,7 @@ public class EventService {
             String errorMsg = "Something went wrong: " + e.getLocalizedMessage();
             throw new IllegalArgumentException(errorMsg);
          }
-         return event;
+        return EventMappers.toResponseDTO(event);
     }
 
 

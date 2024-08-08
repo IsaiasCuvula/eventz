@@ -2,7 +2,6 @@ package com.bersyte.eventz.controllers;
 
 import com.bersyte.eventz.dto.EventRequestDTO;
 import com.bersyte.eventz.dto.EventResponseDTO;
-import com.bersyte.eventz.models.Event;
 import com.bersyte.eventz.services.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +22,9 @@ public class EventController {
 
 
    @PostMapping
-   public ResponseEntity<Event> create(@Valid @RequestBody EventRequestDTO data) {
-       Event event = this.service.createEvent(data);
-       return ResponseEntity.ok(event);
+   public ResponseEntity<EventResponseDTO> create(@Valid @RequestBody EventRequestDTO data) {
+       EventResponseDTO responseDTO = this.service.createEvent(data);
+       return ResponseEntity.ok(responseDTO);
    }
 
    @GetMapping
@@ -44,9 +43,9 @@ public class EventController {
    }
 
    @PutMapping("{id}")
-   public ResponseEntity<Event> updateEvent(@PathVariable Integer id,@Valid @RequestBody EventRequestDTO data) {
-        Event event = this.service.updateEvent(id, data);
-        return ResponseEntity.ok(event);
+   public ResponseEntity<EventResponseDTO> updateEvent(@PathVariable Integer id, @Valid @RequestBody EventRequestDTO data) {
+       EventResponseDTO responseDTO = this.service.updateEvent(id, data);
+       return ResponseEntity.ok(responseDTO);
    }
 
    @ResponseStatus(HttpStatus.NO_CONTENT)
