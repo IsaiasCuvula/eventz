@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class AppUser {
+public class AuthUser {
     @Id
     @GeneratedValue
     private Integer id;
