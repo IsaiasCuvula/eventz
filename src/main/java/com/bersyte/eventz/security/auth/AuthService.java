@@ -20,11 +20,11 @@ public class AuthService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse createUser(RegisterRequestDTO requestDTO) {
-        AuthUser user = AuthMapper.toAuthUser(requestDTO);
+    public UserResponseDTO createUser(RegisterRequestDTO requestDTO) {
+        AppUser user = UserMapper.toUserEntity(requestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
 
-        Optional<AuthUser> userOptional = findAuthUserByEmail(requestDTO.email());
+        Optional<AppUser> userOptional = findAuthUserByEmail(requestDTO.email());
         if (userOptional.isPresent()) {
             throw new DatabaseOperationException("User already exists");
         }
@@ -35,12 +35,12 @@ public class AuthService {
             throw new DatabaseOperationException(e.getLocalizedMessage());
         }
         final String token = jwtService.generateToken(user.getEmail());
-        return AuthMapper.toAuthResponse(user, token);
+        return UserMapper.toUserResponseDTO(user, token);
     }
 
 
     public String login(LoginRequestDTO requestDTO) {
-        Optional<AuthUser> user = findAuthUserByEmail(requestDTO.email());
+        Optional<AppUser> user = findAuthUserByEmail(requestDTO.email());
         if (user.isPresent()) {
             try {
                 Authentication authentication = authenticationManager.authenticate(
@@ -60,7 +60,7 @@ public class AuthService {
         return "Authentication failed";
     }
 
-    private Optional<AuthUser> findAuthUserByEmail(String email) {
+    private Optional<AppUser> findAuthUserByEmail(String email) {
         try {
             return Optional.ofNullable(authRepository.findByEmail(email));
         } catch (DataAccessException e) {

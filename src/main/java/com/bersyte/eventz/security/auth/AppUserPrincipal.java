@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class AppUserPrincipal implements UserDetails {
-    private final AuthUser authUser;
+    private final AppUser authUser;
 
-    public AppUserPrincipal(AuthUser authUser) {
+    public AppUserPrincipal(AppUser authUser) {
         this.authUser = authUser;
     }
 

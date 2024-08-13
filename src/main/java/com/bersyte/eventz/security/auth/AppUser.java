@@ -13,13 +13,16 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class AuthUser {
+public class AppUser {
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(nullable = false, unique = true)
     private String email;
     private String password;
+    private String firstName;
+    private String lastName;
+    private String phone;
     private Date createdAt;
     @Enumerated(EnumType.STRING)
     private UserRole role;

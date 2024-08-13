@@ -2,10 +2,13 @@ package com.bersyte.eventz.security.auth;
 
 import java.util.Date;
 
-public record AuthResponse(
+public record UserResponseDTO(
         String token,
-        Integer id,
+        Long id,
         String email,
+        String firstName,
+        String lastName,
+        String phone,
         Date createdAt,
         UserRole role
 ) {

@@ -1,5 +1,6 @@
 package com.bersyte.eventz.security.auth;
 
+import com.bersyte.eventz.utils.Utils;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 public record RegisterRequestDTO(
-        @Email(message = "Email is not valid", regexp = Utilities.emailRegexp)
+        @Email(message = "Email is not valid", regexp = Utils.emailRegexp)
         @NotBlank(message = "email is required")
         String email,
         @NotBlank(message = "password is required")
@@ -16,6 +17,11 @@ public record RegisterRequestDTO(
         String password,
         @NotNull(message = "user role is required")
         UserRole role,
+        String token,
+        @NotNull(message = "user firstName is required")
+        String firstName,
+        String lastName,
+        String phone,
         Long createdAt
 ) {
     public RegisterRequestDTO {
