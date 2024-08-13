@@ -53,17 +53,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults())
-//                .exceptionHandling((exception) -> exception.authenticationEntryPoint(
-//                        (request, response, ex) -> {
-//                            ApiError apiError = new ApiError(
-//                                    request.getRequestURI(),
-//                                    ex.getLocalizedMessage(),
-//                                    response.getStatus(),
-//                                    LocalDateTime.now()
-//                            );
-//                            System.out.println(apiError);
-//                        })
-//                )
                 .build();
     }
 
