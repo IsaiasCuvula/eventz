@@ -1,4 +1,4 @@
-package com.bersyte.eventz.models;
+package com.bersyte.eventz.events;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,11 +1,6 @@
-package com.bersyte.eventz.services;
+package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.dto.EventRequestDTO;
-import com.bersyte.eventz.dto.EventResponseDTO;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.mapper.EventMappers;
-import com.bersyte.eventz.models.Event;
-import com.bersyte.eventz.repositories.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;

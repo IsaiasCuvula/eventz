@@ -1,8 +1,5 @@
-package com.bersyte.eventz.controllers;
+package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.dto.EventRequestDTO;
-import com.bersyte.eventz.dto.EventResponseDTO;
-import com.bersyte.eventz.services.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

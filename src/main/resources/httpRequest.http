@@ -9,10 +9,10 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Internal Hackathon",
-  "description": "24-hour hackathon to promote innovation",
-  "location": "Innovation Lab",
-  "date": 1673370000000
+  "title": "Annual Company Picnic",
+  "description": "Company-wide picnic and outdoor games",
+  "location": "Local Park",
+  "date": 1733754984000
 }
 
 ###
@@ -22,7 +22,7 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Training Workshop 3",
+  "title": "Training Workshop 4",
   "description": "Training session on new software tools",
   "location": "Training Room 3",
   "date": 1733754984000

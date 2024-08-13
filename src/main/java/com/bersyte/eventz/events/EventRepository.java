@@ -1,6 +1,5 @@
-package com.bersyte.eventz.repositories;
+package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.models.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

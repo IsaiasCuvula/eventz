@@ -1,4 +1,4 @@
-package com.bersyte.eventz.dto;
+package com.bersyte.eventz.events;
 import java.util.Date;
 
 

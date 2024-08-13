@@ -1,7 +1,4 @@
-package com.bersyte.eventz.mapper;
-import com.bersyte.eventz.dto.EventRequestDTO;
-import com.bersyte.eventz.dto.EventResponseDTO;
-import com.bersyte.eventz.models.Event;
+package com.bersyte.eventz.events;
 import java.util.Date;
 
 

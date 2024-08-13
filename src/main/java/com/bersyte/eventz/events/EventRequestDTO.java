@@ -1,6 +1,9 @@
-package com.bersyte.eventz.dto;
+package com.bersyte.eventz.events;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
-import jakarta.validation.constraints.*;
 
 public record EventRequestDTO(
         @NotBlank(message = "title is required")
