@@ -5,7 +5,7 @@ import java.util.Date;
 public record AuthResponse(
         String token,
         Integer id,
-        String username,
+        String email,
         Date createdAt,
         UserRole role
 ) {

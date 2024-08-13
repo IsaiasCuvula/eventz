@@ -17,7 +17,8 @@ public class AuthUser {
     @Id
     @GeneratedValue
     private Integer id;
-    private String username;
+    @Column(nullable = false, unique = true)
+    private String email;
     private String password;
     private Date createdAt;
     @Enumerated(EnumType.STRING)

@@ -33,7 +33,7 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return authUser.getUsername();
+        return authUser.getEmail();
     }
 
     @Override

@@ -6,7 +6,7 @@ public class AuthMapper {
 
     public static AuthUser toAuthUser(RegisterRequestDTO dto) {
         AuthUser entity = new AuthUser();
-        entity.setUsername(dto.email());
+        entity.setEmail(dto.email());
         entity.setPassword(dto.password());
         entity.setRole(dto.role());
         entity.setCreatedAt(new Date(dto.createdAt()));
@@ -18,7 +18,7 @@ public class AuthMapper {
         return new AuthResponse(
                 token,
                 entity.getId(),
-                entity.getUsername(),
+                entity.getEmail(),
                 entity.getCreatedAt(),
                 entity.getRole()
         );
