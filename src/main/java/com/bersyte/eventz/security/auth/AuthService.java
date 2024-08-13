@@ -35,7 +35,7 @@ public class AuthService {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            requestDTO.username(), requestDTO.password()
+                            requestDTO.email(), requestDTO.password()
                     )
             );
             if (authentication.isAuthenticated()) {
