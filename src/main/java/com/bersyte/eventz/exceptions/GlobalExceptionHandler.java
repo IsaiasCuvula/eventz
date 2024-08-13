@@ -37,9 +37,12 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(DatabaseOperationException.class)
-    public ResponseEntity<ApiError> handleDatabaseExceptions(DatabaseOperationException e) {
+    public ResponseEntity<ApiError> handleDatabaseExceptions(
+            DatabaseOperationException e,
+            HttpServletRequest request
+    ) {
         ApiError error = new ApiError(
-                "eventz/",
+                request.getRequestURI(),
                 e.getLocalizedMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now()
