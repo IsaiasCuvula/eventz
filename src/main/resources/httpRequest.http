@@ -17,15 +17,15 @@ Cookie: key=first-value
 
 ###
 #Update existing event
-PUT http://localhost:8080/v1/eventz/29
+PUT http://localhost:8080/v1/eventz/10
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "title": "Team Building Activity",
-  "description": "Outdoor team building exercises & games",
-  "location": "Local Park",
-  "date": 1672761600000
+  "title": "Training Workshop 3",
+  "description": "Training session on new software tools",
+  "location": "Training Room 3",
+  "date": 1733754984000
 }
 
 ###

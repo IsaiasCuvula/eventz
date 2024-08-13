@@ -41,6 +41,12 @@ public class EventService {
         return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
     }
 
+    public List<EventResponseDTO> getUpcomingEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
+        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+    }
+
     public EventResponseDTO getEventById(Integer id){
        Event event = this.findEventById(id);
        return EventMappers.toResponseDTO(event);
