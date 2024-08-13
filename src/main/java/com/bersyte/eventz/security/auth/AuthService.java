@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -21,10 +23,16 @@ public class AuthService {
     public AuthResponse createUser(RegisterRequestDTO requestDTO) {
         AuthUser user = AuthMapper.toAuthUser(requestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
+
+        Optional<AuthUser> userOptional = findAuthUserByEmail(requestDTO.email());
+        if (userOptional.isPresent()) {
+            throw new DatabaseOperationException("User already exists");
+        }
+        //
         try {
             authRepository.save(user);
         } catch (DataAccessException e) {
-            throw new DatabaseOperationException(e.getMessage());
+            throw new DatabaseOperationException(e.getLocalizedMessage());
         }
         final String token = jwtService.generateToken(user.getEmail());
         return AuthMapper.toAuthResponse(user, token);
@@ -32,18 +40,32 @@ public class AuthService {
 
 
     public String login(LoginRequestDTO requestDTO) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            requestDTO.email(), requestDTO.password()
-                    )
-            );
-            if (authentication.isAuthenticated()) {
-                return jwtService.generateToken(authentication.getName());
+        Optional<AuthUser> user = findAuthUserByEmail(requestDTO.email());
+        if (user.isPresent()) {
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                requestDTO.email(), requestDTO.password()
+                        )
+                );
+                if (authentication.isAuthenticated()) {
+                    return jwtService.generateToken(authentication.getName());
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } else {
+            throw new DatabaseOperationException("User does not exists");
         }
         return "Authentication failed";
+    }
+
+    private Optional<AuthUser> findAuthUserByEmail(String email) {
+        try {
+            return Optional.ofNullable(authRepository.findByEmail(email));
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 }
