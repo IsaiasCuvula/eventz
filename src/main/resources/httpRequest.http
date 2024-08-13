@@ -2,7 +2,7 @@ GET http://localhost:8080/v1/eventz?page=0&size=50
 
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/2009
+GET http://localhost:8080/v1/eventz/9
 ###
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
@@ -33,7 +33,7 @@ DELETE http://localhost:8080/v1/eventz/{id}
 
 ###
 #Search Events by title
-GET http://localhost:8080/v1/eventz/filter?title=concert&page=0&size=10
+GET http://localhost:8080/v1/eventz/filter?title=training&page=0&size=10
 
 ###
 #Search by date
@@ -45,7 +45,7 @@ GET http://localhost:8080/v1/eventz/filter?location=room&page=0&size=10
 
 ###
 #Search Events by title and location
-GET http://localhost:8080/v1/eventz/filter?title=hackaton&location=room&page=0&size=10
+GET http://localhost:8080/v1/eventz/filter?title=training&location=room&page=0&size=10
 
 ###
 #Filter Events by Category
