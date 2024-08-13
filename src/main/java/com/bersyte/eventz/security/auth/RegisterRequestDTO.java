@@ -3,6 +3,7 @@ package com.bersyte.eventz.security.auth;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ public record RegisterRequestDTO(
         @NotBlank(message = "email is required")
         String email,
         @NotBlank(message = "password is required")
+        @Size(min = 6, message = "Password should have min 6 characters")
         String password,
         @NotNull(message = "user role is required")
         UserRole role,
