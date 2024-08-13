@@ -22,19 +22,14 @@ public class JWTService {
     private final String secretKey;
 
     public JWTService() {
-        secretKey = getSecretKey();
-    }
-
-    private String getSecretKey() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sKey = keyGenerator.generateKey();
-            return Base64.getEncoder().encodeToString(sKey.getEncoded());
+            secretKey = Base64.getEncoder().encodeToString(sKey.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
