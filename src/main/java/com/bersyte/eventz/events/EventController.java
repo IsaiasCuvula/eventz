@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,11 @@ public class EventController {
 
 
    @PostMapping
-   public ResponseEntity<EventResponseDTO> create(@Valid @RequestBody EventRequestDTO data) {
-       EventResponseDTO responseDTO = this.service.createEvent(data);
+   public ResponseEntity<EventResponseDTO> create(
+           @AuthenticationPrincipal UserDetails userDetails,
+           @Valid @RequestBody EventRequestDTO data
+   ) {
+       EventResponseDTO responseDTO = this.service.createEvent(data, userDetails);
        return ResponseEntity.ok(responseDTO);
    }
 

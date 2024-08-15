@@ -1,11 +1,13 @@
 package com.bersyte.eventz.security.auth;
 
+import com.bersyte.eventz.events.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -26,4 +28,7 @@ public class AppUser {
     private Date createdAt;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToMany(mappedBy = "organizer")
+    private List<Event> events;
 }

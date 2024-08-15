@@ -1,5 +1,36 @@
-GET http://localhost:8080/v1/eventz?page=0&size=50
+#Register
+POST http://localhost:8080/v1/auth/register
+Content-Type: application/json
+Cookie: key=first-value
 
+{
+  "email": "bernardo@gmail.io",
+  "password": "123456",
+  "firstName": "Bernardo",
+  "lastName": "John",
+  "role": "USER"
+}
+
+
+###
+#login
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+Cookie: key=first-value
+
+{
+  "email": "lay@gmail.io",
+  "password": "123456"
+}
+
+###
+#Get current user
+GET http://localhost:8080/v1/users/current-user
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MTkzMDMsImV4cCI6MTcyMzcyNjUwM30.w0gxaXIu4f-8UxoF2vykoIz1CCGYPhX9nU82Gm5_Ges
+
+###
+GET http://localhost:8080/v1/eventz?page=0&size=50
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MTkzMDMsImV4cCI6MTcyMzcyNjUwM30.w0gxaXIu4f-8UxoF2vykoIz1CCGYPhX9nU82Gm5_Ges
 ###
 #Get by id
 GET http://localhost:8080/v1/eventz/9
@@ -7,12 +38,13 @@ GET http://localhost:8080/v1/eventz/9
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MjIwMzIsImV4cCI6MTcyMzcyOTIzMn0.DY-bU2eThXycGrSn8_yInM2wdKL5AYUGwDJQVZnAM5s
 
 {
   "title": "Annual Company Picnic",
   "description": "Company-wide picnic and outdoor games",
   "location": "Local Park",
-  "date": 1733754984000
+  "date": 1763754984000
 }
 
 ###

@@ -1,5 +1,6 @@
 package com.bersyte.eventz.events;
 
+import com.bersyte.eventz.security.auth.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +23,7 @@ public class Event {
     private String location;
     private Date date;
     private Date createdAt;
+
+    @ManyToOne
+    private AppUser organizer;
 }

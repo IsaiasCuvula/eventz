@@ -1,11 +1,14 @@
 package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.security.auth.AppUser;
+import com.bersyte.eventz.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,17 +20,24 @@ import java.util.Optional;
 public class EventService {
 
     private final EventRepository repository;
+    private final UsersService usersService;
 
 
-    public EventResponseDTO createEvent(EventRequestDTO data) {
-        Event newEvent = EventMappers.toEventEntity(data);
+    public EventResponseDTO createEvent(
+            EventRequestDTO data, UserDetails userDetails
+    ) {
         try {
-           repository.save(newEvent);
+            String email = userDetails.getUsername();
+            AppUser currentUser = usersService.getUserByEmail(email);
+            Event event = EventMappers.toEventEntity(data);
+            event.setOrganizer(currentUser);
+
+            Event newEvent = repository.save(event);
+            return EventMappers.toResponseDTO(newEvent);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error creating new event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
         }
-        return EventMappers.toResponseDTO(newEvent);
     }
 
     public List<EventResponseDTO> getAllEvents(int page, int size){
@@ -79,7 +89,6 @@ public class EventService {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
          }
-
     }
 
 
@@ -105,7 +114,6 @@ public class EventService {
             String errorMsg = String.format("Failed to get event by id %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
         }
-
     }
 
     public List<EventResponseDTO> filterEvents(
@@ -139,6 +147,4 @@ public class EventService {
             throw new DatabaseOperationException(errorMsg);
         }
     }
-
-
 }
