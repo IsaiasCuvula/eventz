@@ -34,7 +34,7 @@ public class AuthService {
         } catch (DataAccessException e) {
             throw new DatabaseOperationException(e.getLocalizedMessage());
         }
-        final String token = jwtService.generateToken(user.getEmail());
+        //final String token = jwtService.generateToken(user.getEmail());
         return UserMapper.toUserResponseDTO(user);
     }
 

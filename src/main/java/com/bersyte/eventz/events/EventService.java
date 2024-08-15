@@ -31,15 +31,25 @@ public class EventService {
     }
 
     public List<EventResponseDTO> getAllEvents(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Event> eventsPerPage = repository.findAll(pageable);
-        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Event> eventsPerPage = repository.findAll(pageable);
+            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error getting all events: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
     public List<EventResponseDTO> getUpcomingEvents(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
-        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
+            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error getting upcoming events: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
     public EventResponseDTO getEventById(Integer id){
@@ -48,9 +58,9 @@ public class EventService {
     }
 
     public EventResponseDTO updateEvent(Integer id, EventRequestDTO data) {
-         Event event = this.findEventById(id);
-
         try {
+            Event event = this.findEventById(id);
+
             if (data.title() != null) {
                 event.setTitle(data.title());
             }
@@ -63,20 +73,19 @@ public class EventService {
             if (data.date() != null) {
                 event.setDate(new Date(data.date()));
             }
-
-            repository.save(event);
             //
+            return EventMappers.toResponseDTO(repository.save(event));
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
          }
-        return EventMappers.toResponseDTO(event);
+
     }
 
 
     public void deleteEvent(Integer id){
-        Event eventOptional = this.findEventById(id);
         try {
+            Event eventOptional = this.findEventById(id);
             repository.delete(eventOptional);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
@@ -85,20 +94,18 @@ public class EventService {
     }
 
     private Event findEventById(Integer id){
-        Optional<Event> eventOptional;
-
         try {
-            eventOptional = repository.findById(id);
-
+            Optional<Event> eventOptional = repository.findById(id);
             if (eventOptional.isEmpty()) {
                 String errorMsg = String.format("Event with id: %s not found", id);
                 throw new DatabaseOperationException(errorMsg);
             }
+            return eventOptional.get();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get event by id %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
         }
-       return eventOptional.get();
+
     }
 
     public List<EventResponseDTO> filterEvents(
@@ -107,24 +114,30 @@ public class EventService {
         String title, 
         String location
     ){
-        title = (title != null) ? title : " ";
-        location = (location != null) ? location : " ";
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<Event> eventsPerPage = this.repository.findFilteredEvents(
-            title, location, pageable
-        );
-        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        try {
+            title = (title != null) ? title : " ";
+            location = (location != null) ? location : " ";
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Event> eventsPerPage = this.repository.findFilteredEvents(
+                    title, location, pageable
+            );
+            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to get filtered events: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
     public List<EventResponseDTO> getEventsByDate(int page, int size, Long date) {
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        Date dateEvent = (date != null) ? new Date(date) : new Date();
-        Page<Event> eventsPerPage = this.repository.getEventsByDate(dateEvent, pageable);
-        return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Date dateEvent = (date != null) ? new Date(date) : new Date();
+            Page<Event> eventsPerPage = this.repository.getEventsByDate(dateEvent, pageable);
+            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to get event by date: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
 
