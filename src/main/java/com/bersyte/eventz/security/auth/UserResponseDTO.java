@@ -3,7 +3,6 @@ package com.bersyte.eventz.security.auth;
 import java.util.Date;
 
 public record UserResponseDTO(
-        String token,
         Long id,
         String email,
         String firstName,

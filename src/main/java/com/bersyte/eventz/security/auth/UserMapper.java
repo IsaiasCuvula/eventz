@@ -17,17 +17,16 @@ public class UserMapper {
     }
 
 
-    public static UserResponseDTO toUserResponseDTO(AppUser entity, String token) {
+    public static UserResponseDTO toUserResponseDTO(AppUser entity) {
         final String phone = entity.getPhone() != null ? entity.getPhone() : " ";
         final String lastName = entity.getLastName() != null ? entity.getLastName() : " ";
         //
         return new UserResponseDTO(
-                token,
                 entity.getId(),
                 entity.getEmail(),
                 entity.getFirstName(),
-                phone,
                 lastName,
+                phone,
                 entity.getCreatedAt(),
                 entity.getRole()
         );
