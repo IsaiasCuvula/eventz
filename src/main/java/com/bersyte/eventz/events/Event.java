@@ -1,5 +1,6 @@
 package com.bersyte.eventz.events;
 
+import com.bersyte.eventz.event_registration.Registration;
 import com.bersyte.eventz.security.auth.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -26,4 +28,7 @@ public class Event {
 
     @ManyToOne
     private AppUser organizer;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Registration> registrations;
 }

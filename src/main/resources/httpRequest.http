@@ -11,7 +11,6 @@ Cookie: key=first-value
   "role": "ADMIN"
 }
 
-
 ###
 #login
 POST http://localhost:8080/v1/auth/login
@@ -19,7 +18,7 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "admin@gmail.io",
+  "email": "jos@gmail.io",
   "password": "123456"
 }
 
@@ -31,7 +30,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 
 ###
 GET http://localhost:8080/v1/eventz?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM3NjcwODcsImV4cCI6MTcyMzc3NDI4N30.VyyXIUMEtLGvTcEqLCrD73z0pHYFF941QRKDfFITjuI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4NTIxODAsImV4cCI6MTcyMzg1OTM4MH0.wwxQn6s8kVptNS3VZTJENFWpgjXkvXNOGK1ajUGc9Jk
 
 ###
 #Get by id
@@ -101,10 +100,22 @@ GET http://localhost:8080/v1/eventz/upcoming?page=0&size=10
 GET http://localhost:8080/v1/users?page=0&size=10
 
 ###
-#Login
-POST http://localhost:8080/v1/auth/login
-
-
-###
 #register
 POST http://localhost:8080/v1/auth/register
+
+###
+###
+#login
+POST http://localhost:8080/v1/auth/login
+Content-Type: application/json
+Cookie: key=first-value
+
+{
+  "email": "max@gmail.com",
+  "password": "123456"
+}
+
+###
+#event-registration
+POST http://localhost:8080/event-registration/39
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODUyNjg1LCJleHAiOjE3MjM4NTk4ODV9.Du4RMpJeak4k8DJ166sCkCa6oKDxnj8k6p0DmQovKZ8

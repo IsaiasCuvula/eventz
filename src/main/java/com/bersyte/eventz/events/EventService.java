@@ -147,7 +147,7 @@ public class EventService {
         }
     }
 
-    private Event findEventById(Integer id){
+    public Event findEventById(Integer id) {
         try {
             Optional<Event> eventOptional = repository.findById(id);
             if (eventOptional.isEmpty()) {
