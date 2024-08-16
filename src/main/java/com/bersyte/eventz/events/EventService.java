@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -67,35 +68,64 @@ public class EventService {
        return EventMappers.toResponseDTO(event);
     }
 
-    public EventResponseDTO updateEvent(Integer id, EventRequestDTO data) {
+    public EventResponseDTO updateEvent(
+            Integer id,
+            EventRequestDTO data,
+            UserDetails userDetails
+    ) {
+
         try {
+            String email = userDetails.getUsername();
             Event event = this.findEventById(id);
 
-            if (data.title() != null) {
-                event.setTitle(data.title());
+            if (event.getOrganizer().getEmail().equals(email)) {
+                return updateEventOnDb(event, data);
+            } else {
+                throw new AccessDeniedException("You do not have permission to update this event");
             }
-            if (data.description() != null) {
-                event.setDescription(data.description());
-            }
-            if (data.location() != null) {
-                event.setLocation(data.location());
-            }
-            if (data.date() != null) {
-                event.setDate(new Date(data.date()));
-            }
-            //
-            return EventMappers.toResponseDTO(repository.save(event));
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
-         }
+        }
+    }
+
+    public EventResponseDTO adminUpdateEvent(Integer id, EventRequestDTO data) {
+        try {
+            Event event = this.findEventById(id);
+            return updateEventOnDb(event, data);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
+    }
+
+    private EventResponseDTO updateEventOnDb(Event oldEvent, EventRequestDTO data) {
+        if (data.title() != null) {
+            oldEvent.setTitle(data.title());
+        }
+        if (data.description() != null) {
+            oldEvent.setDescription(data.description());
+        }
+        if (data.location() != null) {
+            oldEvent.setLocation(data.location());
+        }
+        if (data.date() != null) {
+            oldEvent.setDate(new Date(data.date()));
+        }
+        //
+        return EventMappers.toResponseDTO(repository.save(oldEvent));
     }
 
 
-    public void deleteEvent(Integer id){
+    public void deleteEvent(Integer id, UserDetails userDetails) {
         try {
-            Event eventOptional = this.findEventById(id);
-            repository.delete(eventOptional);
+            String email = userDetails.getUsername();
+            Event event = this.findEventById(id);
+            if (event.getOrganizer().getEmail().equals(email)) {
+                repository.delete(event);
+            } else {
+                throw new AccessDeniedException("You do not have permission to delete this event");
+            }
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);

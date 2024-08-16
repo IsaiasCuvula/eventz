@@ -16,14 +16,16 @@ public class AppUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        String ROLE_PREFIX = "ROLE_";
         UserRole role = authUser.getRole();
+
         if (role == UserRole.ADMIN) {
             return List.of(
-                    new SimpleGrantedAuthority(role.toString()),
-                    new SimpleGrantedAuthority(UserRole.USER.name())
+                    new SimpleGrantedAuthority(UserRole.ADMIN.name().toUpperCase()),
+                    new SimpleGrantedAuthority(ROLE_PREFIX + role.name().toUpperCase())
             );
         }
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name().toUpperCase()));
     }
 
     @Override

@@ -4,11 +4,11 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "bernardo@gmail.io",
+  "email": "admin@gmail.io",
   "password": "123456",
-  "firstName": "Bernardo",
+  "firstName": "King",
   "lastName": "John",
-  "role": "USER"
+  "role": "ADMIN"
 }
 
 
@@ -19,49 +19,58 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "lay@gmail.io",
+  "email": "jos@gmail.io",
   "password": "123456"
 }
 
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MTkzMDMsImV4cCI6MTcyMzcyNjUwM30.w0gxaXIu4f-8UxoF2vykoIz1CCGYPhX9nU82Gm5_Ges
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM3NjcwODcsImV4cCI6MTcyMzc3NDI4N30.VyyXIUMEtLGvTcEqLCrD73z0pHYFF941QRKDfFITjuI
+
 
 ###
 GET http://localhost:8080/v1/eventz?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MTkzMDMsImV4cCI6MTcyMzcyNjUwM30.w0gxaXIu4f-8UxoF2vykoIz1CCGYPhX9nU82Gm5_Ges
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM3NjcwODcsImV4cCI6MTcyMzc3NDI4N30.VyyXIUMEtLGvTcEqLCrD73z0pHYFF941QRKDfFITjuI
+
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/9
+GET http://localhost:8080/v1/eventz/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDcyMjcsImV4cCI6MTcyMzgxNDQyN30.5KTOMCzLZJwZegugJIJSw2P25yN773L3LwH5XddrFVE
+
+
 ###
+#Create event
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM3MjIwMzIsImV4cCI6MTcyMzcyOTIzMn0.DY-bU2eThXycGrSn8_yInM2wdKL5AYUGwDJQVZnAM5s
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDcyMjcsImV4cCI6MTcyMzgxNDQyN30.5KTOMCzLZJwZegugJIJSw2P25yN773L3LwH5XddrFVE
 
 {
-  "title": "Annual Company Picnic",
-  "description": "Company-wide picnic and outdoor games",
-  "location": "Local Park",
+  "title": "Company Town Hall",
+  "description": "Quarterly town hall meeting for all employees",
+  "location": "Main Auditorium",
   "date": 1763754984000
 }
 
 ###
 #Update existing event
-PUT http://localhost:8080/v1/eventz/10
+#PUT http://localhost:8080/v1/eventz/37
+PUT http://localhost:8080/v1/eventz/34
 Content-Type: application/json
 Cookie: key=first-value
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDc4ODcsImV4cCI6MTcyMzgxNTA4N30.gy2mVbP5HYBDyBKM_zEOGDdj1PCwhkt2PkwVPZCnZVU
 
 {
-  "title": "Training Workshop 4",
-  "description": "Training session on new software tools",
-  "location": "Training Room 3",
-  "date": 1733754984000
+  "title": "Client Demo",
+  "description": "Demo of prototype to Client B",
+  "location": "Client B's Office",
+  "date": 1738754984000
 }
 
 ###
-DELETE http://localhost:8080/v1/eventz/{id}
+DELETE http://localhost:8080/v1/eventz/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyMzc2NDU3OSwiZXhwIjoxNzIzNzcxNzc5fQ.8ovSjEqALWcxpb7mbuC11QtboUjfkyiQNRYHOrEo2GA
 
 ###
 #Search Events by title

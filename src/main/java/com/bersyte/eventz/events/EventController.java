@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -45,15 +46,33 @@ public class EventController {
    }
 
    @PutMapping("{id}")
-   public ResponseEntity<EventResponseDTO> updateEvent(@PathVariable Integer id, @Valid @RequestBody EventRequestDTO data) {
-       EventResponseDTO responseDTO = this.service.updateEvent(id, data);
+   public ResponseEntity<EventResponseDTO> updateEvent(
+           @AuthenticationPrincipal UserDetails userDetails,
+           @PathVariable Integer id,
+           @Valid @RequestBody EventRequestDTO data
+   ) {
+       EventResponseDTO responseDTO = this.service.updateEvent(id, data, userDetails);
        return ResponseEntity.ok(responseDTO);
    }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<EventResponseDTO> updateEventAdmin(
+            @PathVariable Integer id,
+            @Valid @RequestBody EventRequestDTO data
+    ) {
+        EventResponseDTO response = service.adminUpdateEvent(id, data);
+        return ResponseEntity.ok(response);
+    }
+
+
    @ResponseStatus(HttpStatus.NO_CONTENT)
    @DeleteMapping("{id}")
-   public void deleteEvent(@PathVariable Integer id) {
-       this.service.deleteEvent(id);
+   public void deleteEvent(
+           @AuthenticationPrincipal UserDetails userDetails,
+           @PathVariable Integer id
+   ) {
+       this.service.deleteEvent(id, userDetails);
    }
 
    @GetMapping("/filter")
