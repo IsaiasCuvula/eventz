@@ -2,7 +2,6 @@ package com.bersyte.eventz.events;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -55,6 +54,15 @@ public class EventController {
        return ResponseEntity.ok(responseDTO);
    }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteEvent(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Integer id
+    ) {
+        this.service.deleteEvent(id, userDetails);
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/{id}")
     public ResponseEntity<EventResponseDTO> updateEventAdmin(
@@ -65,14 +73,11 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
-
-   @ResponseStatus(HttpStatus.NO_CONTENT)
-   @DeleteMapping("{id}")
-   public void deleteEvent(
-           @AuthenticationPrincipal UserDetails userDetails,
-           @PathVariable Integer id
-   ) {
-       this.service.deleteEvent(id, userDetails);
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<String> deleteEventAdmin(@PathVariable Integer id) {
+        this.service.adminDeleteEvent(id);
+        return ResponseEntity.ok("Event deleted successfully");
    }
 
    @GetMapping("/filter")

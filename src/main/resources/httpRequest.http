@@ -19,7 +19,7 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "jos@gmail.io",
+  "email": "admin@gmail.io",
   "password": "123456"
 }
 
@@ -44,13 +44,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 POST http://localhost:8080/v1/eventz
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDcyMjcsImV4cCI6MTcyMzgxNDQyN30.5KTOMCzLZJwZegugJIJSw2P25yN773L3LwH5XddrFVE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDg2MjQsImV4cCI6MTcyMzgxNTgyNH0.Tkog9k3DL38c4xfoQkoo8aOLJIrf4-vUfJzjWHGbTn0
 
 {
   "title": "Company Town Hall",
   "description": "Quarterly town hall meeting for all employees",
   "location": "Main Auditorium",
-  "date": 1763754984000
+  "date": 1753754984000
 }
 
 ###
@@ -69,8 +69,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 }
 
 ###
-DELETE http://localhost:8080/v1/eventz/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyMzc2NDU3OSwiZXhwIjoxNzIzNzcxNzc5fQ.8ovSjEqALWcxpb7mbuC11QtboUjfkyiQNRYHOrEo2GA
+DELETE http://localhost:8080/v1/eventz/admin/34
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyMzgwODc4NSwiZXhwIjoxNzIzODE1OTg1fQ.pa1kLOAB4YVRaYMUUZDtxVBtKzNkSKE2H9PUFSwgeOQ
 
 ###
 #Search Events by title

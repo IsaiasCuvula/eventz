@@ -132,6 +132,16 @@ public class EventService {
         }
     }
 
+    public void adminDeleteEvent(Integer id) {
+        try {
+            Event event = this.findEventById(id);
+            repository.delete(event);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
+    }
+
     private Event findEventById(Integer id){
         try {
             Optional<Event> eventOptional = repository.findById(id);
