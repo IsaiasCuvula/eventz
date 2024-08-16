@@ -64,8 +64,13 @@ public class EventService {
     }
 
     public EventResponseDTO getEventById(Integer id){
-       Event event = this.findEventById(id);
-       return EventMappers.toResponseDTO(event);
+        try {
+            Event event = this.findEventById(id);
+            return EventMappers.toResponseDTO(event);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
     }
 
     public EventResponseDTO updateEvent(
