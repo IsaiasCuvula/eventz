@@ -34,8 +34,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 
 ###
 #Get by id
-GET http://localhost:8080/v1/eventz/34
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDcyMjcsImV4cCI6MTcyMzgxNDQyN30.5KTOMCzLZJwZegugJIJSw2P25yN773L3LwH5XddrFVE
+GET http://localhost:8080/v1/eventz/37
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4NTMzMzIsImV4cCI6MTcyMzg2MDUzMn0.4G1o0TgPwsX6WbccHM-Uo-YtHsmnS4tfujWydsMWDXo
 
 
 ###
@@ -118,4 +118,6 @@ Cookie: key=first-value
 ###
 #event-registration
 POST http://localhost:8080/event-registration/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODUyNjg1LCJleHAiOjE3MjM4NTk4ODV9.Du4RMpJeak4k8DJ166sCkCa6oKDxnj8k6p0DmQovKZ8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4NTM2NjcsImV4cCI6MTcyMzg2MDg2N30.ov7B08Fa9acd_TGkssh5iWznb49M8PLzNT8zuIxUCgQ
+
+###
