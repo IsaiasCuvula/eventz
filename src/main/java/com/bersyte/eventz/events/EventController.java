@@ -39,7 +39,7 @@ public class EventController {
    }
 
    @GetMapping("{id}")
-   public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Integer id) {
+   public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Long id) {
         EventResponseDTO response = this.service.getEventById(id);
        return ResponseEntity.ok(response);
    }
@@ -47,7 +47,7 @@ public class EventController {
    @PutMapping("{id}")
    public ResponseEntity<EventResponseDTO> updateEvent(
            @AuthenticationPrincipal UserDetails userDetails,
-           @PathVariable Integer id,
+           @PathVariable Long id,
            @Valid @RequestBody EventRequestDTO data
    ) {
        EventResponseDTO responseDTO = this.service.updateEvent(id, data, userDetails);
@@ -57,7 +57,7 @@ public class EventController {
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteEvent(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         this.service.deleteEvent(id, userDetails);
         return ResponseEntity.ok("Event deleted successfully");
@@ -66,7 +66,7 @@ public class EventController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/{id}")
     public ResponseEntity<EventResponseDTO> updateEventAdmin(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody EventRequestDTO data
     ) {
         EventResponseDTO response = service.adminUpdateEvent(id, data);
@@ -75,7 +75,7 @@ public class EventController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<String> deleteEventAdmin(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteEventAdmin(@PathVariable Long id) {
         this.service.adminDeleteEvent(id);
         return ResponseEntity.ok("Event deleted successfully");
    }

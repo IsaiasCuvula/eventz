@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
-public interface EventRepository extends JpaRepository<Event, Integer>{
+public interface EventRepository extends JpaRepository<Event, Long> {
 
   //Event - entity name
   @Query(

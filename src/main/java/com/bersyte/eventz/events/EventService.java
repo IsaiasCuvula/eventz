@@ -63,7 +63,7 @@ public class EventService {
         }
     }
 
-    public EventResponseDTO getEventById(Integer id){
+    public EventResponseDTO getEventById(Long id) {
         try {
             Event event = this.findEventById(id);
             return EventMappers.toResponseDTO(event);
@@ -74,7 +74,7 @@ public class EventService {
     }
 
     public EventResponseDTO updateEvent(
-            Integer id,
+            Long id,
             EventRequestDTO data,
             UserDetails userDetails
     ) {
@@ -94,7 +94,7 @@ public class EventService {
         }
     }
 
-    public EventResponseDTO adminUpdateEvent(Integer id, EventRequestDTO data) {
+    public EventResponseDTO adminUpdateEvent(Long id, EventRequestDTO data) {
         try {
             Event event = this.findEventById(id);
             return updateEventOnDb(event, data);
@@ -122,7 +122,7 @@ public class EventService {
     }
 
 
-    public void deleteEvent(Integer id, UserDetails userDetails) {
+    public void deleteEvent(Long id, UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
             Event event = this.findEventById(id);
@@ -137,7 +137,7 @@ public class EventService {
         }
     }
 
-    public void adminDeleteEvent(Integer id) {
+    public void adminDeleteEvent(Long id) {
         try {
             Event event = this.findEventById(id);
             repository.delete(event);
@@ -147,7 +147,7 @@ public class EventService {
         }
     }
 
-    public Event findEventById(Integer id) {
+    public Event findEventById(Long id) {
         try {
             Optional<Event> eventOptional = repository.findById(id);
             if (eventOptional.isEmpty()) {
