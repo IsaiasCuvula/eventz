@@ -4,15 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/event-registration")
+@RequestMapping("/v1/event-registration")
 public class RegistrationController {
 
     private final RegistrationService registrationService;
@@ -23,9 +20,18 @@ public class RegistrationController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
     ) {
-        RegistrationResponseDTO response = registrationService.registerToEvent(
+        RegistrationResponseDTO response = registrationService.registerUserToEvent(
                 id, userDetails
         );
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelRegistration(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id
+    ) {
+        final String response = registrationService.cancelRegistration(userDetails, id);
         return ResponseEntity.ok(response);
     }
 

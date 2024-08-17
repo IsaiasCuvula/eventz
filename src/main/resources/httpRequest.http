@@ -117,7 +117,12 @@ Cookie: key=first-value
 
 ###
 #event-registration
-POST http://localhost:8080/event-registration/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4NTM2NjcsImV4cCI6MTcyMzg2MDg2N30.ov7B08Fa9acd_TGkssh5iWznb49M8PLzNT8zuIxUCgQ
+POST http://localhost:8080/v1/event-registration/39
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODk1MjQ2LCJleHAiOjE3MjM5MDI0NDZ9.K2uwawDWKiOe0BiNwrF-VtWI2Dzv9sTKJ_HndCC61SI
+
 
 ###
+#cancel event-registration
+PUT http://localhost:8080/v1/event-registration/cancel/39
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODk1MjQ2LCJleHAiOjE3MjM5MDI0NDZ9.K2uwawDWKiOe0BiNwrF-VtWI2Dzv9sTKJ_HndCC61SI
+

@@ -19,6 +19,9 @@ public class Registration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Enumerated(EnumType.STRING)
+    RegistrationStatus status;
+
     @ManyToOne
     @JoinColumn(name = "event_id")
     Event event;
