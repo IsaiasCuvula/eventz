@@ -66,4 +66,18 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(EventRegistrationException.class)
+    public ResponseEntity<ApiError> eventRegistrationException(
+            EventRegistrationException e,
+            HttpServletRequest request
+    ) {
+        ApiError error = new ApiError(
+                request.getRequestURI(),
+                e.getLocalizedMessage(),
+                HttpStatus.FORBIDDEN.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
 }
