@@ -75,9 +75,9 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 request.getRequestURI(),
                 e.getLocalizedMessage(),
-                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.CONFLICT.value(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }
