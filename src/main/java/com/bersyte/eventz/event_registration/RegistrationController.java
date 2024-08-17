@@ -21,7 +21,7 @@ public class RegistrationController {
     @PostMapping("{id}")
     public ResponseEntity<RegistrationResponseDTO> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Integer id
+            @PathVariable Long id
     ) {
         RegistrationResponseDTO response = registrationService.registerToEvent(
                 id, userDetails
