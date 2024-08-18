@@ -1,6 +1,7 @@
 package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.event_registration.Registration;
+import com.bersyte.eventz.event_registration.RegistrationStatus;
 import com.bersyte.eventz.security.auth.AppUser;
 
 import java.util.Date;
@@ -12,7 +13,8 @@ public class EventMappers {
 
    public static EventResponseDTO toResponseDTO(Event entity){
        final AppUser organizer = entity.getOrganizer();
-       final List<Registration> participants = entity.getRegistrations();
+       final List<Registration> registrations = entity.getRegistrations();
+       final String organizerLastName = organizer.getLastName() == null ? " " : organizer.getLastName();
 
        return new EventResponseDTO(
                entity.getId(),
@@ -20,10 +22,16 @@ public class EventMappers {
                entity.getDescription(),
                entity.getLocation(),
                entity.getDate(),
-               organizer.getFirstName() + " " + organizer.getLastName(),
-               participants.stream().map(
-                       participant -> participant.getUser().getFirstName() +
-                               " " + participant.getUser().getLastName()
+               organizer.getFirstName() + " " + organizerLastName,
+               registrations.stream()
+                       .filter(registration -> registration.getStatus() == RegistrationStatus.ACTIVE)
+                       .map(
+                               registration -> {
+                                   AppUser user = registration.getUser();
+                                   String lastName = user.getLastName() == null ? "" : user.getLastName();
+                                   String firstName = user.getFirstName();
+                                   return firstName + " " + lastName;
+                               }
                ).toList(),
                entity.getCreatedAt()
        );
