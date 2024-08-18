@@ -30,4 +30,5 @@ public class Registration {
     @JoinColumn(name = "user_id")
     AppUser user;
     Date registeredAt;
+    Date updateAt;
 }
