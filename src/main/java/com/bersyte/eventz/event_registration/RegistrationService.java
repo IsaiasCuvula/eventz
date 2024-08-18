@@ -5,7 +5,7 @@ import com.bersyte.eventz.events.EventService;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
 import com.bersyte.eventz.security.auth.AppUser;
-import com.bersyte.eventz.users.UsersService;
+import com.bersyte.eventz.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RegistrationService {
     private final RegistrationRepository registrationRepository;
-    private final UsersService usersService;
+    private final UserService usersService;
     private final EventService eventService;
 
     private static Registration getRegistration(Long participantId, Optional<Registration> registration) {

@@ -2,7 +2,7 @@ package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.security.auth.AppUser;
-import com.bersyte.eventz.users.UsersService;
+import com.bersyte.eventz.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class EventService {
 
     private final EventRepository repository;
-    private final UsersService usersService;
+    private final UserService usersService;
 
 
     public EventResponseDTO createEvent(

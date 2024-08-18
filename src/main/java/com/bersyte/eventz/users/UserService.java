@@ -17,9 +17,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UsersService {
+public class UserService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository usersRepository;
 
 
     public List<UserResponseDTO> getAllUsers(int page, int size) {
