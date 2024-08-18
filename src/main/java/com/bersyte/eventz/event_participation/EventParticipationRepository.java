@@ -13,16 +13,16 @@ import java.util.Optional;
 public interface EventParticipationRepository extends JpaRepository<EventParticipation, Long> {
 
   @Query(
-          "select r from EventParticipation  r " +
-                  "where r.user.id = :userId and r.event.id = :eventId"
+          "select evPart from EventParticipation  evPart " +
+                  "where evPart.user.id = :userId and evPart.event.id = :eventId"
   )
   Optional<EventParticipation> findByUserIdAndEventId(Long userId, Long eventId);
 
   @Modifying
   @Transactional
   @Query(
-          "update EventParticipation r set r.status = :status, r.updateAt = :updateAt " +
-                  "where r.user.id = :userId and r.event.id = :eventId"
+          "update EventParticipation evPart set evPart.status = :status, evPart.updateAt = :updateAt " +
+                  "where evPart.user.id = :userId and evPart.event.id = :eventId"
   )
   void updateRegistrationStatus(
           Long userId,
