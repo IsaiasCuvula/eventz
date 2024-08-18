@@ -1,4 +1,4 @@
-package com.bersyte.eventz.event_registration;
+package com.bersyte.eventz.event_participation;
 
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.events.EventMappers;
@@ -7,10 +7,10 @@ import com.bersyte.eventz.security.auth.AppUser;
 import java.util.Date;
 
 
-public class RegistrationMapper {
+public class EventParticipationMapper {
 
-    public static RegistrationResponseDTO toResponseDTO(Registration registration) {
-        return new RegistrationResponseDTO(
+    public static EventParticipationResponseDTO toResponseDTO(EventParticipation registration) {
+        return new EventParticipationResponseDTO(
                 registration.getId(),
                 EventMappers.toResponseDTO(registration.getEvent()),
                 "Successfully registered",
@@ -18,13 +18,13 @@ public class RegistrationMapper {
         );
     }
 
-    public static Registration toEntity(
+    public static EventParticipation toEntity(
             Date registrationAt,
             Date updateAt,
             Event event,
             AppUser user
     ) {
-        Registration entity = new Registration();
+        EventParticipation entity = new EventParticipation();
         entity.setEvent(event);
         entity.setUser(user);
         entity.setRegisteredAt(registrationAt);

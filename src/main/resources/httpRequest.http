@@ -118,7 +118,7 @@ Cookie: key=first-value
 ###
 #event-registration
 POST http://localhost:8080/v1/event-registration/37
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsYXlAZ21haWwuaW8iLCJpYXQiOjE3MjM5NzQ1MjAsImV4cCI6MTcyMzk4MTcyMH0.PfzRGFKWMOX7jp-Fm9JVyND-KGjmxwIRaHPnn8XXJuc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM5ODAzOTQsImV4cCI6MTcyMzk4NzU5NH0.vZjW8B-zxgVmpFXLnALe960bI8wwSOEgjGv6RWFU4Zw
 
 
 

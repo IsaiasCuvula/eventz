@@ -1,4 +1,4 @@
-package com.bersyte.eventz.event_registration;
+package com.bersyte.eventz.event_participation;
 
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.security.auth.AppUser;
@@ -13,14 +13,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "registrations")
-public class Registration {
+@Table(name = "event_participations")
+public class EventParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Enumerated(EnumType.STRING)
-    RegistrationStatus status;
+    ParticipationStatus status;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
