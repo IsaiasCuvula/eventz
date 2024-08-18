@@ -22,8 +22,6 @@ public class RegistrationService {
     private final UsersService usersService;
     private final EventService eventService;
 
-    //TODO- EVENT CREATOR AND ADMIN CAN REMOVE PARTICIPANTS
-
     private static Registration getRegistration(Long participantId, Optional<Registration> registration) {
 
         if (registration.isEmpty()) {
@@ -47,12 +45,61 @@ public class RegistrationService {
         return organizerRegistration;
     }
 
+    public RegistrationResponseDTO organizerAddUserToHisEvent(
+            UserDetails organizerDetails,
+            Long participantId,
+            Long eventId
+    ) {
+        try {
+            AppUser organizer = this.getUserByEmail(organizerDetails);
+            Event event = this.getEvent(eventId);
+            Long organizerId = organizer.getId();
+            Long eventOrganizerId = event.getOrganizer().getId();
+            final Date updatedDate = new Date();
+            final Date createdDate = new Date();
+
+            if (!organizerId.equals(eventOrganizerId)) {
+                throw new EventRegistrationException("You are not the organizer of this event");
+            }
+
+            Optional<Registration> existingRegistration = registrationRepository.findByUserIdAndEventId(
+                    participantId,
+                    event.getId()
+            );
+
+            if (existingRegistration.isEmpty()) {
+                AppUser participant = usersService.getUserById(participantId);
+                Registration registration = RegistrationMapper.toEntity(
+                        createdDate,
+                        updatedDate,
+                        event,
+                        participant
+                );
+                registration.setStatus(RegistrationStatus.ACTIVE);
+                return saveRegistration(registration);
+            }
+
+            Registration oldRegistration = existingRegistration.get();
+            if (oldRegistration.getStatus() == RegistrationStatus.ACTIVE) {
+                throw new EventRegistrationException("User is already participating in this event");
+            }
+
+            oldRegistration.setStatus(RegistrationStatus.ACTIVE);
+            oldRegistration.setUpdateAt(updatedDate);
+            return saveRegistration(oldRegistration);
+        } catch (EventRegistrationException e) {
+            throw new EventRegistrationException(
+                    "Failed to register user to the event - " + e.getLocalizedMessage()
+            );
+        }
+    }
+
     public RegistrationResponseDTO removeParticipantFromEvent(
             UserDetails userDetails, Long participantId, Long eventId
     ) {
         try {
             AppUser currentUser = this.getUserByEmail(userDetails);
-            Event event = eventService.findEventById(eventId);
+            Event event = this.getEvent(eventId);
             Long organizerId = event.getOrganizer().getId();
 
             if (!organizerId.equals(currentUser.getId())) {
@@ -81,7 +128,7 @@ public class RegistrationService {
     ) {
         try {
             AppUser user = this.getUserByEmail(userDetails);
-            Event event = eventService.findEventById(eventId);
+            Event event = this.getEvent(eventId);
 
             Optional<Registration> registration = registrationRepository.findByUserIdAndEventId(
                     user.getId(),
@@ -120,7 +167,7 @@ public class RegistrationService {
     ) {
         try {
             AppUser user = this.getUserByEmail(userDetails);
-            Event event = eventService.findEventById(eventId);
+            Event event = this.getEvent(eventId);
             final Date updatedDate = new Date();
             final Date createdDate = new Date();
 
@@ -178,4 +225,13 @@ public class RegistrationService {
         }
     }
 
+    private Event getEvent(Long eventId) {
+        try {
+            return eventService.findEventById(eventId);
+        } catch (DataAccessException e) {
+            throw new DatabaseOperationException(
+                    "Error getting event " + e.getLocalizedMessage()
+            );
+        }
+    }
 }

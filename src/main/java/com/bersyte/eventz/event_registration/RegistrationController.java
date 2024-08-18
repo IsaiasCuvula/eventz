@@ -48,4 +48,19 @@ public class RegistrationController {
         );
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/add-participant")
+    public ResponseEntity<RegistrationResponseDTO> organizerAddUserToHisEvent(
+            @AuthenticationPrincipal UserDetails organizerDetails,
+            @RequestParam Long participantId,
+            @RequestParam Long eventId
+
+    ) {
+        final RegistrationResponseDTO response = registrationService.organizerAddUserToHisEvent(
+                organizerDetails,
+                participantId,
+                eventId
+        );
+        return ResponseEntity.ok(response);
+    }
 }
