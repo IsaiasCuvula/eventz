@@ -6,20 +6,28 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.Optional;
+
 @Repository
 public interface RegistrationRepository extends JpaRepository<Registration, Long> {
 
   @Query(
-          "select count(r) > 0 from  Registration r where r.user.id = :userId " +
-                  " and r.event.id = :eventId"
+          "select r from Registration  r " +
+                  "where r.user.id = :userId and r.event.id = :eventId"
   )
-  boolean existsByUserIdAndEventId(Long userId, Long eventId);
+  Optional<Registration> findByUserIdAndEventId(Long userId, Long eventId);
 
   @Modifying
   @Transactional
   @Query(
-          "update Registration r set r.status = :status " +
+          "update Registration r set r.status = :status, r.updateAt = :updateAt " +
                   "where r.user.id = :userId and r.event.id = :eventId"
   )
-  void updateRegistrationStatus(Long userId, Long eventId, RegistrationStatus status);
+  void updateRegistrationStatus(
+          Long userId,
+          Long eventId,
+          RegistrationStatus status,
+          Date updateAt
+  );
 }
