@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,16 +29,30 @@ public class RegistrationService {
             AppUser user = this.getUserByEmail(userDetails);
             Event event = eventService.findEventById(eventId);
 
-            final boolean isUserAlreadyRegistered = isUserRegistered(user.getId(), event.getId());
+            Optional<Registration> registration = registrationRepository.findByUserIdAndEventId(
+                    user.getId(),
+                    event.getId()
+            );
 
-            if (!isUserAlreadyRegistered) {
+            if (registration.isEmpty()) {
+                throw new EventRegistrationException("User not registered in this event");
+            }
+
+            final Registration existingRegistration = registration.get();
+
+            if (existingRegistration.status == RegistrationStatus.CANCELED) {
                 throw new EventRegistrationException("User not registered in this event");
             }
 
             registrationRepository.updateRegistrationStatus(
-                    user.getId(), eventId, RegistrationStatus.CANCELED
+                    user.getId(), eventId,
+                    RegistrationStatus.CANCELED,
+                    new Date()
             );
+
             return "Event Registration Cancelled Successfully";
+
+
         } catch (EventRegistrationException e) {
             throw new EventRegistrationException(
                     "Failed to cancel registration from the event - " + e.getLocalizedMessage()
@@ -55,18 +70,36 @@ public class RegistrationService {
         try {
             AppUser user = this.getUserByEmail(userDetails);
             Event event = eventService.findEventById(eventId);
+            final Date updatedDate = new Date();
+            final Date createdDate = new Date();
 
-            final boolean isUserAlreadyRegistered = isUserRegistered(user.getId(), event.getId());
+            Optional<Registration> existingRegistration = registrationRepository.findByUserIdAndEventId(
+                    user.getId(),
+                    event.getId()
+            );
 
-            if (isUserAlreadyRegistered) {
+            if (existingRegistration.isEmpty()) {
+                Registration registration = RegistrationMapper.toEntity(
+                        createdDate,
+                        updatedDate,
+                        event,
+                        user
+                );
+                registration.setStatus(RegistrationStatus.ACTIVE);
+                return saveRegistration(registration);
+            }
+
+            final Registration oldRegistration = existingRegistration.get();
+
+            System.out.println("Old Registration: " + oldRegistration);
+
+            if (oldRegistration.status == RegistrationStatus.ACTIVE) {
                 throw new EventRegistrationException("User already registered");
             }
 
-            Registration registration = RegistrationMapper.toEntity(new Date(), event, user);
-            registration.setStatus(RegistrationStatus.ACTIVE);
-            //
-            final Registration result = registrationRepository.save(registration);
-            return RegistrationMapper.toResponseDTO(result);
+            oldRegistration.setStatus(RegistrationStatus.ACTIVE);
+            oldRegistration.setUpdateAt(updatedDate);
+            return saveRegistration(oldRegistration);
         } catch (EventRegistrationException e) {
             throw new EventRegistrationException(
                     "Failed to register user to the event - " + e.getLocalizedMessage()
@@ -74,12 +107,13 @@ public class RegistrationService {
         }
     }
 
-    private boolean isUserRegistered(Long userId, Long eventId) {
+    private RegistrationResponseDTO saveRegistration(Registration registration) {
         try {
-            return registrationRepository.existsByUserIdAndEventId(userId, eventId);
+            final Registration result = registrationRepository.save(registration);
+            return RegistrationMapper.toResponseDTO(result);
         } catch (EventRegistrationException e) {
             throw new EventRegistrationException(
-                    "Failed to check if user is registered to the event - " + e.getLocalizedMessage()
+                    "Failed to register user to the event - " + e.getLocalizedMessage()
             );
         }
     }

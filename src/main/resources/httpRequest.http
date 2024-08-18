@@ -117,12 +117,18 @@ Cookie: key=first-value
 
 ###
 #event-registration
-POST http://localhost:8080/v1/event-registration/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODk1MjQ2LCJleHAiOjE3MjM5MDI0NDZ9.K2uwawDWKiOe0BiNwrF-VtWI2Dzv9sTKJ_HndCC61SI
-
+POST http://localhost:8080/v1/event-registration/36
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzOTM5MjYxLCJleHAiOjE3MjM5NDY0NjF9.UvooOb2Sxw-ABIuVJjysrcD3WJ7GDFleiIbmDy7eSqo
 
 ###
 #cancel event-registration
 PUT http://localhost:8080/v1/event-registration/cancel/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzODk1MjQ2LCJleHAiOjE3MjM5MDI0NDZ9.K2uwawDWKiOe0BiNwrF-VtWI2Dzv9sTKJ_HndCC61SI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXhAZ21haWwuY29tIiwiaWF0IjoxNzIzOTM5MjYxLCJleHAiOjE3MjM5NDY0NjF9.UvooOb2Sxw-ABIuVJjysrcD3WJ7GDFleiIbmDy7eSqo
+
+
+
+
+
+
+
 
