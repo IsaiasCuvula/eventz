@@ -18,14 +18,14 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "jos@gmail.io",
+  "email": "admin@gmail.io",
   "password": "123456"
 }
 
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM3NjcwODcsImV4cCI6MTcyMzc3NDI4N30.VyyXIUMEtLGvTcEqLCrD73z0pHYFF941QRKDfFITjuI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDAyMjEyMiwiZXhwIjoxNzI0MDI5MzIyfQ.hjIYfBLgJDY_7y34zNz5m1DdRt-dFISYuMw3OUxcPEo
 
 
 ###
@@ -43,10 +43,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 POST http://localhost:8080/v1/events
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDg2MjQsImV4cCI6MTcyMzgxNTgyNH0.Tkog9k3DL38c4xfoQkoo8aOLJIrf4-vUfJzjWHGbTn0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDAyMjMyNCwiZXhwIjoxNzI0MDI5NTI0fQ.230qeMx58vGL2YOXoUuqddKz9f2prMAKz1ZHS9SaJYs
 
 {
-  "title": "Company Town Hall",
+  "title": "Company Hall",
   "description": "Quarterly town hall meeting for all employees",
   "location": "Main Auditorium",
   "date": 1753754984000
@@ -55,10 +55,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 ###
 #Update existing event
 #PUT http://localhost:8080/v1/events/37
-PUT http://localhost:8080/v1/events/34
+PUT http://localhost:8080/v1/events/35
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4MDc4ODcsImV4cCI6MTcyMzgxNTA4N30.gy2mVbP5HYBDyBKM_zEOGDdj1PCwhkt2PkwVPZCnZVU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDAyMjMyNCwiZXhwIjoxNzI0MDI5NTI0fQ.230qeMx58vGL2YOXoUuqddKz9f2prMAKz1ZHS9SaJYs
 
 {
   "title": "Client Demo",

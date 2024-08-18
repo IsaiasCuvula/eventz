@@ -4,6 +4,7 @@ import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.event_participation.ParticipationStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,9 @@ public class EventMappers {
 
    public static EventResponseDTO toResponseDTO(Event entity){
        final AppUser organizer = entity.getOrganizer();
-       final List<EventParticipation> registrations = entity.getRegistrations();
+       final List<EventParticipation> registrations = entity.getRegistrations() == null ?
+               new ArrayList<EventParticipation>() : entity.getRegistrations();
+
        final String organizerLastName = organizer.getLastName() == null ? " " : organizer.getLastName();
 
        return new EventResponseDTO(

@@ -1,8 +1,8 @@
 package com.bersyte.eventz.event_participation;
 
 import com.bersyte.eventz.common.AppUser;
+import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.events.Event;
-import com.bersyte.eventz.events.EventService;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
 import com.bersyte.eventz.users.UserService;
@@ -19,8 +19,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EventParticipationService {
     private final EventParticipationRepository registrationRepository;
+    private final EventCommonService eventCommonService;
     private final UserService usersService;
-    private final EventService eventService;
+
 
     private static EventParticipation getRegistration(Long participantId, Optional<EventParticipation> registration) {
 
@@ -227,7 +228,7 @@ public class EventParticipationService {
 
     private Event getEvent(Long eventId) {
         try {
-            return eventService.findEventById(eventId);
+            return eventCommonService.findEventById(eventId);
         } catch (DataAccessException e) {
             throw new DatabaseOperationException(
                     "Error getting event " + e.getLocalizedMessage()

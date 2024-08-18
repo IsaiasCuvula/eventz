@@ -1,6 +1,7 @@
 package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.common.AppUser;
+import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.users.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +22,7 @@ public class EventService {
 
     private final EventRepository repository;
     private final UserService usersService;
+    private final EventCommonService eventCommonService;
 
 
     public EventResponseDTO createEvent(
@@ -65,7 +66,7 @@ public class EventService {
 
     public EventResponseDTO getEventById(Long id) {
         try {
-            Event event = this.findEventById(id);
+            Event event = eventCommonService.findEventById(id);
             return EventMappers.toResponseDTO(event);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
@@ -81,10 +82,10 @@ public class EventService {
 
         try {
             String email = userDetails.getUsername();
-            Event event = this.findEventById(id);
+            Event event = eventCommonService.findEventById(id);
 
             if (event.getOrganizer().getEmail().equals(email)) {
-                return updateEventOnDb(event, data);
+                return eventCommonService.updateEventOnDb(event, data);
             } else {
                 throw new AccessDeniedException("You do not have permission to update this event");
             }
@@ -95,33 +96,10 @@ public class EventService {
     }
 
 
-    private EventResponseDTO updateEventOnDb(Event oldEvent, EventRequestDTO data) {
-        try {
-            if (data.title() != null) {
-                oldEvent.setTitle(data.title());
-            }
-            if (data.description() != null) {
-                oldEvent.setDescription(data.description());
-            }
-            if (data.location() != null) {
-                oldEvent.setLocation(data.location());
-            }
-            if (data.date() != null) {
-                oldEvent.setDate(new Date(data.date()));
-            }
-            //
-            return EventMappers.toResponseDTO(repository.save(oldEvent));
-        } catch (DataAccessException e) {
-            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
-        }
-    }
-
-
     public void deleteEvent(Long id, UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
-            Event event = this.findEventById(id);
+            Event event = eventCommonService.findEventById(id);
             if (event.getOrganizer().getEmail().equals(email)) {
                 repository.delete(event);
             } else {
@@ -129,21 +107,6 @@ public class EventService {
             }
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
-        }
-    }
-
-
-    public Event findEventById(Long id) {
-        try {
-            Optional<Event> eventOptional = repository.findById(id);
-            if (eventOptional.isEmpty()) {
-                String errorMsg = String.format("Event with id: %s not found", id);
-                throw new DatabaseOperationException(errorMsg);
-            }
-            return eventOptional.get();
-        } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to get event by id %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
         }
     }
