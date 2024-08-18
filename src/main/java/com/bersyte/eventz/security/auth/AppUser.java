@@ -4,17 +4,19 @@ import com.bersyte.eventz.event_registration.Registration;
 import com.bersyte.eventz.events.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
 
 
-@Data
 @Entity
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class AppUser {
     @Id
