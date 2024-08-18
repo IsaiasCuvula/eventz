@@ -1,4 +1,4 @@
-package com.bersyte.eventz.security.auth;
+package com.bersyte.eventz.common;
 
 import java.util.Date;
 

@@ -1,5 +1,6 @@
 package com.bersyte.eventz.security.auth;
 
+import com.bersyte.eventz.common.AppUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

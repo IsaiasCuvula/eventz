@@ -3,7 +3,6 @@ package com.bersyte.eventz.events;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -62,23 +61,6 @@ public class EventController {
         this.service.deleteEvent(id, userDetails);
         return ResponseEntity.ok("Event deleted successfully");
     }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/admin/{id}")
-    public ResponseEntity<EventResponseDTO> updateEventAdmin(
-            @PathVariable Long id,
-            @Valid @RequestBody EventRequestDTO data
-    ) {
-        EventResponseDTO response = service.adminUpdateEvent(id, data);
-        return ResponseEntity.ok(response);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/admin/{id}")
-    public ResponseEntity<String> deleteEventAdmin(@PathVariable Long id) {
-        this.service.adminDeleteEvent(id);
-        return ResponseEntity.ok("Event deleted successfully");
-   }
 
    @GetMapping("/filter")
    public ResponseEntity<List<EventResponseDTO>> filterEvents(

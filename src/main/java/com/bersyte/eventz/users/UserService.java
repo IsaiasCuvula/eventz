@@ -1,9 +1,9 @@
 package com.bersyte.eventz.users;
 
+import com.bersyte.eventz.common.AppUser;
+import com.bersyte.eventz.common.UserMapper;
+import com.bersyte.eventz.common.UserResponseDTO;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.security.auth.AppUser;
-import com.bersyte.eventz.security.auth.UserMapper;
-import com.bersyte.eventz.security.auth.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;

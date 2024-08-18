@@ -1,4 +1,4 @@
-package com.bersyte.eventz.security.auth;
+package com.bersyte.eventz.common;
 
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.events.Event;

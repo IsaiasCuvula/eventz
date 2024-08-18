@@ -1,7 +1,7 @@
 package com.bersyte.eventz.events;
 
+import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.security.auth.AppUser;
 import com.bersyte.eventz.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -94,31 +94,27 @@ public class EventService {
         }
     }
 
-    public EventResponseDTO adminUpdateEvent(Long id, EventRequestDTO data) {
+
+    private EventResponseDTO updateEventOnDb(Event oldEvent, EventRequestDTO data) {
         try {
-            Event event = this.findEventById(id);
-            return updateEventOnDb(event, data);
+            if (data.title() != null) {
+                oldEvent.setTitle(data.title());
+            }
+            if (data.description() != null) {
+                oldEvent.setDescription(data.description());
+            }
+            if (data.location() != null) {
+                oldEvent.setLocation(data.location());
+            }
+            if (data.date() != null) {
+                oldEvent.setDate(new Date(data.date()));
+            }
+            //
+            return EventMappers.toResponseDTO(repository.save(oldEvent));
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
         }
-    }
-
-    private EventResponseDTO updateEventOnDb(Event oldEvent, EventRequestDTO data) {
-        if (data.title() != null) {
-            oldEvent.setTitle(data.title());
-        }
-        if (data.description() != null) {
-            oldEvent.setDescription(data.description());
-        }
-        if (data.location() != null) {
-            oldEvent.setLocation(data.location());
-        }
-        if (data.date() != null) {
-            oldEvent.setDate(new Date(data.date()));
-        }
-        //
-        return EventMappers.toResponseDTO(repository.save(oldEvent));
     }
 
 
@@ -137,15 +133,6 @@ public class EventService {
         }
     }
 
-    public void adminDeleteEvent(Long id) {
-        try {
-            Event event = this.findEventById(id);
-            repository.delete(event);
-        } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
-        }
-    }
 
     public Event findEventById(Long id) {
         try {

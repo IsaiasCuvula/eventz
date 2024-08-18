@@ -1,7 +1,7 @@
 package com.bersyte.eventz.events;
 
+import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.security.auth.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

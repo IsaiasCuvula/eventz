@@ -1,6 +1,6 @@
 package com.bersyte.eventz.users;
 
-import com.bersyte.eventz.security.auth.AppUser;
+import com.bersyte.eventz.common.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

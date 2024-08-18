@@ -1,8 +1,8 @@
 package com.bersyte.eventz.events;
 
+import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.event_participation.ParticipationStatus;
-import com.bersyte.eventz.security.auth.AppUser;
 
 import java.util.Date;
 import java.util.List;

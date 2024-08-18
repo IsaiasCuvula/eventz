@@ -1,10 +1,10 @@
 package com.bersyte.eventz.event_participation;
 
+import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.events.EventService;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
-import com.bersyte.eventz.security.auth.AppUser;
 import com.bersyte.eventz.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;

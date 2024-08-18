@@ -1,6 +1,6 @@
 package com.bersyte.eventz.users;
 
-import com.bersyte.eventz.security.auth.UserResponseDTO;
+import com.bersyte.eventz.common.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
