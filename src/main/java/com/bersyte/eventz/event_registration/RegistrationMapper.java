@@ -20,6 +20,7 @@ public class RegistrationMapper {
 
     public static Registration toEntity(
             Date registrationAt,
+            Date updateAt,
             Event event,
             AppUser user
     ) {
@@ -27,6 +28,7 @@ public class RegistrationMapper {
         entity.setEvent(event);
         entity.setUser(user);
         entity.setRegisteredAt(registrationAt);
+        entity.setUpdateAt(updateAt == null ? new Date() : updateAt);
         return entity;
     }
 }
