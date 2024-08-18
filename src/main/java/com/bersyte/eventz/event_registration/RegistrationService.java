@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,59 @@ public class RegistrationService {
     private final UsersService usersService;
     private final EventService eventService;
 
+    //TODO- EVENT CREATOR AND ADMIN CAN REMOVE PARTICIPANTS
+
+    private static Registration getRegistration(Long participantId, Optional<Registration> registration) {
+
+        if (registration.isEmpty()) {
+            throw new EventRegistrationException("Registration not found");
+        }
+
+        Registration organizerRegistration = registration.get();
+
+        Long eventParticipantId = organizerRegistration.user.getId();
+
+        if (!Objects.equals(eventParticipantId, participantId)) {
+            throw new EventRegistrationException("This user is not a participant of the event");
+        }
+
+        if (organizerRegistration.getStatus() == RegistrationStatus.CANCELED) {
+            throw new EventRegistrationException("This user is not a participant of the event");
+        }
+
+        organizerRegistration.setStatus(RegistrationStatus.CANCELED);
+        organizerRegistration.setUpdateAt(new Date());
+        return organizerRegistration;
+    }
+
+    public RegistrationResponseDTO removeParticipantFromEvent(
+            UserDetails userDetails, Long participantId, Long eventId
+    ) {
+        try {
+            AppUser currentUser = this.getUserByEmail(userDetails);
+            Event event = eventService.findEventById(eventId);
+            Long organizerId = event.getOrganizer().getId();
+
+            if (!organizerId.equals(currentUser.getId())) {
+                throw new EventRegistrationException("You are not the organizer of the event");
+            }
+
+            Optional<Registration> registration = registrationRepository.findByUserIdAndEventId(
+                    currentUser.getId(), event.getId()
+            );
+
+            Registration organizerRegistration = getRegistration(participantId, registration);
+
+            return this.saveRegistration(organizerRegistration);
+        } catch (EventRegistrationException e) {
+            throw new EventRegistrationException(
+                    "Failed to cancel registration from the event - " + e.getLocalizedMessage()
+            );
+        }
+
+    }
+
+    //
     public String cancelRegistration(
             UserDetails userDetails,
             Long eventId
@@ -59,10 +113,7 @@ public class RegistrationService {
             );
         }
     }
-    //TODO- EVENT CREATOR AND ADMIN CAN REMOVE PARTICIPANTS
 
-
-    //
     public RegistrationResponseDTO registerUserToEvent(
             Long eventId,
             UserDetails userDetails
@@ -90,8 +141,6 @@ public class RegistrationService {
             }
 
             final Registration oldRegistration = existingRegistration.get();
-
-            System.out.println("Old Registration: " + oldRegistration);
 
             if (oldRegistration.status == RegistrationStatus.ACTIVE) {
                 throw new EventRegistrationException("User already registered");

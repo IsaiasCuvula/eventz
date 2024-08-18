@@ -26,7 +26,7 @@ public class RegistrationController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/cancel/{id}")
+    @PostMapping("/cancel/{id}")
     public ResponseEntity<String> cancelRegistration(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id
@@ -35,5 +35,17 @@ public class RegistrationController {
         return ResponseEntity.ok(response);
     }
 
-
+    @PostMapping("/remove-participant")
+    public ResponseEntity<RegistrationResponseDTO> removeParticipantFromEvent(
+            @AuthenticationPrincipal UserDetails organizerDetails,
+            @RequestParam Long participantId,
+            @RequestParam Long eventId
+    ) {
+        final RegistrationResponseDTO response = registrationService.removeParticipantFromEvent(
+                organizerDetails,
+                participantId,
+                eventId
+        );
+        return ResponseEntity.ok(response);
+    }
 }
