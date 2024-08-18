@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -64,6 +65,19 @@ public class UsersService {
     public AppUser getUserByEmail(String email) {
         try {
             return usersRepository.findByEmail(email);
+        } catch (DataAccessException e) {
+            String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
+            throw new DatabaseOperationException(errorMsg);
+        }
+    }
+
+    public AppUser getUserById(Long id) {
+        try {
+            Optional<AppUser> userOptional = usersRepository.findById(id);
+            if (userOptional.isEmpty()) {
+                throw new DatabaseOperationException("User not found");
+            }
+            return userOptional.get();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
