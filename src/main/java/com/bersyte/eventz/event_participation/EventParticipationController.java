@@ -14,7 +14,6 @@ public class EventParticipationController {
 
     private final EventParticipationService registrationService;
 
-
     @PostMapping("{id}")
     public ResponseEntity<EventParticipationResponseDTO> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
