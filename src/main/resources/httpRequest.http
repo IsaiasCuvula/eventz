@@ -30,7 +30,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhd
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM4NTIxODAsImV4cCI6MTcyMzg1OTM4MH0.wwxQn6s8kVptNS3VZTJENFWpgjXkvXNOGK1ajUGc9Jk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDExMTMwMiwiZXhwIjoxNzI0MTE0OTAyfQ.NIKjjS76PKCNSgalhCLjXEfSXVpgn1K89lAaovrW9HE
+
 
 ###
 #Get by id

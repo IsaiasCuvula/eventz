@@ -1,6 +1,6 @@
-package com.bersyte.eventz.security.jwt;
+package com.bersyte.eventz.security;
 
-import com.bersyte.eventz.security.auth.AuthUserDetailsService;
+import com.bersyte.eventz.auth.AuthUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

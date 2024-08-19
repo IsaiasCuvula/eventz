@@ -5,6 +5,7 @@ import com.bersyte.eventz.common.UserMapper;
 import com.bersyte.eventz.common.UserResponseDTO;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.security.JWTService;
+import com.bersyte.eventz.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +19,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public UserResponseDTO createUser(RegisterRequestDTO requestDTO) {
+    public UserResponseDTO createUser(RegisterRequestDto requestDTO) {
         AppUser user = UserMapper.toUserEntity(requestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
 
@@ -33,7 +34,7 @@ public class AuthService {
         }
         //
         try {
-            authRepository.save(user);
+            userRepository.save(user);
         } catch (DataAccessException e) {
             throw new DatabaseOperationException(e.getLocalizedMessage());
         }
@@ -41,31 +42,45 @@ public class AuthService {
         return UserMapper.toUserResponseDTO(user);
     }
 
+    public LoginResponse login(LoginRequestDto requestDTO) {
+        try {
+            String email = requestDTO.email();
+            String password = requestDTO.password();
+            AppUser user = authenticate(email, password);
 
-    public String login(LoginRequestDTO requestDTO) {
-        Optional<AppUser> user = findAuthUserByEmail(requestDTO.email());
-        if (user.isPresent()) {
-            try {
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                requestDTO.email(), requestDTO.password()
-                        )
-                );
-                if (authentication.isAuthenticated()) {
-                    return jwtService.generateToken(authentication.getName());
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
-        } else {
-            throw new DatabaseOperationException("User does not exists");
+            String token = jwtService.generateToken(user.getEmail());
+            return new LoginResponse(
+                    token, jwtService.getExpirationTime()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return "Authentication failed";
     }
+
+    private AppUser authenticate(String email, String password) {
+        try {
+            AppUser user = findAuthUserByEmail(email).orElseThrow(
+                    () -> new DatabaseOperationException("User does not exists")
+            );
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            email, password
+                    )
+            );
+            if (!authentication.isAuthenticated()) {
+                throw new RuntimeException("Authentication failed");
+            }
+
+            return user;
+        } catch (DataAccessException e) {
+            throw new DatabaseOperationException(e.getLocalizedMessage());
+        }
+    }
+
 
     private Optional<AppUser> findAuthUserByEmail(String email) {
         try {
-            return Optional.ofNullable(authRepository.findByEmail(email));
+            return Optional.ofNullable(userRepository.findByEmail(email));
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);

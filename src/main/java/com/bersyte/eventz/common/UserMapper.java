@@ -1,12 +1,12 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterRequestDTO;
+import com.bersyte.eventz.auth.RegisterRequestDto;
 
 import java.util.Date;
 
 public class UserMapper {
 
-    public static AppUser toUserEntity(RegisterRequestDTO dto) {
+    public static AppUser toUserEntity(RegisterRequestDto dto) {
         AppUser entity = new AppUser();
         entity.setEmail(dto.email());
         entity.setPassword(dto.password());

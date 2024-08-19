@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,14 @@ public class JWTService {
 
     private final String secretKey;
 
+    @Value("${security.jwt.expiration-time}")
+    private long jwtExpirationTime;
+
+
+    public long getExpirationTime() {
+        return jwtExpirationTime;
+    }
+
     public JWTService() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
@@ -33,7 +42,6 @@ public class JWTService {
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        final long validityInMilliseconds = System.currentTimeMillis() + 2 * 60 * 60 * 1000;
         //
         try {
             return Jwts.builder()
@@ -41,7 +49,7 @@ public class JWTService {
                     .add(claims)
                     .subject(username)
                     .issuedAt(new Date())
-                    .expiration(new Date(validityInMilliseconds))
+                    .expiration(new Date(System.currentTimeMillis() + jwtExpirationTime))
                     .and()
                     .signWith(getKey())
                     .compact();

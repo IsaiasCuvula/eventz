@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
-public record RegisterRequestDTO(
+public record RegisterRequestDto(
         @Email(message = "Email is not valid", regexp = Utils.emailRegexp)
         @NotBlank(message = "email is required")
         String email,
@@ -25,7 +25,7 @@ public record RegisterRequestDTO(
         String phone,
         Long createdAt
 ) {
-    public RegisterRequestDTO {
+    public RegisterRequestDto {
         createdAt = new Date().getTime();
     }
 }
