@@ -118,13 +118,14 @@ Cookie: key=first-value
 ###
 #event-registration
 POST http://localhost:8080/v1/event-registration/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjQwMjU1ODksImV4cCI6MTcyNDAzMjc4OX0.zeC44YIAQvVGPccFw9jfSWUngqbVWqmRkYOEFg6oaNk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjQwMjYwNDcsImV4cCI6MTcyNDAzMzI0N30.rsE91-QhLchD9LFahnTfqO3gGbI7qaFwUhwfiFM_XQw
 
 
 ###
 #cancel event-registration
 POST http://localhost:8080/v1/event-registration/cancel/39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjQwMjU1ODksImV4cCI6MTcyNDAzMjc4OX0.zeC44YIAQvVGPccFw9jfSWUngqbVWqmRkYOEFg6oaNk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjQwMjYwNDcsImV4cCI6MTcyNDAzMzI0N30.rsE91-QhLchD9LFahnTfqO3gGbI7qaFwUhwfiFM_XQw
+
 
 ###
 POST http://localhost:8080/v1/event-registration/remove-participant?participantId=4&eventId=39

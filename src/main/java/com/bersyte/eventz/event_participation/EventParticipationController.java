@@ -14,13 +14,13 @@ public class EventParticipationController {
 
     private final EventParticipationService registrationService;
 
-    @PostMapping("{id}")
+    @PostMapping("{eventId}")
     public ResponseEntity<EventParticipationResponseDTO> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long id
+            @PathVariable Long eventId
     ) {
         EventParticipationResponseDTO response = registrationService.registerUserToEvent(
-                id, userDetails
+                eventId, userDetails
         );
         return ResponseEntity.ok(response);
     }

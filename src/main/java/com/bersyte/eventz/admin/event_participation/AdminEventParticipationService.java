@@ -35,6 +35,7 @@ public class AdminEventParticipationService {
         }
     }
 
+    //TODO-DELETE REGISTRATION
     public EventParticipationResponseDTO removeParticipantFromEvent(Long participantId, Long eventId) {
         return null;
     }
