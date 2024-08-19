@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.security.auth.RegisterRequestDTO;
+import com.bersyte.eventz.auth.RegisterRequestDTO;
 
 import java.util.Date;
 

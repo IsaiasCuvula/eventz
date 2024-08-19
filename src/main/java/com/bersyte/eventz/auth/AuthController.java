@@ -1,4 +1,4 @@
-package com.bersyte.eventz.security.auth;
+package com.bersyte.eventz.auth;
 
 import com.bersyte.eventz.common.UserResponseDTO;
 import jakarta.validation.Valid;

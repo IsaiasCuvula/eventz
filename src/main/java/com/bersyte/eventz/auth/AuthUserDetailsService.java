@@ -1,4 +1,4 @@
-package com.bersyte.eventz.security.auth;
+package com.bersyte.eventz.auth;
 
 import com.bersyte.eventz.common.AppUser;
 import org.springframework.security.core.userdetails.UserDetails;
