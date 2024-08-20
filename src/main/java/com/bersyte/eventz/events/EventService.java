@@ -25,8 +25,8 @@ public class EventService {
     private final EventCommonService eventCommonService;
 
 
-    public EventResponseDTO createEvent(
-            EventRequestDTO data, UserDetails userDetails
+    public EventResponseDto createEvent(
+            EventRequestDto data, UserDetails userDetails
     ) {
         try {
             String email = userDetails.getUsername();
@@ -42,7 +42,7 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDTO> getAllEvents(int page, int size){
+    public List<EventResponseDto> getAllEvents(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Event> eventsPerPage = repository.findAll(pageable);
@@ -53,7 +53,7 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDTO> getUpcomingEvents(int page, int size) {
+    public List<EventResponseDto> getUpcomingEvents(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
@@ -64,7 +64,7 @@ public class EventService {
         }
     }
 
-    public EventResponseDTO getEventById(Long id) {
+    public EventResponseDto getEventById(Long id) {
         try {
             Event event = eventCommonService.findEventById(id);
             return EventMappers.toResponseDTO(event);
@@ -74,9 +74,9 @@ public class EventService {
         }
     }
 
-    public EventResponseDTO updateEvent(
+    public EventResponseDto updateEvent(
             Long id,
-            EventRequestDTO data,
+            EventRequestDto data,
             UserDetails userDetails
     ) {
 
@@ -111,7 +111,7 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDTO> filterEvents(
+    public List<EventResponseDto> filterEvents(
         int page, 
         int size,
         String title, 
@@ -131,7 +131,7 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDTO> getEventsByDate(int page, int size, Long date) {
+    public List<EventResponseDto> getEventsByDate(int page, int size, Long date) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Date dateEvent = (date != null) ? new Date(date) : new Date();

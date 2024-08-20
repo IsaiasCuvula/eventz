@@ -1,6 +1,6 @@
 package com.bersyte.eventz.auth;
 
-import com.bersyte.eventz.common.UserResponseDTO;
+import com.bersyte.eventz.common.UserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody RegisterRequestDto requestDTO) {
-        UserResponseDTO response = authService.createUser(requestDTO);
+    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto requestDTO) {
+        UserResponseDto response = authService.createUser(requestDTO);
         return ResponseEntity.ok(response);
     }
 

@@ -50,7 +50,7 @@ public class EventParticipationService {
         return organizerRegistration;
     }
 
-    public EventParticipationResponseDTO organizerAddUserToHisEvent(
+    public EventParticipationResponseDto organizerAddUserToHisEvent(
             UserDetails organizerDetails,
             Long participantId,
             Long eventId
@@ -98,7 +98,7 @@ public class EventParticipationService {
         }
     }
 
-    public EventParticipationResponseDTO removeParticipantFromEvent(
+    public EventParticipationResponseDto removeParticipantFromEvent(
             UserDetails userDetails, Long participantId, Long eventId
     ) {
         try {
@@ -164,7 +164,7 @@ public class EventParticipationService {
         }
     }
 
-    public EventParticipationResponseDTO registerUserToEvent(
+    public EventParticipationResponseDto registerUserToEvent(
             Long eventId,
             UserDetails userDetails
     ) {
@@ -196,7 +196,7 @@ public class EventParticipationService {
         }
     }
 
-    private EventParticipationResponseDTO saveRegistration(EventParticipation registration) {
+    private EventParticipationResponseDto saveRegistration(EventParticipation registration) {
         return eventParticipationCommonService.saveRegistration(registration);
     }
 

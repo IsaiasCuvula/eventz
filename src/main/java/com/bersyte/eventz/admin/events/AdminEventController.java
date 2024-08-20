@@ -1,7 +1,7 @@
 package com.bersyte.eventz.admin.events;
 
-import com.bersyte.eventz.events.EventRequestDTO;
-import com.bersyte.eventz.events.EventResponseDTO;
+import com.bersyte.eventz.events.EventRequestDto;
+import com.bersyte.eventz.events.EventResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,11 @@ public class AdminEventController {
     private final AdminEventService service;
 
     @PutMapping("{id}")
-    public ResponseEntity<EventResponseDTO> updateEvent(
-            @Valid @RequestBody EventRequestDTO data,
+    public ResponseEntity<EventResponseDto> updateEvent(
+            @Valid @RequestBody EventRequestDto data,
             @PathVariable Long id
     ) {
-        EventResponseDTO response = service.updateEvent(id, data);
+        EventResponseDto response = service.updateEvent(id, data);
         return ResponseEntity.ok(response);
     }
 

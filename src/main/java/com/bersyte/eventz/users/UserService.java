@@ -3,7 +3,7 @@ package com.bersyte.eventz.users;
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserCommonService;
 import com.bersyte.eventz.common.UserMapper;
-import com.bersyte.eventz.common.UserResponseDTO;
+import com.bersyte.eventz.common.UserResponseDto;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -22,7 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserCommonService userCommonService;
 
-    public List<UserResponseDTO> getAllUsers(int page, int size) {
+    public List<UserResponseDto> getAllUsers(int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<AppUser> users = userRepository.findAll(pageable);
@@ -34,13 +34,13 @@ public class UserService {
     }
 
 
-    public UserResponseDTO getCurrentUser(String email) {
+    public UserResponseDto getCurrentUser(String email) {
         final AppUser user = getUserByEmail(email);
         return UserMapper.toUserResponseDTO(user);
     }
 
-    public UserResponseDTO updateUser(
-            UpdateUserRequestDTO requestDTO,
+    public UserResponseDto updateUser(
+            UpdateUserRequestDto requestDTO,
             String email
     ) {
         try {

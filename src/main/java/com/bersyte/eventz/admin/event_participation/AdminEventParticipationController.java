@@ -1,7 +1,7 @@
 package com.bersyte.eventz.admin.event_participation;
 
 
-import com.bersyte.eventz.event_participation.EventParticipationResponseDTO;
+import com.bersyte.eventz.event_participation.EventParticipationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,22 +18,22 @@ public class AdminEventParticipationController {
     private final AdminEventParticipationService adminService;
 
     @PostMapping("/add-participant")
-    public ResponseEntity<EventParticipationResponseDTO> registerUserToEvent(
+    public ResponseEntity<EventParticipationResponseDto> registerUserToEvent(
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        EventParticipationResponseDTO response = adminService.registerUserToEvent(
+        EventParticipationResponseDto response = adminService.registerUserToEvent(
                 participantId, eventId
         );
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/remove-participant")
-    public ResponseEntity<EventParticipationResponseDTO> removeParticipantFromEvent(
+    public ResponseEntity<EventParticipationResponseDto> removeParticipantFromEvent(
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        final EventParticipationResponseDTO response = adminService.removeParticipantFromEvent(
+        final EventParticipationResponseDto response = adminService.removeParticipantFromEvent(
                 participantId,
                 eventId
         );

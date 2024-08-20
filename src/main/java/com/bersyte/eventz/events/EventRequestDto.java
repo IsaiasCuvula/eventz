@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
-public record EventRequestDTO(
+public record EventRequestDto(
         @NotBlank(message = "title is required")
         String title,
         @NotBlank(message = "description is required")
@@ -16,7 +16,7 @@ public record EventRequestDTO(
         Long date,
         Long createdAt
 ) {
-    public EventRequestDTO{
+    public EventRequestDto {
         createdAt = new Date().getTime();
     }
 }

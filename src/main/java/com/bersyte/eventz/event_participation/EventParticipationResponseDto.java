@@ -1,12 +1,12 @@
 package com.bersyte.eventz.event_participation;
 
-import com.bersyte.eventz.events.EventResponseDTO;
+import com.bersyte.eventz.events.EventResponseDto;
 
 import java.util.Date;
 
-public record EventParticipationResponseDTO(
+public record EventParticipationResponseDto(
         Long id,
-        EventResponseDTO event,
+        EventResponseDto event,
         String msg,
         Date registrationAt
 ) {

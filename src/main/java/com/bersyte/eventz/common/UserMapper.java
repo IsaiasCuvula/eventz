@@ -19,11 +19,11 @@ public class UserMapper {
     }
 
 
-    public static UserResponseDTO toUserResponseDTO(AppUser entity) {
+    public static UserResponseDto toUserResponseDTO(AppUser entity) {
         final String phone = entity.getPhone() != null ? entity.getPhone() : " ";
         final String lastName = entity.getLastName() != null ? entity.getLastName() : " ";
         //
-        return new UserResponseDTO(
+        return new UserResponseDto(
                 entity.getId(),
                 entity.getEmail(),
                 entity.getFirstName(),

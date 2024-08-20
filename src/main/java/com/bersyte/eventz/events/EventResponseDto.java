@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public record EventResponseDTO(
+public record EventResponseDto(
         Long id,
     String title,
     String description,

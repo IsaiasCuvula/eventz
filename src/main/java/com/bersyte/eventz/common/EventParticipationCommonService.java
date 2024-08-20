@@ -15,7 +15,7 @@ public class EventParticipationCommonService {
 
     final private EventParticipationRepository eventParticipationRepository;
 
-    public EventParticipationResponseDTO registerUserToEvent(
+    public EventParticipationResponseDto registerUserToEvent(
             AppUser participant,
             Event event
     ) {
@@ -57,7 +57,7 @@ public class EventParticipationCommonService {
     }
 
 
-    public EventParticipationResponseDTO saveRegistration(EventParticipation registration) {
+    public EventParticipationResponseDto saveRegistration(EventParticipation registration) {
         try {
             final EventParticipation result = eventParticipationRepository.save(registration);
             return EventParticipationMapper.toResponseDTO(result);

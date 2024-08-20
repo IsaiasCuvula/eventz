@@ -15,11 +15,11 @@ public class EventParticipationController {
     private final EventParticipationService registrationService;
 
     @PostMapping("{eventId}")
-    public ResponseEntity<EventParticipationResponseDTO> registerToEvent(
+    public ResponseEntity<EventParticipationResponseDto> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long eventId
     ) {
-        EventParticipationResponseDTO response = registrationService.registerUserToEvent(
+        EventParticipationResponseDto response = registrationService.registerUserToEvent(
                 eventId, userDetails
         );
         return ResponseEntity.ok(response);
@@ -35,12 +35,12 @@ public class EventParticipationController {
     }
 
     @PostMapping("/remove-participant")
-    public ResponseEntity<EventParticipationResponseDTO> removeParticipantFromEvent(
+    public ResponseEntity<EventParticipationResponseDto> removeParticipantFromEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        final EventParticipationResponseDTO response = registrationService.removeParticipantFromEvent(
+        final EventParticipationResponseDto response = registrationService.removeParticipantFromEvent(
                 organizerDetails,
                 participantId,
                 eventId
@@ -49,13 +49,13 @@ public class EventParticipationController {
     }
 
     @PostMapping("/add-participant")
-    public ResponseEntity<EventParticipationResponseDTO> organizerAddUserToHisEvent(
+    public ResponseEntity<EventParticipationResponseDto> organizerAddUserToHisEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
 
     ) {
-        final EventParticipationResponseDTO response = registrationService.organizerAddUserToHisEvent(
+        final EventParticipationResponseDto response = registrationService.organizerAddUserToHisEvent(
                 organizerDetails,
                 participantId,
                 eventId

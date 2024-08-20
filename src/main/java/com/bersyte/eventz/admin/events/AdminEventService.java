@@ -3,8 +3,8 @@ package com.bersyte.eventz.admin.events;
 import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.events.EventRepository;
-import com.bersyte.eventz.events.EventRequestDTO;
-import com.bersyte.eventz.events.EventResponseDTO;
+import com.bersyte.eventz.events.EventRequestDto;
+import com.bersyte.eventz.events.EventResponseDto;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -19,7 +19,7 @@ public class AdminEventService {
     private final EventCommonService eventCommonService;
 
 
-    public EventResponseDTO updateEvent(Long id, EventRequestDTO data) {
+    public EventResponseDto updateEvent(Long id, EventRequestDto data) {
         try {
             Event event = eventCommonService.findEventById(id);
             return eventCommonService.updateEventOnDb(event, data);

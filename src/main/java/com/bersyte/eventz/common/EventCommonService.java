@@ -31,7 +31,7 @@ public class EventCommonService {
     }
 
 
-    public EventResponseDTO updateEventOnDb(Event oldEvent, EventRequestDTO data) {
+    public EventResponseDto updateEventOnDb(Event oldEvent, EventRequestDto data) {
         try {
             if (data.title() != null) {
                 oldEvent.setTitle(data.title());

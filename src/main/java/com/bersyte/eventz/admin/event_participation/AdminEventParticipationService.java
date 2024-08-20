@@ -23,8 +23,7 @@ public class AdminEventParticipationService {
     final private UserCommonService userCommonService;
 
 
-
-    public EventParticipationResponseDTO registerUserToEvent(
+    public EventParticipationResponseDto registerUserToEvent(
             Long participantId, Long eventId
     ) {
         try {
@@ -40,7 +39,7 @@ public class AdminEventParticipationService {
         }
     }
 
-    public EventParticipationResponseDTO removeParticipantFromEvent(
+    public EventParticipationResponseDto removeParticipantFromEvent(
             Long participantId, Long eventId
     ) {
         try {

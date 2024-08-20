@@ -1,6 +1,6 @@
 package com.bersyte.eventz.users;
 
-import com.bersyte.eventz.common.UserResponseDTO;
+import com.bersyte.eventz.common.UserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(
+    public ResponseEntity<List<UserResponseDto>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -27,21 +27,21 @@ public class UserController {
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<UserResponseDTO> getCurrentUser(
+    public ResponseEntity<UserResponseDto> getCurrentUser(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
         String email = userDetails.getUsername();
-        final UserResponseDTO response = usersService.getCurrentUser(email);
+        final UserResponseDto response = usersService.getCurrentUser(email);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/update")
-    public ResponseEntity<UserResponseDTO> updateUser(
+    public ResponseEntity<UserResponseDto> updateUser(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UpdateUserRequestDTO requestDTO
+            @Valid @RequestBody UpdateUserRequestDto requestDTO
     ) {
         String email = userDetails.getUsername();
-        final UserResponseDTO response = usersService.updateUser(requestDTO, email);
+        final UserResponseDto response = usersService.updateUser(requestDTO, email);
         return ResponseEntity.ok(response);
     }
 

@@ -2,7 +2,7 @@ package com.bersyte.eventz.common;
 
 import java.util.Date;
 
-public record UserResponseDTO(
+public record UserResponseDto(
         Long id,
         String email,
         String firstName,

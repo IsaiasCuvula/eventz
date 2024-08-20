@@ -2,7 +2,7 @@ package com.bersyte.eventz.auth;
 
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserMapper;
-import com.bersyte.eventz.common.UserResponseDTO;
+import com.bersyte.eventz.common.UserResponseDto;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.security.JWTService;
 import com.bersyte.eventz.users.UserRepository;
@@ -24,7 +24,7 @@ public class AuthService {
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public UserResponseDTO createUser(RegisterRequestDto requestDTO) {
+    public UserResponseDto createUser(RegisterRequestDto requestDTO) {
         AppUser user = UserMapper.toUserEntity(requestDTO);
         user.setPassword(encoder.encode(user.getPassword()));
 

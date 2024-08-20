@@ -12,14 +12,14 @@ import java.util.List;
 public class EventMappers {
 
 
-   public static EventResponseDTO toResponseDTO(Event entity){
+    public static EventResponseDto toResponseDTO(Event entity) {
        final AppUser organizer = entity.getOrganizer();
        final List<EventParticipation> registrations = entity.getRegistrations() == null ?
                new ArrayList<>() : entity.getRegistrations();
 
        final String organizerLastName = organizer.getLastName() == null ? " " : organizer.getLastName();
 
-       return new EventResponseDTO(
+        return new EventResponseDto(
                entity.getId(),
                entity.getTitle(),
                entity.getDescription(),
@@ -40,7 +40,7 @@ public class EventMappers {
        );
    }
 
-    public static Event  toEventEntity(EventRequestDTO dto){
+    public static Event toEventEntity(EventRequestDto dto) {
         Event entity = new Event();
         entity.setTitle(dto.title());
         entity.setDescription(dto.description());

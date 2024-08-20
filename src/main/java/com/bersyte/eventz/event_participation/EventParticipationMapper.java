@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class EventParticipationMapper {
 
-    public static EventParticipationResponseDTO toResponseDTO(EventParticipation registration) {
-        return new EventParticipationResponseDTO(
+    public static EventParticipationResponseDto toResponseDTO(EventParticipation registration) {
+        return new EventParticipationResponseDto(
                 registration.getId(),
                 EventMappers.toResponseDTO(registration.getEvent()),
                 "Successfully registered",
