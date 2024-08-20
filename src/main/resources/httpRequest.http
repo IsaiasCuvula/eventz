@@ -25,12 +25,11 @@ Cookie: key=first-value
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDAyMjEyMiwiZXhwIjoxNzI0MDI5MzIyfQ.hjIYfBLgJDY_7y34zNz5m1DdRt-dFISYuMw3OUxcPEo
-
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5NjAyNywiZXhwIjoxNzI0MTk5NjI3fQ.9lLWkEmYyUUNo1edPEY_G63JyMlu-WfO0K7dKdGt8rKGn0sHZG9WUvw_XwIncEsW
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5MjYxMSwiZXhwIjoxNzI0MTk2MjExfQ.i4y-j8FDWmHTAFnBlFhAWwGv9OGGXfg6pa7Nle4lZXI
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5NjAyNywiZXhwIjoxNzI0MTk5NjI3fQ.9lLWkEmYyUUNo1edPEY_G63JyMlu-WfO0K7dKdGt8rKGn0sHZG9WUvw_XwIncEsW
 
 
 ###
@@ -135,8 +134,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiO
 
 
 ###
-POST http://localhost:8080/v1/event-registration/add-participant?participantId=1&eventId=39
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb3NAZ21haWwuaW8iLCJpYXQiOjE3MjM5Nzg0MTAsImV4cCI6MTcyMzk4NTYxMH0.LaxVQyZsNzBJgqZVK9uy8b8LdZFjHx6CaafXVt956vQ
+POST http://localhost:8080/v1/event-registration/add-participant?participantId=1&eventId=36
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5NjAyNywiZXhwIjoxNzI0MTk5NjI3fQ.9lLWkEmYyUUNo1edPEY_G63JyMlu-WfO0K7dKdGt8rKGn0sHZG9WUvw_XwIncEsW
 
 
 ###
