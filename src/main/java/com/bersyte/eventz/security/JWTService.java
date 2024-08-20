@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,25 +18,16 @@ import java.util.function.Function;
 @Service
 public class JWTService {
 
-    private final String secretKey;
+    @Value("${security.jwt.secret-key}")
+    private String secretKey;
 
     @Value("${security.jwt.expiration-time}")
     private long jwtExpirationTime;
-
 
     public long getExpirationTime() {
         return jwtExpirationTime;
     }
 
-    public JWTService() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sKey = keyGenerator.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sKey.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
