@@ -30,7 +30,9 @@ public class UserCommonService {
 
     public AppUser findUserByEmail(String email) {
         try {
-            return userRepository.findByEmail(email);
+            return userRepository.findByEmail(email).orElseThrow(
+                    () -> new DatabaseOperationException("User not found")
+            );
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);

@@ -4,10 +4,10 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "admin@gmail.io",
+  "email": "jone@gmail.io",
   "password": "123456",
-  "firstName": "King",
-  "lastName": "John",
+  "firstName": "Any",
+  "lastName": "Flow",
   "role": "ADMIN"
 }
 
@@ -30,7 +30,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhd
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDExMTMwMiwiZXhwIjoxNzI0MTE0OTAyfQ.NIKjjS76PKCNSgalhCLjXEfSXVpgn1K89lAaovrW9HE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5MjYxMSwiZXhwIjoxNzI0MTk2MjExfQ.i4y-j8FDWmHTAFnBlFhAWwGv9OGGXfg6pa7Nle4lZXI
 
 
 ###

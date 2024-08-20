@@ -52,8 +52,8 @@ public class AuthService {
             return new LoginResponse(
                     token, jwtService.getExpirationTime()
             );
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (DataAccessException e) {
+            throw new DatabaseOperationException(e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class AuthService {
                     )
             );
             if (!authentication.isAuthenticated()) {
-                throw new RuntimeException("Authentication failed");
+                throw new DatabaseOperationException("Authentication failed");
             }
 
             return user;
@@ -80,7 +80,7 @@ public class AuthService {
 
     private Optional<AppUser> findAuthUserByEmail(String email) {
         try {
-            return Optional.ofNullable(userRepository.findByEmail(email));
+            return userRepository.findByEmail(email);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
