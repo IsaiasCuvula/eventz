@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -44,13 +45,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter (request, response);
             return;
         }
 
         try {
-
-
             String token = authHeader.substring(7);
             String userEmail = jwtService.extractUsername(token);
             Authentication authentication = SecurityContextHolder
@@ -59,28 +58,50 @@ public class JwtFilter extends OncePerRequestFilter {
             if (userEmail != null && authentication == null) {
 
                 UserDetails userDetails = userDetailsService
-                        .loadUserByUsername(userEmail);
+                        .loadUserByUsername (userEmail);
 
-                if (jwtService.isTokenValid(token, userDetails)) {
+                if (jwtService.isTokenValid (token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
+                            new UsernamePasswordAuthenticationToken (
                                     userDetails,
                                     null,
-                                    userDetails.getAuthorities()
+                                    userDetails.getAuthorities ()
                             );
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request)
+                    authToken.setDetails (
+                            new WebAuthenticationDetailsSource ()
+                                    .buildDetails (request)
                     );
 
                     SecurityContextHolder
-                            .getContext()
-                            .setAuthentication(authToken);
+                            .getContext ()
+                            .setAuthentication (authToken);
                 }
             }
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
+            errorResponse (response, request, e.getLocalizedMessage ());
         }
+    }
+
+    private void errorResponse(
+            HttpServletResponse response,
+            HttpServletRequest request,
+            String errorMessage
+    ) throws IOException {
+        // Prepare response map values
+        String path = request.getRequestURI ();
+        int status = HttpServletResponse.SC_UNAUTHORIZED;
+        String timestamp = LocalDateTime.now ().toString ();
+
+        // Build JSON response manually
+        String jsonResponse = String.format ("{\"path\":\"%s\",\"error\":\"%s\"," +
+                        "\"timestamp\":\"%s\",\"status\":%d,}",
+                path, errorMessage, timestamp, status);
+
+        // Write JSON response
+        response.setStatus (HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType ("application/json");
+        response.getWriter ().write (jsonResponse);
     }
 }

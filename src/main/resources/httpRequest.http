@@ -24,6 +24,8 @@ Cookie: key=first-value
 ###
 POST http://localhost:8080/v1/auth/refresh-token
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNjg5NDIsImV4cCI6MTcyNDg3Mzc0Mn0.UrqXJqiKaNGDS1bArEmJtAR7rJqc8bbGYfzBvuI1XGUBWNFYHUbXmmZbmj-lV6m7
+
+
 ###
 #login
 POST http://localhost:8080/v1/auth/login
@@ -38,12 +40,12 @@ Cookie: key=first-value
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNjkwNDEsImV4cCI6MTcyNDI2OTA3N30.ZSHv0j3VZIYDA1clyOjtIdknGQNvdfdGYaBhEKZk8Lovm5wLuSf9Oliml0_XNPFE
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNzYzNDQsImV4cCI6MTcyNDI3NzI0NH0.tG3i2srTlMlNNEMsZeXuq84hjcO1qsfJ98kOnyMeUK9sq5nGH7_l_1du4diS6vwg
 
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNjIxMzksImV4cCI6MTcyNDI2NTczOX0.9mmbnbbzhxYiYrGPixkUqeb-xfgaNEFjtnyje-s6ICfQvIJg8A2jWYqb47ABgNqw
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNzYzNDQsImV4cCI6MTcyNDI3NzI0NH0.tG3i2srTlMlNNEMsZeXuq84hjcO1qsfJ98kOnyMeUK9sq5nGH7_l_1du4diS6vwg
 
 
 ###
