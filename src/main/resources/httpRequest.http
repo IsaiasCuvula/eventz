@@ -1,14 +1,24 @@
 #Register
-POST http://localhost:8080/v1/auth/register
+POST http://localhost:8080/v1/auth/signup
 Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "jone@gmail.io",
+  "email": "bersyteinfo@gmail.com",
   "password": "123456",
   "firstName": "Any",
   "lastName": "Flow",
-  "role": "ADMIN"
+  "role": "USER"
+}
+
+###
+POST http://localhost:8080/v1/auth/verify
+Content-Type: application/json
+Cookie: key=first-value
+
+{
+  "email": "bersyteinfo@gmail.com",
+  "verificationCode": "165783"
 }
 
 ###
@@ -18,7 +28,7 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "admin@gmail.io",
+  "email": "bersyteinfo@gmail.com",
   "password": "123456"
 }
 
@@ -43,7 +53,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhd
 POST http://localhost:8080/v1/events
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5Mjg4MywiZXhwIjoxNzI0MTk2NDgzfQ.dzvhyLHNqN-nKK8_qEpQ82QJXo04BjMQahjUuiXC57kPTohRYeBqM8MviYKm144U
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyMDEyMDQsImV4cCI6MTcyNDIwNDgwNH0.VhruXbtaCXu3TshKZDZvKfdc32hqd8KPQXTnocG55l-3j5gwe0JoB9W-ONWPLanx
 
 {
   "title": "Company Hall",
@@ -55,10 +65,10 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhd
 ###
 #Update existing event
 #PUT http://localhost:8080/v1/events/37
-PUT http://localhost:8080/v1/events/35
+PUT http://localhost:8080/v1/events/1
 Content-Type: application/json
 Cookie: key=first-value
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDAyMjMyNCwiZXhwIjoxNzI0MDI5NTI0fQ.230qeMx58vGL2YOXoUuqddKz9f2prMAKz1ZHS9SaJYs
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyMDEyMDQsImV4cCI6MTcyNDIwNDgwNH0.VhruXbtaCXu3TshKZDZvKfdc32hqd8KPQXTnocG55l-3j5gwe0JoB9W-ONWPLanx
 
 {
   "title": "Client Demo",

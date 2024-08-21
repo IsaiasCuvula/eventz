@@ -80,4 +80,18 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApiError> authException(
+            AuthException e,
+            HttpServletRequest request
+    ) {
+        ApiError error = new ApiError(
+                request.getRequestURI(),
+                e.getLocalizedMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }

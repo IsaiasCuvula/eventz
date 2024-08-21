@@ -16,9 +16,9 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody RegisterRequestDto requestDTO) {
-        UserResponseDto response = authService.createUser(requestDTO);
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody RegisterRequestDto requestDTO) {
+        UserResponseDto response = authService.signup(requestDTO);
         return ResponseEntity.ok(response);
     }
 
@@ -26,5 +26,24 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequestDto requestDTO) {
         LoginResponse response = authService.login(requestDTO);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<String> verifyUser(
+            @RequestBody VerifyUserDto verifyUserDto
+    ) {
+        authService.verifyUser(verifyUserDto);
+        return ResponseEntity.ok("User verified successfully");
+    }
+
+    @PostMapping("/resend")
+    public ResponseEntity<?> resend(@RequestBody String email) {
+        try {
+            authService.resendVerificationCode(email);
+            return ResponseEntity.ok("Code verification resent");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }
