@@ -16,8 +16,13 @@ public class AuthResponse {
     @JsonProperty("expires_in")
     private Date expiresIn;
 
-    public AuthResponse(String token, Date expiresIn) {
+    public AuthResponse(
+            String token,
+            String refreshToken,
+            Date expiresIn
+    ) {
         this.accessToken = token;
         this.expiresIn = expiresIn;
+        this.refreshToken = refreshToken;
     }
 }

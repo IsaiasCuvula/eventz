@@ -6,14 +6,19 @@ import com.bersyte.eventz.email.EmailService;
 import com.bersyte.eventz.exceptions.AuthException;
 import com.bersyte.eventz.security.JWTService;
 import com.bersyte.eventz.users.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
@@ -36,8 +41,6 @@ public class AuthService {
             if (hasUser(requestDTO.email())) {
                 throw new AuthException("User already exists");
             }
-            //
-
             newUser.setVerificationCode(generateVerificationCode());
             newUser.setVerificationExpiration(
                     LocalDateTime.now().plusMinutes(15)
@@ -65,9 +68,48 @@ public class AuthService {
 
     private AuthResponse getAuthResponse(AppUser user) {
         String token = jwtService.generateToken(user.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         Date expiration = jwtService.extractExpiration(token);
-        return new AuthResponse(token, expiration);
+        //saveUserToken(user, token)
+        return new AuthResponse(token, refreshToken, expiration);
     }
+
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        try {
+            final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return;
+            }
+
+            final String refreshToken = authHeader.substring(7);
+            final String email = jwtService.extractUsername(refreshToken);
+            final AppUser user = findAuthUserByEmail(email);
+
+            if (jwtService.isTokenValid(refreshToken, user)) {
+                String accessToken = jwtService.generateToken(email);
+
+                //revokeAllUserToken(user)
+                //saveUserToken(user, accessToken)
+                AuthResponse authResponse = new AuthResponse(
+                        accessToken,
+                        refreshToken,
+                        jwtService.extractExpiration(accessToken)
+                );
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+
+        } catch (AuthException e) {
+            throw new AuthException(e.getMessage());
+        }
+    }
+
+//    private void revokeAllUserTokens(AppUser user) {
+//
+//    }
 
     public void verifyUser(VerifyUserDto data) {
         try {
@@ -195,4 +237,5 @@ public class AuthService {
         }
 
     }
+
 }

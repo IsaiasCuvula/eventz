@@ -21,20 +21,38 @@ public class JWTService {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
+    private final long refreshTokenExpiration;
     @Value("${security.jwt.expiration-time}")
-    private long jwtExpirationTime;
+    private long tokenExpiration;
+
+    public JWTService() {
+        //7 days
+        refreshTokenExpiration = 604800000;
+    }
 
 
     public String generateToken(String username) {
-        Map<String, Object> claims = new HashMap<>();
-        //
+        Map<String, Object> extraClaims = new HashMap<>();
+        return buildToken(username, extraClaims, tokenExpiration);
+    }
+
+    public String generateRefreshToken(String username) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        return buildToken(username, extraClaims, refreshTokenExpiration);
+    }
+
+    private String buildToken(
+            String username,
+            Map<String, Object> claims,
+            long expirationTime
+    ) {
         try {
             return Jwts.builder()
                     .claims()
                     .add(claims)
                     .subject(username)
-                    .issuedAt(new Date())
-                    .expiration(new Date(System.currentTimeMillis() + jwtExpirationTime))
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(new Date(System.currentTimeMillis() + expirationTime))
                     .and()
                     .signWith(getKey())
                     .compact();
