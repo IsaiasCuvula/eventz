@@ -24,10 +24,6 @@ public class JWTService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpirationTime;
 
-    public long getExpirationTime() {
-        return jwtExpirationTime;
-    }
-
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
@@ -78,7 +74,7 @@ public class JWTService {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 }

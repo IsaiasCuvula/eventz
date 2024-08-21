@@ -2,7 +2,6 @@ package com.bersyte.eventz.auth;
 
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserMapper;
-import com.bersyte.eventz.common.UserResponseDto;
 import com.bersyte.eventz.email.EmailService;
 import com.bersyte.eventz.exceptions.AuthException;
 import com.bersyte.eventz.security.JWTService;
@@ -16,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,7 +28,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
-    public UserResponseDto signup(RegisterRequestDto requestDTO) {
+    public AuthResponse signup(RegisterRequestDto requestDTO) {
         try {
             AppUser newUser = UserMapper.toUserEntity(requestDTO);
             newUser.setPassword(encoder.encode(newUser.getPassword()));
@@ -45,25 +45,28 @@ public class AuthService {
             newUser.setEnabled(false);
             final AppUser savedUser = userRepository.save(newUser);
             sendVerificationEmail(savedUser);
-            return UserMapper.toUserResponseDTO(savedUser);
+            return getAuthResponse(savedUser);
         } catch (Exception e) {
             throw new AuthException(e.getMessage());
         }
     }
 
-    public LoginResponse login(LoginRequestDto requestDTO) {
+    public AuthResponse login(LoginRequestDto requestDTO) {
         try {
             String email = requestDTO.email();
             String password = requestDTO.password();
             AppUser user = authenticate(email, password);
 
-            String token = jwtService.generateToken(user.getEmail());
-            return new LoginResponse(
-                    token, jwtService.getExpirationTime()
-            );
+            return getAuthResponse(user);
         } catch (Exception e) {
             throw new AuthException(e.getMessage());
         }
+    }
+
+    private AuthResponse getAuthResponse(AppUser user) {
+        String token = jwtService.generateToken(user.getEmail());
+        Date expiration = jwtService.extractExpiration(token);
+        return new AuthResponse(token, expiration);
     }
 
     public void verifyUser(VerifyUserDto data) {

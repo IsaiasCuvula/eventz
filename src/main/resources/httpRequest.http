@@ -4,10 +4,10 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "bersyteinfo@gmail.com",
+  "email": "kay@gmail.io",
   "password": "123456",
-  "firstName": "Any",
-  "lastName": "Flow",
+  "firstName": "Kay",
+  "lastName": "Nice",
   "role": "USER"
 }
 
@@ -35,11 +35,11 @@ Cookie: key=first-value
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5NjAyNywiZXhwIjoxNzI0MTk5NjI3fQ.9lLWkEmYyUUNo1edPEY_G63JyMlu-WfO0K7dKdGt8rKGn0sHZG9WUvw_XwIncEsW
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNjIxMzksImV4cCI6MTcyNDI2NTczOX0.9mmbnbbzhxYiYrGPixkUqeb-xfgaNEFjtnyje-s6ICfQvIJg8A2jWYqb47ABgNqw
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5NjAyNywiZXhwIjoxNzI0MTk5NjI3fQ.9lLWkEmYyUUNo1edPEY_G63JyMlu-WfO0K7dKdGt8rKGn0sHZG9WUvw_XwIncEsW
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQyNjIxMzksImV4cCI6MTcyNDI2NTczOX0.9mmbnbbzhxYiYrGPixkUqeb-xfgaNEFjtnyje-s6ICfQvIJg8A2jWYqb47ABgNqw
 
 
 ###

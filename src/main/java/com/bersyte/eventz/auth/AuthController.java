@@ -1,6 +1,5 @@
 package com.bersyte.eventz.auth;
 
-import com.bersyte.eventz.common.UserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody RegisterRequestDto requestDTO) {
-        UserResponseDto response = authService.signup(requestDTO);
+    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody RegisterRequestDto requestDTO) {
+        AuthResponse response = authService.signup(requestDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequestDto requestDTO) {
-        LoginResponse response = authService.login(requestDTO);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequestDto requestDTO) {
+        AuthResponse response = authService.login(requestDTO);
         return ResponseEntity.ok(response);
     }
 
