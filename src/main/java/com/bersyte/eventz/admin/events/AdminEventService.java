@@ -6,17 +6,20 @@ import com.bersyte.eventz.events.EventRepository;
 import com.bersyte.eventz.events.EventRequestDto;
 import com.bersyte.eventz.events.EventResponseDto;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@RequiredArgsConstructor
 public class AdminEventService {
 
     private final EventRepository repository;
     private final EventCommonService eventCommonService;
+
+    public AdminEventService(EventRepository repository, EventCommonService eventCommonService) {
+        this.repository = repository;
+        this.eventCommonService = eventCommonService;
+    }
 
 
     public EventResponseDto updateEvent(Long id, EventRequestDto data) {

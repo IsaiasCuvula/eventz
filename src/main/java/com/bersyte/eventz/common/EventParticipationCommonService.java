@@ -3,17 +3,21 @@ package com.bersyte.eventz.common;
 import com.bersyte.eventz.event_participation.*;
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class EventParticipationCommonService {
 
-    final private EventParticipationRepository eventParticipationRepository;
+    private final EventParticipationRepository eventParticipationRepository;
+    private final EventParticipationMapper eventParticipationMapper;
+
+    public EventParticipationCommonService(EventParticipationRepository eventParticipationRepository, EventParticipationMapper eventParticipationMapper) {
+        this.eventParticipationRepository = eventParticipationRepository;
+        this.eventParticipationMapper = eventParticipationMapper;
+    }
 
     public EventParticipationResponseDto registerUserToEvent(
             AppUser participant,
@@ -30,7 +34,7 @@ public class EventParticipationCommonService {
                     );
 
             if (existingRegistration.isEmpty()) {
-                EventParticipation registration = EventParticipationMapper.toEntity(
+                EventParticipation registration = eventParticipationMapper.toEntity (
                         createdDate,
                         updatedDate,
                         event,
@@ -60,7 +64,7 @@ public class EventParticipationCommonService {
     public EventParticipationResponseDto saveRegistration(EventParticipation registration) {
         try {
             final EventParticipation result = eventParticipationRepository.save(registration);
-            return EventParticipationMapper.toResponseDTO(result);
+            return eventParticipationMapper.toResponseDTO (result);
         } catch (EventRegistrationException e) {
             throw new EventRegistrationException(
                     "Failed to register user to the event - " + e.getLocalizedMessage()

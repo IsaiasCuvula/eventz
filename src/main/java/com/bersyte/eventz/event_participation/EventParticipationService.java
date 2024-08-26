@@ -7,7 +7,6 @@ import com.bersyte.eventz.common.UserCommonService;
 import com.bersyte.eventz.events.Event;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,12 +16,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class EventParticipationService {
     final private EventParticipationCommonService eventParticipationCommonService;
     private final EventParticipationRepository registrationRepository;
     private final EventCommonService eventCommonService;
     private final UserCommonService userCommonService;
+    private final EventParticipationMapper eventParticipationMapper;
+
+    public EventParticipationService(EventParticipationCommonService eventParticipationCommonService, EventParticipationRepository registrationRepository, EventCommonService eventCommonService, UserCommonService userCommonService, EventParticipationMapper eventParticipationMapper) {
+        this.eventParticipationCommonService = eventParticipationCommonService;
+        this.registrationRepository = registrationRepository;
+        this.eventCommonService = eventCommonService;
+        this.userCommonService = userCommonService;
+        this.eventParticipationMapper = eventParticipationMapper;
+    }
 
     private static EventParticipation getRegistration(
             Long participantId,
@@ -73,7 +80,7 @@ public class EventParticipationService {
 
             if (existingRegistration.isEmpty()) {
                 AppUser participant = userCommonService.getUserById(participantId);
-                EventParticipation registration = EventParticipationMapper.toEntity(
+                EventParticipation registration = eventParticipationMapper.toEntity (
                         createdDate,
                         updatedDate,
                         event,

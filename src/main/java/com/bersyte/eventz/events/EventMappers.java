@@ -3,15 +3,14 @@ package com.bersyte.eventz.events;
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.event_participation.ParticipationStatus;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@Component
 public class EventMappers {
-
 
     public EventResponseDto toResponseDTO(Event entity) {
        final AppUser organizer = entity.getOrganizer();

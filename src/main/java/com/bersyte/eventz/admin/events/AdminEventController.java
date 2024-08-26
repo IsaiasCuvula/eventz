@@ -3,18 +3,20 @@ package com.bersyte.eventz.admin.events;
 import com.bersyte.eventz.events.EventRequestDto;
 import com.bersyte.eventz.events.EventResponseDto;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/admin/events")
 public class AdminEventController {
 
     private final AdminEventService service;
+
+    public AdminEventController(AdminEventService service) {
+        this.service = service;
+    }
 
     @PutMapping("{id}")
     public ResponseEntity<EventResponseDto> updateEvent(

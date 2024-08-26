@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,17 +24,26 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final UserMapper userMapper;
+
+    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager, EmailService emailService, UserMapper userMapper) {
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
+        this.userMapper = userMapper;
+    }
 
     public AuthResponse signup(RegisterRequestDto requestDTO) {
         try {
-            AppUser newUser = UserMapper.toUserEntity(requestDTO);
+            AppUser newUser = userMapper.toUserEntity (requestDTO);
             newUser.setPassword(encoder.encode(newUser.getPassword()));
 
             if (hasUser(requestDTO.email())) {

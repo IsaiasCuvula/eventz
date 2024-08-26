@@ -1,6 +1,5 @@
 package com.bersyte.eventz.event_participation;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,11 +7,14 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/v1/event-registration")
 public class EventParticipationController {
 
     private final EventParticipationService registrationService;
+
+    public EventParticipationController(EventParticipationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     @PostMapping("{eventId}")
     public ResponseEntity<EventParticipationResponseDto> registerToEvent(

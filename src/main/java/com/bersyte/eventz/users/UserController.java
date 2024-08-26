@@ -2,7 +2,6 @@ package com.bersyte.eventz.users;
 
 import com.bersyte.eventz.common.UserResponseDto;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService usersService;
+
+    public UserController(UserService usersService) {
+        this.usersService = usersService;
+    }
 
 
     @GetMapping

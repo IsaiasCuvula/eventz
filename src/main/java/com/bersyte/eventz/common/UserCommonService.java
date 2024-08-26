@@ -2,17 +2,19 @@ package com.bersyte.eventz.common;
 
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.users.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserCommonService {
 
     final private UserRepository userRepository;
+
+    public UserCommonService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     public AppUser getUserById(Long id) {
