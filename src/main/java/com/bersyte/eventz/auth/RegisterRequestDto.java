@@ -26,5 +26,7 @@ public record RegisterRequestDto(
 ) {
     public RegisterRequestDto {
         createdAt = new Date().getTime();
+        lastName = lastName == null ? "" : lastName;
+        phone = phone == null ? "" : phone;
     }
 }
