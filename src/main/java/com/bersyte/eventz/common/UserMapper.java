@@ -9,6 +9,9 @@ import java.util.Date;
 public class UserMapper {
 
     public AppUser toUserEntity(RegisterRequestDto dto) {
+        if (dto == null) {
+            throw new NullPointerException ("Register dto cannot be null");
+        }
         AppUser entity = new AppUser();
         entity.setEmail(dto.email());
         entity.setPassword(dto.password());
@@ -22,15 +25,16 @@ public class UserMapper {
 
 
     public UserResponseDto toUserResponseDTO(AppUser entity) {
-        final String phone = entity.getPhone() != null ? entity.getPhone() : " ";
-        final String lastName = entity.getLastName() != null ? entity.getLastName() : " ";
+        if (entity == null) {
+            throw new NullPointerException ("User cannot be null");
+        }
         //
         return new UserResponseDto(
                 entity.getId(),
                 entity.getEmail(),
                 entity.getFirstName(),
-                lastName,
-                phone,
+                entity.getLastName (),
+                entity.getPhone (),
                 entity.getCreatedAt(),
                 entity.getRole()
         );
