@@ -2,7 +2,6 @@ package com.bersyte.eventz.common;
 
 import com.bersyte.eventz.events.*;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +9,15 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class EventCommonService {
 
     private final EventRepository eventRepository;
+    private final EventMappers eventMappers;
+
+    public EventCommonService(EventRepository eventRepository, EventMappers eventMappers) {
+        this.eventRepository = eventRepository;
+        this.eventMappers = eventMappers;
+    }
 
 
     public Event findEventById(Long id) {
@@ -46,7 +50,7 @@ public class EventCommonService {
                 oldEvent.setDate(new Date(data.date()));
             }
             //
-            return EventMappers.toResponseDTO(eventRepository.save(oldEvent));
+            return eventMappers.toResponseDTO (eventRepository.save (oldEvent));
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);

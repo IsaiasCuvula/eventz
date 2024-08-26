@@ -3,16 +3,17 @@ package com.bersyte.eventz.events;
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.event_participation.ParticipationStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+@Service
 public class EventMappers {
 
 
-    public static EventResponseDto toResponseDTO(Event entity) {
+    public EventResponseDto toResponseDTO(Event entity) {
        final AppUser organizer = entity.getOrganizer();
        final List<EventParticipation> registrations = entity.getRegistrations() == null ?
                new ArrayList<>() : entity.getRegistrations();
@@ -40,7 +41,7 @@ public class EventMappers {
        );
    }
 
-    public static Event toEventEntity(EventRequestDto dto) {
+    public Event toEventEntity(EventRequestDto dto) {
         Event entity = new Event();
         entity.setTitle(dto.title());
         entity.setDescription(dto.description());

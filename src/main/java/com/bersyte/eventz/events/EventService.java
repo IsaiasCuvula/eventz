@@ -4,7 +4,6 @@ import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.users.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,12 +16,24 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository repository;
     private final UserService usersService;
     private final EventCommonService eventCommonService;
+    private final EventMappers eventMappers;
+
+    public EventService(
+            EventRepository repository,
+            UserService usersService,
+            EventCommonService eventCommonService,
+            EventMappers eventMappers
+    ) {
+        this.repository = repository;
+        this.usersService = usersService;
+        this.eventCommonService = eventCommonService;
+        this.eventMappers = eventMappers;
+    }
 
 
     public EventResponseDto createEvent(
@@ -31,11 +42,11 @@ public class EventService {
         try {
             String email = userDetails.getUsername();
             AppUser currentUser = usersService.getUserByEmail(email);
-            Event event = EventMappers.toEventEntity(data);
+            Event event = eventMappers.toEventEntity (data);
             event.setOrganizer(currentUser);
 
             Event newEvent = repository.save(event);
-            return EventMappers.toResponseDTO(newEvent);
+            return eventMappers.toResponseDTO (newEvent);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error creating new event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
@@ -46,7 +57,7 @@ public class EventService {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Event> eventsPerPage = repository.findAll(pageable);
-            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+            return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error getting all events: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
@@ -57,7 +68,7 @@ public class EventService {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
-            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+            return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error getting upcoming events: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
@@ -67,7 +78,7 @@ public class EventService {
     public EventResponseDto getEventById(Long id) {
         try {
             Event event = eventCommonService.findEventById(id);
-            return EventMappers.toResponseDTO(event);
+            return eventMappers.toResponseDTO (event);
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
@@ -124,7 +135,7 @@ public class EventService {
             Page<Event> eventsPerPage = this.repository.findFilteredEvents(
                     title, location, pageable
             );
-            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+            return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get filtered events: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
@@ -136,7 +147,7 @@ public class EventService {
             Pageable pageable = PageRequest.of(page, size);
             Date dateEvent = (date != null) ? new Date(date) : new Date();
             Page<Event> eventsPerPage = this.repository.getEventsByDate(dateEvent, pageable);
-            return eventsPerPage.stream().map(EventMappers::toResponseDTO).toList();
+            return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get event by date: %s", e.getLocalizedMessage());
             throw new DatabaseOperationException(errorMsg);
