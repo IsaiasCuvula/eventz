@@ -16,7 +16,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     "WHERE (:title = '' OR LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%')) ) AND " +  
     "(:location = '' OR LOWER(e.location) LIKE LOWER(CONCAT('%', :location, '%')) ) "
   )
-  Page<Event> findFilteredEvents(
+  Page<Event> filterEventsByTitleAndLocation(
           @Param("title") String title,
           @Param("location") String location,
           Pageable pageable

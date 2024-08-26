@@ -132,7 +132,7 @@ public class EventService {
             title = (title != null) ? title : " ";
             location = (location != null) ? location : " ";
             Pageable pageable = PageRequest.of(page, size);
-            Page<Event> eventsPerPage = this.repository.findFilteredEvents(
+            Page<Event> eventsPerPage = this.repository.filterEventsByTitleAndLocation (
                     title, location, pageable
             );
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
