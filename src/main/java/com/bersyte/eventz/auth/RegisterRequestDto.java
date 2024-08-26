@@ -18,7 +18,6 @@ public record RegisterRequestDto(
         String password,
         @NotNull(message = "user role is required")
         UserRole role,
-        String token,
         @NotNull(message = "user firstName is required")
         String firstName,
         String lastName,
