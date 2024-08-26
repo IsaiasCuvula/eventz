@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterRequestDto;
+import com.bersyte.eventz.auth.RegisterDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.Date;
 @Component
 public class UserMapper {
 
-    public AppUser toUserEntity(RegisterRequestDto dto) {
+    public AppUser toUserEntity(RegisterDto dto) {
         if (dto == null) {
             throw new NullPointerException ("Register dto cannot be null");
         }

@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterRequestDto;
+import com.bersyte.eventz.auth.RegisterDto;
 import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.events.Event;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ class UserMapperTest {
     @Test
     public void shouldMapRegisterRequestDtoToAppUserEntity() {
         // Given
-        RegisterRequestDto dto = new RegisterRequestDto (
+        RegisterDto dto = new RegisterDto (
                 "may@gmail.com",
                 "123456",
                 UserRole.USER,

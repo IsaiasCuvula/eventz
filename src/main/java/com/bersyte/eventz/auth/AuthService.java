@@ -41,7 +41,7 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
-    public AuthResponse signup(RegisterRequestDto requestDTO) {
+    public AuthResponseDto signup(RegisterDto requestDTO) {
         try {
             AppUser newUser = userMapper.toUserEntity (requestDTO);
             newUser.setPassword(encoder.encode(newUser.getPassword()));
@@ -62,7 +62,7 @@ public class AuthService {
         }
     }
 
-    public AuthResponse login(LoginRequestDto requestDTO) {
+    public AuthResponseDto login(LoginDto requestDTO) {
         try {
             String email = requestDTO.email();
             String password = requestDTO.password();
@@ -74,12 +74,12 @@ public class AuthService {
         }
     }
 
-    private AuthResponse getAuthResponse(AppUser user) {
+    private AuthResponseDto getAuthResponse(AppUser user) {
         String token = jwtService.generateToken(user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         Date expiration = jwtService.extractExpiration(token);
         //saveUserToken(user, token)
-        return new AuthResponse(token, refreshToken, expiration);
+        return new AuthResponseDto (token, refreshToken, expiration);
     }
 
     public void refreshToken(
@@ -102,7 +102,7 @@ public class AuthService {
 
                 //revokeAllUserToken(user)
                 //saveUserToken(user, accessToken)
-                AuthResponse authResponse = new AuthResponse(
+                AuthResponseDto authResponse = new AuthResponseDto (
                         accessToken,
                         refreshToken,
                         jwtService.extractExpiration(accessToken)

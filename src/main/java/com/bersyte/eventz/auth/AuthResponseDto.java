@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class AuthResponse {
+public class AuthResponseDto {
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("refresh_token")
@@ -16,7 +16,7 @@ public class AuthResponse {
     @JsonProperty("expires_in")
     private Date expiresIn;
 
-    public AuthResponse(
+    public AuthResponseDto(
             String token,
             String refreshToken,
             Date expiresIn
