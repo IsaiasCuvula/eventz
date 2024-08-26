@@ -31,5 +31,5 @@ public class Event {
     private AppUser organizer;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<EventParticipation> registrations;
+    private List<EventParticipation> participants;
 }

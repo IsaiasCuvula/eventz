@@ -14,8 +14,8 @@ public class EventMappers {
 
     public EventResponseDto toResponseDTO(Event entity) {
        final AppUser organizer = entity.getOrganizer();
-       final List<EventParticipation> registrations = entity.getRegistrations() == null ?
-               new ArrayList<>() : entity.getRegistrations();
+        final List<EventParticipation> registrations = entity.getParticipants () == null ?
+                new ArrayList<> () : entity.getParticipants ();
 
        final String organizerLastName = organizer.getLastName() == null ? " " : organizer.getLastName();
 
