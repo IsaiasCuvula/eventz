@@ -4,10 +4,9 @@ Content-Type: application/json
 Cookie: key=first-value
 
 {
-  "email": "math@gmail.io",
+  "email": "karl@gmail.io",
   "password": "123456",
-  "firstName": "Math",
-  "lastName": "Boss",
+  "firstName": "Karl",
   "role": "USER"
 }
 
@@ -40,7 +39,9 @@ Cookie: key=first-value
 ###
 #Get current user
 GET http://localhost:8080/v1/users/current-user
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb20iLCJpYXQiOjE3MjQ2OTU5NjMsImV4cCI6MTcyNDY5Njg2M30.EHTZxWivTVJT3QDEPa1Tv4H4gL3m3BDJSzWN04m-3sEZOLgJ26F7llihsEze5jRj
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJrYXJsQGdtYWlsLmlvIiwiaWF0IjoxNzI0NzAxNDY0LCJleHAiOjE3MjQ3MDIzNjR9.iJU8on9R3bGc0xJvelqaLEam2ILAztCgvRpPEWBXLB5Yz0DbD_0A7QrX_aWHNvpN
+
+
 
 ###
 GET http://localhost:8080/v1/events?page=0&size=50
