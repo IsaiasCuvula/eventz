@@ -6,7 +6,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class EventCommonService {
@@ -22,15 +21,13 @@ public class EventCommonService {
 
     public Event findEventById(Long id) {
         try {
-            Optional<Event> eventOptional = eventRepository.findById(id);
-            if (eventOptional.isEmpty()) {
-                String errorMsg = String.format("Event with id: %s not found", id);
-                throw new DatabaseOperationException(errorMsg);
-            }
-            return eventOptional.get();
+            return eventRepository.findById (id).orElseThrow (
+                    () -> new DatabaseOperationException ("Could not find event with id: " + id)
+            );
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to get event by id %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error accessing database: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -52,8 +49,9 @@ public class EventCommonService {
             //
             return eventMappers.toResponseDTO (eventRepository.save (oldEvent));
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error accessing database: " + e.getLocalizedMessage ()
+            );
         }
     }
 
