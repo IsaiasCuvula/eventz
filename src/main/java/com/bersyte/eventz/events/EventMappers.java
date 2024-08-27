@@ -12,6 +12,9 @@ import java.util.List;
 public class EventMappers {
 
     public EventResponseDto toResponseDTO(Event entity) {
+        if (entity == null) {
+            throw new NullPointerException ("Entity cannot be null");
+        }
        final AppUser organizer = entity.getOrganizer();
         final List<EventParticipation> registrations = entity.getParticipants () == null ?
                 List.of () : entity.getParticipants ();
@@ -28,9 +31,7 @@ public class EventMappers {
                        .map(
                                registration -> {
                                    AppUser user = registration.getUser();
-                                   String lastName = user.getLastName() == null ? "" : user.getLastName();
-                                   String firstName = user.getFirstName();
-                                   return firstName + " " + lastName;
+                                   return user.getFirstName () + " " + user.getLastName ();
                                }
                ).toList(),
                entity.getCreatedAt()
@@ -38,6 +39,9 @@ public class EventMappers {
    }
 
     public Event toEventEntity(EventRequestDto dto) {
+        if (dto == null) {
+            throw new NullPointerException ("Request data cannot be null");
+        }
         Event entity = new Event();
         entity.setTitle(dto.title());
         entity.setDescription(dto.description());
