@@ -106,28 +106,4 @@ class UserMapperTest {
         //Assert
         assertEquals ("User cannot be null", exception.getMessage ());
     }
-
-//    @Test
-//    public void shouldReturnEmptyValueIfRegisterRequestDtoPhoneIsNull(){
-//        // Given
-//        RegisterRequestDto dto = new RegisterRequestDto(
-//                "may@gmail.com",
-//                "123456",
-//                UserRole.USER,
-//                "May",
-//                "Jane",
-//                null,
-//                System.currentTimeMillis ()
-//        );
-//        //When
-//        AppUser result = userMapper.toUserEntity(dto);
-//
-//        //Then - Assert
-//        assertNotNull(result);
-//        assertEquals("", result.getPhone());
-//    }
-//    final String phone = entity.getPhone() != null ? entity.getPhone() : " ";
-//    final String lastName = entity.getLastName() != null ? entity.getLastName() : " ";
-
-
 }
