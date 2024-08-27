@@ -5,7 +5,6 @@ import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.event_participation.ParticipationStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,9 +14,7 @@ public class EventMappers {
     public EventResponseDto toResponseDTO(Event entity) {
        final AppUser organizer = entity.getOrganizer();
         final List<EventParticipation> registrations = entity.getParticipants () == null ?
-                new ArrayList<> () : entity.getParticipants ();
-
-       final String organizerLastName = organizer.getLastName() == null ? " " : organizer.getLastName();
+                List.of () : entity.getParticipants ();
 
         return new EventResponseDto(
                entity.getId(),
@@ -25,7 +22,7 @@ public class EventMappers {
                entity.getDescription(),
                entity.getLocation(),
                entity.getDate(),
-               organizer.getFirstName() + " " + organizerLastName,
+                organizer.getFirstName () + " " + organizer.getLastName (),
                registrations.stream()
                        .filter(registration -> registration.getStatus() == ParticipationStatus.ACTIVE)
                        .map(
