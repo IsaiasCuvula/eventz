@@ -33,8 +33,9 @@ public class UserService {
             Page<AppUser> users = userRepository.findAll(pageable);
             return users.stream ().map (userMapper::toUserResponseDTO).toList ();
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed load users  %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error access database " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -62,13 +63,14 @@ public class UserService {
             return userMapper.toUserResponseDTO (updatedUser);
 
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to update user:  %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error access database " + e.getLocalizedMessage ()
+            );
         }
     }
 
     public AppUser getUserByEmail(String email) {
-        return userCommonService.findUserByEmail(email);
+        return userCommonService.getUserByEmail (email);
     }
 
 

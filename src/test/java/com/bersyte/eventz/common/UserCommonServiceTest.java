@@ -104,7 +104,7 @@ class UserCommonServiceTest {
                 .thenReturn (Optional.of (user));
 
         //When
-        AppUser returnedUser = userCommonService.findUserByEmail (email);
+        AppUser returnedUser = userCommonService.getUserByEmail (email);
 
         //Act
         assertNotNull (returnedUser);
@@ -124,7 +124,7 @@ class UserCommonServiceTest {
         //When
         DatabaseOperationException exception = assertThrows (
                 DatabaseOperationException.class,
-                () -> userCommonService.findUserByEmail (email)
+                () -> userCommonService.getUserByEmail (email)
         );
         //
         assertEquals (expectedMsg, exception.getMessage ());

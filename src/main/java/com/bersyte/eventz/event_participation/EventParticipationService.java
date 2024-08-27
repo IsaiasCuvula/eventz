@@ -220,7 +220,7 @@ public class EventParticipationService {
     private AppUser getUserByEmail(UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
-            return userCommonService.findUserByEmail(email);
+            return userCommonService.getUserByEmail (email);
         } catch (DataAccessException e) {
             throw new DatabaseOperationException(
                     "Error getting user " + e.getLocalizedMessage()

@@ -28,7 +28,7 @@ public class UserCommonService {
         }
     }
 
-    public AppUser findUserByEmail(String email) {
+    public AppUser getUserByEmail(String email) {
         try {
             return userRepository.findByEmail(email).orElseThrow(
                     () -> new DatabaseOperationException("User not found")
