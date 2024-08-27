@@ -147,8 +147,4 @@ class UserCommonServiceTest {
                 true
         );
     }
-
-//    @Test
-//    void findUserByEmail() {
-//    }
 }
