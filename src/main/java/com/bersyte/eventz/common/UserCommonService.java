@@ -5,7 +5,6 @@ import com.bersyte.eventz.users.UserRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class UserCommonService {
@@ -19,14 +18,13 @@ public class UserCommonService {
 
     public AppUser getUserById(Long id) {
         try {
-            Optional<AppUser> userOptional = userRepository.findById(id);
-            if (userOptional.isEmpty()) {
-                throw new DatabaseOperationException("User not found");
-            }
-            return userOptional.get();
+            return userRepository.findById (id).orElseThrow (
+                    () -> new DatabaseOperationException ("User not found")
+            );
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to get user by email %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Database error occurred " + e.getLocalizedMessage ()
+            );
         }
     }
 

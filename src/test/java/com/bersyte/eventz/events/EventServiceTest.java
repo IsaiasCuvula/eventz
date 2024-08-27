@@ -3,7 +3,6 @@ package com.bersyte.eventz.events;
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.event_participation.EventParticipation;
 import com.bersyte.eventz.users.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -128,8 +127,6 @@ class EventServiceTest {
     }
 
     private AppUser getOrganizerForTest() {
-        List<EventParticipation> registrations = List.of ();
-        List<Event> events = List.of ();
         return new AppUser (
                 1L,
                 "isaias@gmail.com",
@@ -139,8 +136,8 @@ class EventServiceTest {
                 "+244989647474",
                 new Date (),
                 UserRole.USER,
-                events,
-                registrations,
+                List.of (),
+                List.of (),
                 "123456",
                 LocalDateTime.now (),
                 true
