@@ -70,7 +70,7 @@ public class EventController {
      @RequestParam(required = false) String title,
      @RequestParam(required = false) String location
    ) {
-       List<EventResponseDto> allEvents = this.service.filterEvents(page, size, title, location);
+       List<EventResponseDto> allEvents = this.service.getFilteredEventsByTitleAndLocation (page, size, title, location);
      return ResponseEntity.ok(allEvents);
    }
 

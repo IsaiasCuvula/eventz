@@ -126,7 +126,7 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDto> filterEvents(
+    public List<EventResponseDto> getFilteredEventsByTitleAndLocation(
         int page, 
         int size,
         String title, 
