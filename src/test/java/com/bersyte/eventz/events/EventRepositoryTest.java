@@ -39,7 +39,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.getUpcomingEvents (
+        Page<Event> eventsPerPage = eventRepository.findUpcomingEvents (
                 new Date (), pageable
         );
 
@@ -55,7 +55,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.getEventsByDate (
+        Page<Event> eventsPerPage = eventRepository.findEventsByDate (
                 date, pageable
         );
 

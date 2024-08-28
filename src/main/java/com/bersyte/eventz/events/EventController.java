@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -88,7 +89,8 @@ public class EventController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<EventResponseDto> upcomingEvents = this.service.getUpcomingEvents(page, size);
+        List<EventResponseDto> upcomingEvents =
+                this.service.getUpcomingEvents (new Date (), page, size);
         return ResponseEntity.ok(upcomingEvents);
     }
 }

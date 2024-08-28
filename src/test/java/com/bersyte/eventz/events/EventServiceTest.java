@@ -10,6 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -18,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -126,6 +131,150 @@ class EventServiceTest {
 
     }
 
+    @Test
+    void shouldGetAllEventsSuccessfully() {
+        //Arrange
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of (page, size);
+        Event event1 = getEvent (
+                4L,
+                "Training Workshop",
+                "Training session on new software tools",
+                "Training Room 3"
+        );
+
+        Event event2 = getEvent (
+                5L,
+                "Math Training",
+                "Math training session on new software tools",
+                "Classroom 5"
+        );
+
+        Event event3 = getEvent (
+                8L,
+                "Medical Workshop",
+                "Medical session on new-hires tools",
+                "Room 89"
+        );
+
+        EventResponseDto response = new EventResponseDto (
+                9L,
+                "title",
+                "description",
+                "location",
+                new Date (1726472944000L),
+                getOrganizerForTest ().getFirstName (),
+                List.of (),
+                new Date (1726172944000L)
+        );
+
+        List<Event> events = List.of (event1, event2, event3);
+        Page<Event> eventsPage = new PageImpl<> (events);
+
+        //Mock calls
+        Mockito.when (eventRepository.findAll (pageable))
+                .thenReturn (eventsPage);
+
+        Mockito.when (eventMappers.toResponseDTO (any ()))
+                .thenReturn (response);
+
+        //When
+        List<EventResponseDto> result = eventService.getAllEvents (page, size);
+
+        //Act - Assert
+        assertNotNull (result);
+        assertEquals (events.size (), result.size ());
+        verify (eventMappers, times (result.size ()))
+                .toResponseDTO (any ());
+
+        verify (eventRepository, times (1))
+                .findAll (pageable);
+    }
+
+
+    @Test
+    void shouldGetAllUpcomingEventsSuccessfully() {
+        //Arrange
+        int page = 0;
+        int size = 10;
+        Date date = new Date (1724831344000L);
+        Pageable pageable = PageRequest.of (page, size);
+        Event event1 = getEvent (
+                4L,
+                "Training Workshop",
+                "Training session on new software tools",
+                "Training Room 3"
+        );
+
+        Event event2 = getEvent (
+                5L,
+                "Math Training",
+                "Math training session on new software tools",
+                "Classroom 5"
+        );
+
+        Event event3 = getEvent (
+                8L,
+                "Medical Workshop",
+                "Medical session on new-hires tools",
+                "Room 89"
+        );
+
+        EventResponseDto response = new EventResponseDto (
+                9L,
+                "title",
+                "description",
+                "location",
+                date,
+                getOrganizerForTest ().getFirstName (),
+                List.of (),
+                new Date (1726172944000L)
+        );
+
+        List<Event> events = List.of (event1, event2, event3);
+        Page<Event> eventsPage = new PageImpl<> (events);
+
+        //Mock calls
+        Mockito.when (eventRepository.findUpcomingEvents (date, pageable))
+                .thenReturn (eventsPage);
+
+        Mockito.when (eventMappers.toResponseDTO (any ()))
+                .thenReturn (response);
+
+        //When
+        List<EventResponseDto> result =
+                eventService.getUpcomingEvents (date, page, size);
+
+        //Act - Assert
+        assertNotNull (result);
+        assertEquals (events.size (), result.size ());
+        verify (eventMappers, times (result.size ()))
+                .toResponseDTO (any ());
+
+        verify (eventRepository, times (1))
+                .findUpcomingEvents (date, pageable);
+    }
+
+
+    private Event getEvent(
+            Long eventId,
+            String title,
+            String description,
+            String location
+    ) {
+        return new Event (
+                eventId,
+                title,
+                description,
+                location,
+                new Date (1726472944000L),
+                new Date (1726172944000L),
+                getOrganizerForTest (),
+                List.of ()
+        );
+    }
+
     private AppUser getOrganizerForTest() {
         return new AppUser (
                 1L,
@@ -144,9 +293,7 @@ class EventServiceTest {
         );
     }
 
-//    @Test
-//    void getAllEvents() {
-//    }
+
 //
 //    @Test
 //    void getUpcomingEvents() {

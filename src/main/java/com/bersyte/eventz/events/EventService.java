@@ -64,10 +64,10 @@ public class EventService {
         }
     }
 
-    public List<EventResponseDto> getUpcomingEvents(int page, int size) {
+    public List<EventResponseDto> getUpcomingEvents(Date date, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            Page<Event> eventsPerPage = repository.getUpcomingEvents(new Date(), pageable);
+            Page<Event> eventsPerPage = repository.findUpcomingEvents (date, pageable);
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Error getting upcoming events: %s", e.getLocalizedMessage());
@@ -146,7 +146,7 @@ public class EventService {
         try {
             Pageable pageable = PageRequest.of(page, size);
             Date dateEvent = (date != null) ? new Date(date) : new Date();
-            Page<Event> eventsPerPage = this.repository.getEventsByDate(dateEvent, pageable);
+            Page<Event> eventsPerPage = this.repository.findEventsByDate (dateEvent, pageable);
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
             String errorMsg = String.format("Failed to get event by date: %s", e.getLocalizedMessage());

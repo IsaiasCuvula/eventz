@@ -23,8 +23,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   );
 
     @Query("SELECT e FROM Event e WHERE (e.date = :date ) ")
-    Page<Event> getEventsByDate(@Param("date") Date date, Pageable pageable);
+    Page<Event> findEventsByDate(@Param("date") Date date, Pageable pageable);
 
   @Query("SELECT e FROM Event e WHERE e.date >= current_date ")
-  Page<Event> getUpcomingEvents(@Param("date") Date date, Pageable pageable);
+  Page<Event> findUpcomingEvents(@Param("date") Date date, Pageable pageable);
 }
