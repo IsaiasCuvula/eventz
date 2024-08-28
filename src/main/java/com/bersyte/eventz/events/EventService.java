@@ -70,8 +70,9 @@ public class EventService {
             Page<Event> eventsPerPage = repository.findUpcomingEvents (date, pageable);
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Error getting upcoming events: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error getting upcoming events: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -80,8 +81,9 @@ public class EventService {
             Event event = eventCommonService.findEventById(id);
             return eventMappers.toResponseDTO (event);
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error while updating event: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -101,8 +103,9 @@ public class EventService {
                 throw new AccessDeniedException("You do not have permission to update this event");
             }
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Error while updating event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Error while updating event: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -117,8 +120,9 @@ public class EventService {
                 throw new AccessDeniedException("You do not have permission to delete this event");
             }
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to delete event: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Failed to delete event: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -137,8 +141,9 @@ public class EventService {
             );
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to get filtered events: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Failed to get filtered events: " + e.getLocalizedMessage ()
+            );
         }
     }
 
@@ -149,8 +154,9 @@ public class EventService {
             Page<Event> eventsPerPage = this.repository.findEventsByDate (dateEvent, pageable);
             return eventsPerPage.stream ().map (eventMappers::toResponseDTO).toList ();
         } catch (DataAccessException e) {
-            String errorMsg = String.format("Failed to get event by date: %s", e.getLocalizedMessage());
-            throw new DatabaseOperationException(errorMsg);
+            throw new DatabaseOperationException (
+                    "Failed to get event by date: " + e.getLocalizedMessage ()
+            );
         }
     }
 }

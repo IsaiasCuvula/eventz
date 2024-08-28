@@ -3,6 +3,7 @@ package com.bersyte.eventz.events;
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.common.UserRole;
+import com.bersyte.eventz.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.users.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -256,6 +256,69 @@ class EventServiceTest {
                 .findUpcomingEvents (date, pageable);
     }
 
+    @Test
+    public void shouldGetEventByIdSuccessfully() {
+        //Arrange
+        Long eventId = 4L;
+
+        Event event1 = getEvent (
+                eventId,
+                "Training Workshop",
+                "Training session on new software tools",
+                "Training Room 3"
+        );
+
+        EventResponseDto response = new EventResponseDto (
+                eventId,
+                event1.getTitle (),
+                event1.getDescription (),
+                event1.getLocation (),
+                event1.getDate (),
+                event1.getOrganizer ().getFirstName (),
+                List.of (),
+                event1.getCreatedAt ()
+        );
+
+        //Mock call
+        Mockito.when (eventCommonService.findEventById (eventId))
+                .thenReturn (event1);
+
+        Mockito.when (eventMappers.toResponseDTO (event1))
+                .thenReturn (response);
+
+        //When
+        EventResponseDto result = eventService.getEventById (eventId);
+
+        assertNotNull (result);
+        assertEquals (response, result);
+    }
+
+    @Test
+    public void shouldReturnExceptionIfEventByIdNotFound() {
+        // Arrange
+        String expectedMsg = "Error while updating event: ";
+        Long eventId = 56L;
+
+        //Mock calls
+        Mockito.when (eventCommonService.findEventById (eventId))
+                .thenThrow (new DatabaseOperationException (expectedMsg));
+
+        //When
+        DatabaseOperationException exception = assertThrows (
+                DatabaseOperationException.class,
+                () -> eventService.getEventById (eventId)
+        );
+
+        //Act - Assert
+        assertEquals (expectedMsg, exception.getMessage ());
+    }
+
+    //    @Test
+//    void updateEvent() {
+//    }
+
+
+
 
     private Event getEvent(
             Long eventId,
@@ -294,19 +357,6 @@ class EventServiceTest {
     }
 
 
-//
-//    @Test
-//    void getUpcomingEvents() {
-//    }
-//
-//    @Test
-//    void getEventById() {
-//    }
-//
-//    @Test
-//    void updateEvent() {
-//    }
-//
 //    @Test
 //    void deleteEvent() {
 //    }
