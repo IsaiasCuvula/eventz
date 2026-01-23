@@ -2,6 +2,7 @@ package com.bersyte.eventz.common;
 
 import com.bersyte.eventz.events.*;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.events.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class EventCommonService {
     }
 
 
-    public Event findEventById(Long id) {
+    public EventEntity findEventById(Long id) {
         try {
             return eventRepository.findById (id).orElseThrow (
                     () -> new DatabaseOperationException ("Could not find event with id: " + id)
@@ -32,7 +33,7 @@ public class EventCommonService {
     }
 
 
-    public EventResponseDto updateEventOnDb(Event oldEvent, EventRequestDto data) {
+    public EventResponseDto updateEventOnDb(EventEntity oldEvent, EventRequestDto data) {
         try {
             if (data.title() != null) {
                 oldEvent.setTitle(data.title());

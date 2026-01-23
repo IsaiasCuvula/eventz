@@ -1,7 +1,7 @@
 package com.bersyte.eventz.common;
 
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.users.UserRepository;
+import com.bersyte.eventz.features.users.UserRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterDto;
+import com.bersyte.eventz.features.auth.RegisterDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

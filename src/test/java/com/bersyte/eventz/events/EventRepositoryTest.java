@@ -2,8 +2,10 @@ package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.users.UserRepository;
+import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.events.EventEntity;
+import com.bersyte.eventz.features.events.EventRepository;
+import com.bersyte.eventz.features.users.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.findUpcomingEvents (
+        Page<EventEntity> eventsPerPage = eventRepository.findUpcomingEvents (
                 new Date (), pageable
         );
 
@@ -55,7 +57,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.findEventsByDate (
+        Page<EventEntity> eventsPerPage = eventRepository.findEventsByDate (
                 date, pageable
         );
 
@@ -70,8 +72,8 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
-                "New Launch Event", "Luanda", pageable
+        Page<EventEntity> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
+                "New Launch EventEntity", "Luanda", pageable
         );
 
         //Act - Assert
@@ -86,7 +88,7 @@ class EventRepositoryTest {
         );
 
         assertEquals (
-                "New Launch Event",
+                "New Launch EventEntity",
                 eventsPerPage
                         .get ()
                         .toList ()
@@ -102,7 +104,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<Event> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
+        Page<EventEntity> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
                 "Naval Academy", "", pageable
         );
 
@@ -116,10 +118,10 @@ class EventRepositoryTest {
         AppUser organizer = getOrganizerForTest ();
 
         //past event
-        Event event = new Event ();
+        EventEntity event = new EventEntity();
         event.setId (1L);
         event.setOrganizer (organizer);
-        event.setTitle ("Product Launch Event");
+        event.setTitle ("Product Launch EventEntity");
         event.setDescription ("Launch of new product line X");
         event.setLocation ("City Convention Center");
         event.setDate (new Date (1723276144000L));
@@ -127,10 +129,10 @@ class EventRepositoryTest {
         event.setParticipants (participants);
 
         //upcoming event
-        Event event2 = new Event ();
+        EventEntity event2 = new EventEntity();
         event2.setId (2L);
         event2.setOrganizer (organizer);
-        event2.setTitle ("New Launch Event");
+        event2.setTitle ("New Launch EventEntity");
         event2.setDescription ("Launch of X line in Luanda");
         event2.setLocation ("Luanda City Center");
         event2.setDate (new Date (System.currentTimeMillis () + 604800000));
@@ -144,7 +146,7 @@ class EventRepositoryTest {
 
     private AppUser getOrganizerForTest() {
         List<EventParticipation> registrations = List.of ();
-        List<Event> events = List.of ();
+        List<EventEntity> events = List.of ();
         AppUser user = new AppUser (
                 1L,
                 "isaias@gmail.com",

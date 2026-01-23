@@ -1,8 +1,8 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterDto;
-import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.events.Event;
+import com.bersyte.eventz.features.auth.RegisterDto;
+import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.events.EventEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,7 @@ class UserMapperTest {
     @Test
     public void shouldMapUserEntityToUserResponseDto() {
         // Given
-        List<Event> events = List.of ();
+        List<EventEntity> events = List.of ();
         List<EventParticipation> registrations = List.of ();
 
         AppUser user = new AppUser (

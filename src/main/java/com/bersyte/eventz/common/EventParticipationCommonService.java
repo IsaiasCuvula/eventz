@@ -1,7 +1,7 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.event_participation.*;
-import com.bersyte.eventz.events.Event;
+import com.bersyte.eventz.features.event_participation.*;
+import com.bersyte.eventz.features.events.EventEntity;
 import com.bersyte.eventz.exceptions.EventRegistrationException;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class EventParticipationCommonService {
 
     public EventParticipationResponseDto registerUserToEvent(
             AppUser participant,
-            Event event
+            EventEntity event
     ) {
         try {
             final Date updatedDate = new Date();

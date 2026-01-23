@@ -1,6 +1,9 @@
 package com.bersyte.eventz.users;
 
 import com.bersyte.eventz.common.*;
+import com.bersyte.eventz.features.users.UpdateUserRequestDto;
+import com.bersyte.eventz.features.users.UserRepository;
+import com.bersyte.eventz.features.users.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

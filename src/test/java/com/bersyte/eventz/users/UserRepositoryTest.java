@@ -2,8 +2,9 @@ package com.bersyte.eventz.users;
 
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.events.Event;
+import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.events.EventEntity;
+import com.bersyte.eventz.features.users.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ class UserRepositoryTest {
     @BeforeEach
     void setUp() {
 
-        List<Event> events = List.of ();
+        List<EventEntity> events = List.of ();
         List<EventParticipation> registrations = List.of ();
 
         AppUser user = new AppUser (

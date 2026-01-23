@@ -1,7 +1,7 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.events.*;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.events.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +30,7 @@ class EventCommonServiceTest {
     @Test
     void shouldFindEventByIdSuccessfully() {
         // Arrange
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 2L,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -46,7 +46,7 @@ class EventCommonServiceTest {
                 .thenReturn (Optional.of (event));
 
         //When
-        Event foundEvent = eventCommonService.findEventById (2L);
+        EventEntity foundEvent = eventCommonService.findEventById (2L);
 
         //Act - Assert
         assertEquals (event, foundEvent);
@@ -98,7 +98,7 @@ class EventCommonServiceTest {
                 createdAt
         );
 
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 id,
                 dto.title (),
                 dto.description (),

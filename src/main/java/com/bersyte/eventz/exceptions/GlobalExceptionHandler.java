@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception,
             HttpServletRequest request
     ){
-        //get the default msg defined in the [Event] entity
+        //get the default msg defined in the [EventEntity] entity
         AtomicReference<String> defaultMessage = new AtomicReference<>("");
         for (ObjectError objectError : exception.getBindingResult().getAllErrors()) {
             defaultMessage.set(objectError.getDefaultMessage());

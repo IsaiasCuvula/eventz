@@ -4,7 +4,8 @@ import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.EventCommonService;
 import com.bersyte.eventz.common.UserRole;
 import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.users.UserService;
+import com.bersyte.eventz.features.events.*;
+import com.bersyte.eventz.features.users.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -63,7 +64,7 @@ class EventServiceTest {
                 createdAt
         );
 
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 2L,
                 title,
                 description,
@@ -74,7 +75,7 @@ class EventServiceTest {
                 List.of ()
         );
 
-        Event savedEvent = new Event (
+        EventEntity savedEvent = new EventEntity(
                 2L,
                 title,
                 description,
@@ -100,7 +101,7 @@ class EventServiceTest {
 
         Mockito.when (eventMappers.toResponseDTO (savedEvent))
                 .thenReturn (
-                        new EventResponseDto (
+                        new EventResponseDto(
                                 2L,
                                 title,
                                 description,
@@ -137,21 +138,21 @@ class EventServiceTest {
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
@@ -169,8 +170,8 @@ class EventServiceTest {
                 new Date (1726172944000L)
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
         Mockito.when (eventRepository.findAll (pageable))
@@ -200,21 +201,21 @@ class EventServiceTest {
         int size = 10;
         Date date = new Date (1724831344000L);
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
@@ -232,8 +233,8 @@ class EventServiceTest {
                 new Date (1726172944000L)
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
         Mockito.when (eventRepository.findUpcomingEvents (date, pageable))
@@ -261,7 +262,7 @@ class EventServiceTest {
         //Arrange
         Long eventId = 4L;
 
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -332,7 +333,7 @@ class EventServiceTest {
                 createdAt.getTime ()
         );
 
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 title,
                 description,
@@ -384,7 +385,7 @@ class EventServiceTest {
                 new Date (1721472944000L).getTime ()
         );
 
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -414,7 +415,7 @@ class EventServiceTest {
         //Arrange
         String email = "isaias@gmail.com";
         Long eventId = 4L;
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -442,7 +443,7 @@ class EventServiceTest {
         Long eventId = 4L;
         String expectedMsg = "You do not have permission to delete this event";
         String email = "bernardo@gmail.com";
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -476,21 +477,21 @@ class EventServiceTest {
         Pageable pageable = PageRequest.of (page, size);
         String title = "Training";
         String location = "Classroom";
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Classroom 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
@@ -508,8 +509,8 @@ class EventServiceTest {
                 date
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
         Mockito.when (eventRepository.filterEventsByTitleAndLocation (title, location, pageable))
@@ -540,21 +541,21 @@ class EventServiceTest {
         int size = 10;
         Date date = new Date (1726472944000L);
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Classroom 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
@@ -572,8 +573,8 @@ class EventServiceTest {
                 date
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
         Mockito.when (eventRepository.findEventsByDate (date, pageable))
@@ -596,13 +597,13 @@ class EventServiceTest {
                 .findEventsByDate (date, pageable);
     }
 
-    private Event getEvent(
+    private EventEntity getEvent(
             Long eventId,
             String title,
             String description,
             String location
     ) {
-        return new Event (
+        return new EventEntity(
                 eventId,
                 title,
                 description,

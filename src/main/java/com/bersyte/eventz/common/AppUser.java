@@ -1,7 +1,7 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.events.Event;
+import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.events.EventEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class AppUser implements UserDetails {
     private UserRole role;
 
     @OneToMany(mappedBy = "organizer")
-    private List<Event> events;
+    private List<EventEntity> events;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventParticipation> registrations;

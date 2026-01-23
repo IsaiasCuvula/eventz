@@ -2,6 +2,10 @@ package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.common.AppUser;
 import com.bersyte.eventz.common.UserRole;
+import com.bersyte.eventz.features.events.EventEntity;
+import com.bersyte.eventz.features.events.EventMappers;
+import com.bersyte.eventz.features.events.EventRequestDto;
+import com.bersyte.eventz.features.events.EventResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +37,7 @@ class EventMappersTest {
         );
 
         //When
-        Event event = eventMappers.toEventEntity (dto);
+        EventEntity event = eventMappers.toEventEntity (dto);
 
         //Assert
         assertNotNull (event);
@@ -62,7 +66,7 @@ class EventMappersTest {
     @Test
     void shouldMapEventEntityToEventResponseDto() {
         // Arrange
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 2L,
                 "Training Workshop",
                 "Training session on new software tools",
