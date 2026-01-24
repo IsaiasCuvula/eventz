@@ -11,10 +11,14 @@ public interface EventRepository {
     Event updateEvent(Event event);
     void deleteEvent(String id);
     Optional<Event> getEventById(String id);
-    PagedResult<Event> getFilteredEventsByTitleAndLocation(
-            String title, String location, Pagination pagination);
+    boolean existsById(String id);
+    
+    PagedResult<Event> fetchEvents(Pagination pagination);
+    
+   
     PagedResult<Event> getEventsByDate(Pagination pagination, Date date);
     PagedResult<Event> fetchUpcomingEvents(Date date, Pagination pagination);
-    PagedResult<Event> fetchEvents(Pagination pagination);
-    boolean existsById(String id);
+    
+    PagedResult<Event> getFilteredEventsByTitleAndLocation(
+            String title, String location, Pagination pagination);
 }
