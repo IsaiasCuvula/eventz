@@ -12,14 +12,12 @@ public class Event {
     private LocalDateTime updateAt;
     private LocalDateTime createdAt;
     
-    public Event(String title, String description, String location, LocalDateTime date, Integer maxParticipants, LocalDateTime updateAt, LocalDateTime createdAt) {
+    public Event(String title, String description, String location, LocalDateTime date, Integer maxParticipants) {
         this.title = title;
+        this.date = date;
         this.description = description;
         this.location = location;
-        this.date = date;
         this.maxParticipants = maxParticipants;
-        this.updateAt = updateAt;
-        this.createdAt = createdAt;
     }
     
     public Event(String id, String title, String description, String location, LocalDateTime date, Integer maxParticipants, LocalDateTime updateAt, LocalDateTime createdAt) {
@@ -64,5 +62,25 @@ public class Event {
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+    
+    public void setMaxParticipants(Integer maxParticipants) {
+        this.maxParticipants = maxParticipants;
     }
 }
