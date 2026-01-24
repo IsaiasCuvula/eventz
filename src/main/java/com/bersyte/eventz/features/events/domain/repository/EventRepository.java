@@ -14,11 +14,12 @@ public interface EventRepository {
     boolean existsById(String id);
     
     PagedResult<Event> fetchEvents(Pagination pagination);
-    
    
     PagedResult<Event> getEventsByDate(Pagination pagination, Date date);
     PagedResult<Event> fetchUpcomingEvents(Date date, Pagination pagination);
-    
-    PagedResult<Event> getFilteredEventsByTitleAndLocation(
+    PagedResult<Event> filterEventsByTitleAndLocation(
             String title, String location, Pagination pagination);
 }
+
+
+
