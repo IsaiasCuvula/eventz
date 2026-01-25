@@ -9,6 +9,7 @@ public record EventSearchFilter(
         String location,
         String category,
         LocalDateTime startDate,
+        LocalDateTime endDate,
         Pagination pagination
 ) {
 }
