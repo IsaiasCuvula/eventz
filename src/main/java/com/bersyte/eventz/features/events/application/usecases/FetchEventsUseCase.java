@@ -8,8 +8,6 @@ import com.bersyte.eventz.features.events.application.mappers.EventMapper;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 
-import java.util.List;
-
 public class FetchEventsUseCase implements UseCase<Pagination, PagedResult<EventResponse>> {
     private final EventRepository repository;
     private final EventMapper mapper;
@@ -21,15 +19,6 @@ public class FetchEventsUseCase implements UseCase<Pagination, PagedResult<Event
     @Override
     public PagedResult<EventResponse> execute(Pagination pagination) {
         PagedResult<Event> pagedResult = repository.fetchEvents(pagination);
-        List<EventResponse> responses = pagedResult.data().stream().map(
-                 mapper::toResponse
-        ).toList();
-        
-        return new PagedResult<>(
-                responses,
-                pagedResult.totalElements(),
-                pagedResult.totalPages(),
-                pagedResult.isLast()
-        );
+        return mapper.toPagedResponse(pagedResult);
     }
 }
