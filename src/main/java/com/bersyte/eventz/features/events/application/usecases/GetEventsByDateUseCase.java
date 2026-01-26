@@ -3,7 +3,7 @@ package com.bersyte.eventz.features.events.application.usecases;
 import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.common.domain.Pagination;
-import com.bersyte.eventz.features.events.application.dtos.EventByDateParams;
+import com.bersyte.eventz.features.events.application.dtos.EventByDateInput;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import com.bersyte.eventz.features.events.application.mappers.EventMapper;
 import com.bersyte.eventz.features.events.domain.model.Event;
@@ -11,7 +11,7 @@ import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import java.time.LocalDateTime;
 
 
-public class GetEventsByDateUseCase implements UseCase<EventByDateParams, PagedResult<EventResponse>> {
+public class GetEventsByDateUseCase implements UseCase<EventByDateInput, PagedResult<EventResponse>> {
     private final EventRepository repository;
     private final EventMapper mapper;
     
@@ -21,7 +21,7 @@ public class GetEventsByDateUseCase implements UseCase<EventByDateParams, PagedR
     }
     
     @Override
-    public PagedResult<EventResponse> execute(EventByDateParams params) {
+    public PagedResult<EventResponse> execute(EventByDateInput params) {
         Pagination pagination = params.pagination();
         LocalDateTime date = params.date();
         PagedResult<Event> pagedResult = repository.fetchEventsByDate(pagination, date);

@@ -12,7 +12,7 @@ public class UserValidationService {
     }
     
     
-    public AppUser validateAndGetUser(String email){
+    public AppUser getValidUserByEmail(String email){
         return repository.findByEmail(email).orElseThrow(
                 ()-> new ResourceNotFoundException("User", email)
         );

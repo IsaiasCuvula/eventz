@@ -26,7 +26,7 @@ public class CreateEventUseCase implements UseCase<CreateEventInput, EventRespon
     public EventResponse execute(CreateEventInput input) {
         CreateEventRequest request = input.request();
         String userEmail = input.userEmail();
-        AppUser user = userValidationService.validateAndGetUser(userEmail);
+        AppUser user = userValidationService.getValidUserByEmail(userEmail);
         
         if(!user.canManageEvents()){
             throw new UnauthorizedException("Insufficient permissions to create events");
