@@ -25,15 +25,15 @@ public class CreateEventUseCase implements UseCase<CreateEventInput, EventRespon
     @Override
     public EventResponse execute(CreateEventInput input) {
         CreateEventRequest request = input.request();
-        String organizerEmail = input.organizerEmail();
-        AppUser organizer = userValidationService.validateAndGetUser(organizerEmail);
+        String userEmail = input.userEmail();
+        AppUser user = userValidationService.validateAndGetUser(userEmail);
         
-        if(organizer.hasPermissionToCreateEvents()){
+        if(!user.canManageEvents()){
             throw new UnauthorizedException("Insufficient permissions to create events");
         }
         
         Event event = mapper.toDomain(request);
-        event.setOrganizer(organizer);
+        event.setOrganizer(user);
         Event savedEvent = repository.createEvent(event);
         return mapper.toResponse(savedEvent);
     }
