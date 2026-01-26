@@ -35,12 +35,7 @@ public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventRespon
         if (isRequestEmpty(request)) {
             throw new IllegalArgumentException("At least one field must be completed for the update.");
         }
-        AppUser user = userValidationService.getValidUserByEmail(userEmail);
-        
-        if(user.canManageEvents()){
-            throw new UnauthorizedException("Insufficient permissions to create events");
-        }
-        
+        AppUser user = userValidationService.getAuthorizedOrganizer(userEmail);
         Event event = eventValidationService.getValidEventById(eventId);
         
         if(!user.isAdmin() && !event.isOwnedBy(user)){

@@ -24,12 +24,7 @@ public class DeleteEventUseCase implements VoidUseCase<DeleteEventInput> {
     public void execute(DeleteEventInput input) {
         String userEmail = input.userEmail();
         String eventId = input.eventId();
-        
-        AppUser user = userValidationService.getValidUserByEmail(userEmail);
-        if(!user.canManageEvents()){
-            throw new UnauthorizedException("Insufficient permissions to create events");
-        }
-        
+        AppUser user = userValidationService.getAuthorizedOrganizer(userEmail);
         Event event = eventValidationService.getValidEventById(eventId);
         if(!user.isAdmin() && !event.isOwnedBy(user)){
             throw new UnauthorizedException("You don't own this event");

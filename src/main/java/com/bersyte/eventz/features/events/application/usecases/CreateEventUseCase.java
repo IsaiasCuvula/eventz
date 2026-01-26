@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
+import com.bersyte.eventz.common.domain.IdGenerator;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventInput;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
@@ -15,25 +15,22 @@ public class CreateEventUseCase implements UseCase<CreateEventInput, EventRespon
     private final EventRepository repository;
     private final UserValidationService userValidationService;
     private final EventMapper mapper;
+    private final IdGenerator idGenerator;
     
-    public CreateEventUseCase(EventRepository repository, UserValidationService userValidationService, EventMapper mapper) {
+    public CreateEventUseCase(EventRepository repository, UserValidationService userValidationService, EventMapper mapper, IdGenerator idGenerator) {
         this.repository = repository;
         this.userValidationService = userValidationService;
         this.mapper = mapper;
+        this.idGenerator = idGenerator;
     }
     
     @Override
     public EventResponse execute(CreateEventInput input) {
         CreateEventRequest request = input.request();
         String userEmail = input.userEmail();
-        AppUser user = userValidationService.getValidUserByEmail(userEmail);
-        
-        if(!user.canManageEvents()){
-            throw new UnauthorizedException("Insufficient permissions to create events");
-        }
-        
-        Event event = mapper.toDomain(request);
-        event.setOrganizer(user);
+        AppUser organizer = userValidationService.getAuthorizedOrganizer(userEmail);
+        String eventId = idGenerator.generateUuid();
+        Event event = mapper.toDomain(eventId, organizer, request);
         Event savedEvent = repository.createEvent(event);
         return mapper.toResponse(savedEvent);
     }
