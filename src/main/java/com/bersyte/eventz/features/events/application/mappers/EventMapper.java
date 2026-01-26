@@ -2,13 +2,28 @@ package com.bersyte.eventz.features.events.application.mappers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
+import com.bersyte.eventz.features.events.application.dtos.EventOrganizer;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import com.bersyte.eventz.features.events.domain.model.Event;
+import com.bersyte.eventz.features.users.domain.model.AppUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventMapper {
+    
+    
+    
+    public Event toDomain(String eventId, AppUser organizer, CreateEventRequest request){
+        return Event.create(
+                eventId,
+                request.title(),
+                request.description(),
+                request.location(),
+                request.date(),
+                request.maxParticipants(),
+                organizer
+        );
+    }
     
     public PagedResult<EventResponse> toPagedResponse(PagedResult<Event> eventPagedResult){
           List<EventResponse> eventResponseList = eventPagedResult.data().stream().map(
@@ -21,28 +36,28 @@ public class EventMapper {
         );
     }
     
-    public Event toDomain(CreateEventRequest request){
-        return new Event(
-                request.title(),
-                request.description(),
-                request.location(),
-                request.date(),
-                request.maxParticipants()
-        );
-    }
-    
     public EventResponse toResponse(Event event){
-        List<String> participants = new ArrayList<>();
+        EventOrganizer organizer =this.toEventOrganizer(event.getOrganizer());
+        
         return new EventResponse(
                 event.getId(),
                 event.getTitle(),
                 event.getDescription(),
                 event.getLocation(),
-                "Organizer",
                 event.getDate(),
-                participants,
+                event.getCurrentParticipantsCount(),
+                organizer,
                 event.getCreatedAt(),
                 event.getUpdateAt()
+        );
+    }
+    
+    private EventOrganizer toEventOrganizer(AppUser user) {
+        if (user == null) return null;
+        return new EventOrganizer(
+                user.getFullName(),
+                user.getEmail(),
+                user.getId()
         );
     }
 }
