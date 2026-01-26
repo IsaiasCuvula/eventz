@@ -1,5 +1,6 @@
-package com.bersyte.eventz.features.events;
+package com.bersyte.eventz.features.events.infrastructure.persistence.repositories;
 
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,9 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 
-public interface EventRepository extends JpaRepository<EventEntity, Long> {
-
-  //EventEntity - entity name
+public interface JpaEventRepository extends JpaRepository<EventEntity, String> {
+ 
   @Query(
     "SELECT e FROM EventEntity e " +
     "WHERE (:title = '' OR LOWER(e.title) LIKE LOWER(CONCAT('%', :title, '%')) ) AND " +  
@@ -22,8 +22,8 @@ public interface EventRepository extends JpaRepository<EventEntity, Long> {
           Pageable pageable
   );
 
-    @Query("SELECT e FROM EventEntity e WHERE (e.date = :date ) ")
-    Page<EventEntity> findEventsByDate(@Param("date") Date date, Pageable pageable);
+  @Query("SELECT e FROM EventEntity e WHERE (e.date = :date ) ")
+  Page<EventEntity> findEventsByDate(@Param("date") Date date, Pageable pageable);
 
   @Query("SELECT e FROM EventEntity e WHERE e.date >= current_date ")
   Page<EventEntity> findUpcomingEvents(@Param("date") Date date, Pageable pageable);
