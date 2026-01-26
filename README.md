@@ -26,7 +26,7 @@ event management system. The API includes authentication and authorization featu
 
 5. **Participant Management**
     - Event registration and cancellation for users.
-    - Listing participants.
+    - Listing currentParticipantsCount.
 
 6. **Reports and Statistics**
     - Generating participation reports.
