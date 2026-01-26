@@ -11,6 +11,11 @@ public class UserValidationService {
         this.repository = repository;
     }
     
+    public AppUser getValidUserById(String userId){
+        return repository.findById(userId).orElseThrow(
+                ()-> new ResourceNotFoundException("User", userId)
+        );
+    }
     
     public AppUser getValidUserByEmail(String email){
         return repository.findByEmail(email).orElseThrow(
