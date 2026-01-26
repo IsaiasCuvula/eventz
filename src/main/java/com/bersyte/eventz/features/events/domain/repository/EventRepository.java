@@ -13,7 +13,6 @@ public interface EventRepository {
     Event updateEvent(Event event);
     void deleteEvent(String id);
     PagedResult<Event> fetchEventsByOrganizer(String organizerId, Pagination pagination);
-    Optional<Event> findByIdAndOrganizerId(String id, String organizerId);
     
     //End user (public)
     Optional<Event> findEventById(String id);
