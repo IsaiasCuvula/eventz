@@ -8,11 +8,15 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface EventRepository {
+    //Admin & Organizer
     Event createEvent(Event event);
     Event updateEvent(Event event);
     void deleteEvent(String id);
-    boolean existsById(String id);
-    Optional<Event> getEventById(String id);
+    PagedResult<Event> fetchEventsByOrganizer(String organizerId, Pagination pagination);
+    Optional<Event> findByIdAndOrganizerId(String id, String organizerId);
+    
+    //End user (public)
+    Optional<Event> findEventById(String id);
     PagedResult<Event> fetchEvents(Pagination pagination);
     PagedResult<Event> fetchEventsByDate(Pagination pagination, LocalDateTime date);
     PagedResult<Event> fetchUpcomingEvents(Pagination pagination);
