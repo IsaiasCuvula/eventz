@@ -1,6 +1,7 @@
 package com.bersyte.eventz.features.users.domain.services;
 
 import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
+import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 
@@ -10,6 +11,16 @@ public class UserValidationService {
     public UserValidationService(UserRepository repository) {
         this.repository = repository;
     }
+    
+    
+    public AppUser getAuthorizedOrganizer(String email) {
+        AppUser user = getValidUserByEmail(email);
+        if (!user.canManageEvents()) {
+            throw new UnauthorizedException("User cannot organize events");
+        }
+        return user;
+    }
+    
     
     public AppUser getValidUserById(String userId){
         return repository.findById(userId).orElseThrow(
