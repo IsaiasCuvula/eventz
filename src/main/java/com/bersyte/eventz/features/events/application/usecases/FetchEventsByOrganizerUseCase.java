@@ -11,12 +11,12 @@ import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
-public class FetchEventsByOrganizer implements UseCase<EventsByOrganizerInput, PagedResult<EventResponse>> {
+public class FetchEventsByOrganizerUseCase implements UseCase<EventsByOrganizerInput, PagedResult<EventResponse>> {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final UserValidationService userValidationService;
     
-    public FetchEventsByOrganizer(EventRepository eventRepository, EventMapper eventMapper, UserValidationService userValidationService) {
+    public FetchEventsByOrganizerUseCase(EventRepository eventRepository, EventMapper eventMapper, UserValidationService userValidationService) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
         this.userValidationService = userValidationService;
