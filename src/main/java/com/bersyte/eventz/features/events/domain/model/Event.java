@@ -1,26 +1,28 @@
 package com.bersyte.eventz.features.events.domain.model;
 
+import com.bersyte.eventz.features.users.domain.model.AppUser;
+
 import java.time.LocalDateTime;
 
 public class Event {
-    private String id;
+    private final String id;
     private String title;
     private String description;
     private String location;
     private LocalDateTime date;
     private Integer maxParticipants;
     private LocalDateTime updateAt;
-    private LocalDateTime createdAt;
-    
-    public Event(String title, String description, String location, LocalDateTime date, Integer maxParticipants) {
-        this.title = title;
-        this.date = date;
-        this.description = description;
-        this.location = location;
-        this.maxParticipants = maxParticipants;
-    }
-    
-    public Event(String id, String title, String description, String location, LocalDateTime date, Integer maxParticipants, LocalDateTime updateAt, LocalDateTime createdAt) {
+    private final LocalDateTime createdAt;
+    private AppUser organizer;
+    private Integer participantsCount;
+  
+    private Event(String id, String title, String description,
+                 String location, LocalDateTime date,
+                 Integer maxParticipants, LocalDateTime updateAt,
+                 LocalDateTime createdAt,
+                 AppUser organizer,
+                 Integer participantsCount
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -29,8 +31,72 @@ public class Event {
         this.maxParticipants = maxParticipants;
         this.updateAt = updateAt;
         this.createdAt = createdAt;
+        this.organizer = organizer;
+        this.participantsCount = participantsCount;
     }
     
+    public static Event create(
+            String id, String title, String description,
+            String location, LocalDateTime date,
+            Integer maxParticipants,
+            AppUser organizer
+    ) {
+     return new Event(
+             id,title,description, location,date,
+             maxParticipants,
+             LocalDateTime.now(),
+             LocalDateTime.now(),
+             organizer,
+             0
+     );
+    }
+    
+    public static Event restore(
+            String id, String title, String description,
+            String location, LocalDateTime date,
+            Integer maxParticipants,
+            LocalDateTime createdAt, LocalDateTime updateAt,
+            AppUser organizer,
+            Integer participantsCount
+    ){
+        return new Event(
+                id,title,description, location,date,
+                maxParticipants,
+                updateAt,
+                createdAt,
+                organizer,
+                participantsCount
+        );
+    }
+    
+    public boolean canAcceptMoreParticipants() {
+        return participantsCount < maxParticipants;
+    }
+    
+    public boolean isOwnedBy(AppUser owner){
+        return this.organizer.getId().equals(owner.getId());
+    }
+    
+    
+    public void setUpdateAt(LocalDateTime updateAt) {
+        this.updateAt = updateAt;
+    }
+    
+    public AppUser getOrganizer() {
+        return organizer;
+    }
+    
+    public Integer getParticipantsCount() {
+        return participantsCount;
+    }
+    
+    public void setParticipantsCount(Integer participantsCount) {
+        this.participantsCount = participantsCount;
+    }
+    
+    public void setOrganizer(AppUser organizer) {
+        this.organizer = organizer;
+    }
     
     public String getId() {
         return id;
