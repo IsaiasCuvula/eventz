@@ -1,11 +1,11 @@
 package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.common.AppUser;
+import com.bersyte.eventz.common.UserEntity;
 import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.features.events.EventEntity;
-import com.bersyte.eventz.features.events.EventMappers;
-import com.bersyte.eventz.features.events.EventRequestDto;
-import com.bersyte.eventz.features.events.EventResponseDto;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
+import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
+import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,20 +15,20 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EventMappersTest {
+class EventEntityMapperTest {
 
-    private EventMappers eventMappers;
+    private EventEntityMapper eventEntityMapper;
 
     @BeforeEach
     void setUp() {
-        eventMappers = new EventMappers ();
+        eventEntityMapper = new EventEntityMapper();
     }
 
 
     @Test
     void shouldMapEventRequestDtoToEventEntity() {
         //Arrange
-        EventRequestDto dto = new EventRequestDto (
+        CreateEventRequest dto = new CreateEventRequest(
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3",
@@ -37,7 +37,7 @@ class EventMappersTest {
         );
 
         //When
-        EventEntity event = eventMappers.toEventEntity (dto);
+        EventEntity event = eventEntityMapper.toEventEntity (dto);
 
         //Assert
         assertNotNull (event);
@@ -55,7 +55,7 @@ class EventMappersTest {
         //When
         NullPointerException exception = assertThrows (
                 NullPointerException.class,
-                () -> eventMappers.toEventEntity (null)
+                () -> eventEntityMapper.toEventEntity (null)
         );
 
         //Assert
@@ -78,7 +78,7 @@ class EventMappersTest {
         );
 
         //When
-        EventResponseDto responseDto = eventMappers.toResponseDTO (event);
+        EventResponse responseDto = eventEntityMapper.toDomain(event);
 
         //Assert
         assertNotNull (responseDto);
@@ -97,7 +97,7 @@ class EventMappersTest {
         //When
         NullPointerException exception = assertThrows (
                 NullPointerException.class,
-                () -> eventMappers.toResponseDTO (null)
+                () -> eventEntityMapper.toDomain(null)
         );
 
         //Assert
@@ -105,8 +105,8 @@ class EventMappersTest {
     }
 
 
-    private AppUser getOrganizerForTest() {
-        return new AppUser (
+    private UserEntity getOrganizerForTest() {
+        return new UserEntity(
                 2L,
                 "isaias@gmail.com",
                 "123456",
