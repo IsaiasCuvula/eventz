@@ -8,19 +8,25 @@ import com.bersyte.eventz.features.events.application.mappers.EventMapper;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
+
 
 public class FetchUpcomingEventsUseCase implements UseCase<Pagination, PagedResult<EventResponse>> {
     private final EventRepository repository;
     private final EventMapper mapper;
+    private final Clock clock;
     
-    public FetchUpcomingEventsUseCase(EventRepository repository, EventMapper mapper) {
+    public FetchUpcomingEventsUseCase(EventRepository repository, EventMapper mapper, Clock clock) {
         this.repository = repository;
         this.mapper = mapper;
+        this.clock = clock;
     }
     
     @Override
     public PagedResult<EventResponse> execute(Pagination pagination) {
-        PagedResult<Event> result = repository.fetchUpcomingEvents(pagination);
+        LocalDateTime now = LocalDateTime.now(clock);
+        PagedResult<Event> result = repository.fetchUpcomingEvents(now, pagination);
         return mapper.toPagedResponse(result);
     }
 }
