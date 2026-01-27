@@ -15,6 +15,9 @@ public class Event {
     private final LocalDateTime createdAt;
     private AppUser organizer;
     private Integer participantsCount;
+    
+//    private final AccessType accessType;
+//    private final BigDecimal price;
   
     private Event(String id, String title, String description,
                  String location, LocalDateTime date,
@@ -68,6 +71,10 @@ public class Event {
                 participantsCount
         );
     }
+    
+//    public boolean isPaid() {
+//        return this.accessType == AccessType.PAID;
+//    }
     
     public boolean canAcceptMoreParticipants() {
         return participantsCount < maxParticipants;
