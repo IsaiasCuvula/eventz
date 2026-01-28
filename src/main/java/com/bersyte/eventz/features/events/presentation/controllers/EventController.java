@@ -139,4 +139,19 @@ public class EventController {
                 fetchUpcomingEventsUseCase.execute(pagination);
         return ResponseEntity.ok(upcomingEvents);
     }
+    
+    
+    @GetMapping("/organizer")
+    public ResponseEntity<PagedResult<EventResponse>> eventByOrganizer(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        Pagination pagination = new Pagination(page, size);
+        EventsByOrganizerInput input = new EventsByOrganizerInput(
+                pagination,  userDetails.getUsername()
+        );
+        PagedResult<EventResponse>  response = fetchEventsByOrganizerUseCase.execute(input);
+        return ResponseEntity.ok(response);
+    }
 }
