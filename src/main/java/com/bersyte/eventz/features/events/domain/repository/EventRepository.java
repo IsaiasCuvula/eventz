@@ -17,9 +17,13 @@ public interface EventRepository {
     //End user (public)
     Optional<Event> findEventById(String id);
     PagedResult<Event> fetchEvents(Pagination pagination);
-    PagedResult<Event> fetchEventsByDate(Pagination pagination, LocalDateTime date);
-    PagedResult<Event> fetchUpcomingEvents(Pagination pagination);
+    PagedResult<Event> fetchEventsByDate(Pagination pagination, LocalDateTime startDate,LocalDateTime endDate);
+    PagedResult<Event> fetchUpcomingEvents(LocalDateTime now, Pagination pagination);
     PagedResult<Event> filterEvents(String title, String location, Pagination pagination);
+    
+    //Update counters
+    void incrementParticipantCount(String eventId);
+    void decrementParticipantCount(String eventId);
 }
 
 
