@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public record EventSearchFilter(
         String title,
         String location,
-        String category,
+//        String category,
         LocalDateTime startDate,
         LocalDateTime endDate,
         Pagination pagination
