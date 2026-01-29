@@ -13,6 +13,10 @@ public class UserValidationService {
     }
     
     
+    public AppUser getRequester(String email){
+        return this.getValidUserByEmail(email);
+    }
+    
     public AppUser getAuthorizedOrganizer(String email) {
         AppUser user = getValidUserByEmail(email);
         if (!user.canManageEvents()) {

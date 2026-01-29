@@ -1,19 +1,21 @@
-package com.bersyte.eventz.common;
+package com.bersyte.eventz.features.users.infrastructure.persistence.entities;
 
 import com.bersyte.eventz.features.event_participation.EventParticipation;
-import com.bersyte.eventz.features.events.EventEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 
@@ -23,17 +25,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class AppUser implements UserDetails {
+@EntityListeners(AuditingEntityListener.class)
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     @Column(nullable = false, unique = true)
     private String email;
     private String password;
     private String firstName;
     private String lastName;
     private String phone;
-    private Date createdAt;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -50,6 +53,12 @@ public class AppUser implements UserDetails {
     private LocalDateTime verificationExpiration;
 
     private boolean enabled;
+    
+    @LastModifiedDate
+    private LocalDateTime updateAt;
+    
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
 
     @Override
