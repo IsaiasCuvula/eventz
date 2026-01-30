@@ -20,8 +20,11 @@ public class AppUser {
     
     
     
-    private AppUser(String id, String email, String firstName, String lastName, String phone,
-                    UserRole role, boolean enabled, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    private AppUser(String id, String email, String firstName,
+                    String lastName, String phone,
+                    UserRole role, boolean enabled,
+                    LocalDateTime createdAt, LocalDateTime updatedAt
+    ) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -31,6 +34,27 @@ public class AppUser {
         this.enabled = enabled;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+    private AppUser(String id, String email, String firstName,
+                    String lastName, String phone,
+                    UserRole role, boolean enabled,
+                    LocalDateTime createdAt, LocalDateTime updatedAt,
+                    String verificationCode,
+                    String password,
+                    LocalDateTime verificationExpiration
+    ) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.role = role;
+        this.enabled = enabled;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.verificationCode = verificationCode;
+        this.password = password;
+        this.verificationExpiration= verificationExpiration;
     }
     
     /**
@@ -55,8 +79,15 @@ public class AppUser {
      * Factory Method to RESTORE an existing user (coming from Infrastructure/Database).
      */
     public static AppUser restore(String id, String email, String firstName, String lastName, String phone,
-                                  UserRole role, boolean enabled, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new AppUser(id, email, firstName, lastName, phone, role, enabled, createdAt, updatedAt);
+                                  UserRole role, boolean enabled,
+                                  LocalDateTime createdAt, LocalDateTime updatedAt,
+                                  String verificationCode,
+                                  String password,
+                                  LocalDateTime verificationExpiration
+    ) {
+        return new AppUser(id, email, firstName, lastName, phone, role, enabled, createdAt, updatedAt,
+               verificationCode, password,verificationExpiration
+        );
     }
     
     
@@ -174,6 +205,5 @@ public class AppUser {
     public void setVerificationExpiration(LocalDateTime verificationExpiration) {
         this.verificationExpiration = verificationExpiration;
     }
-    
     
 }
