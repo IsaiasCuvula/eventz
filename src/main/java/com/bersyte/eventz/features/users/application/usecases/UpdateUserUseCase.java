@@ -15,7 +15,7 @@ public class UpdateUserUseCase implements UseCase<UpdateUserInput, UserResponse>
     private final UserValidationService validationService;
     private final UserMapper mapper;
     
-    public UpdateUserUseCase(UserRepository repository, UserValidationService validationService, UserMapper mapper) {
+    public UpdateUserUseCase(UserRepository repository,UserMapper mapper,  UserValidationService validationService) {
         this.repository = repository;
         this.validationService = validationService;
         this.mapper = mapper;
