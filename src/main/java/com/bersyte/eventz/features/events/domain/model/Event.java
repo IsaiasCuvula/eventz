@@ -76,6 +76,10 @@ public class Event {
 //        return this.accessType == AccessType.PAID;
 //    }
     
+    public boolean canManage(AppUser user) {
+        return user.isAdmin() || this.isOwnedBy(user);
+    }
+    
     public boolean canAcceptMoreParticipants() {
         return participantsCount < maxParticipants;
     }
