@@ -97,4 +97,11 @@ public class EventBeanConfig {
         return new UpdateEventUseCase(repository, mapper,
                 userValidationService, eventValidationService);
     }
+
+    @Bean
+    GetEventByIdUseCase getEventByIdUseCase(
+            EventRepository repository, EventMapper mapper
+    ){
+        return new GetEventByIdUseCase(repository, mapper);
+    }
 }

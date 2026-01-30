@@ -2,10 +2,7 @@ package com.bersyte.eventz.features.users.infrastructure.config;
 
 import com.bersyte.eventz.common.domain.IdGenerator;
 import com.bersyte.eventz.features.users.application.mappers.UserMapper;
-import com.bersyte.eventz.features.users.application.usecases.DeleteUserUseCase;
-import com.bersyte.eventz.features.users.application.usecases.FetchUsersUseCase;
-import com.bersyte.eventz.features.users.application.usecases.SaveUserUseCase;
-import com.bersyte.eventz.features.users.application.usecases.UpdateUserUseCase;
+import com.bersyte.eventz.features.users.application.usecases.*;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +51,14 @@ public class UserConfig {
             UserValidationService validationService
     ){
         return new DeleteUserUseCase(repository, validationService);
+    }
+    
+    @Bean
+    GetCurrentUserUseCase getCurrentUserUseCase(
+            UserValidationService validationService,
+            UserMapper mapper
+    ){
+        return new GetCurrentUserUseCase(mapper,validationService);
     }
     
 }
