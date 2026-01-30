@@ -39,7 +39,7 @@ public class PublicEventController {
 
    
    @GetMapping
-   public ResponseEntity<PagedResult<EventResponse>> getEvents(
+   public ResponseEntity<PagedResult<EventResponse>> fetchEvents(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
     ) {
