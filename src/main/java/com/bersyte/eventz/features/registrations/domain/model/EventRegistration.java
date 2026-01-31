@@ -48,6 +48,11 @@ public class EventRegistration {
         );
     }
     
+    //Admin, event organizer, or the actual registered user can cancel his participation
+    public boolean canEditOrDelete(AppUser requester){
+        return requester.isAdmin() || this.event.isOwnedBy(requester)|| this.user.getId().equals(requester.getId()) ;
+    }
+    
     
     public String getId() {
         return id;

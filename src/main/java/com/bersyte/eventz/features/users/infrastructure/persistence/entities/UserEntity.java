@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.users.infrastructure.persistence.entities;
 
-import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.users.domain.model.UserRole;
 import jakarta.persistence.*;
@@ -44,7 +44,7 @@ public class UserEntity implements UserDetails {
     private List<EventEntity> events;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventParticipation> registrations;
+    private List<EventRegistrationEntity> registrations;
 
     @Column(name = "verification_code")
     private String verificationCode;

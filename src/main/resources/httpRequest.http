@@ -49,7 +49,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJiZXJzeXRlaW5mb0BnbWFpbC5jb
 
 
 ###
-#Get by id
+#Get by eventId
 GET http://localhost:8080/v1/events/37
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5pbyIsImlhdCI6MTcyNDE5Mjg4MywiZXhwIjoxNzI0MTk2NDgzfQ.dzvhyLHNqN-nKK8_qEpQ82QJXo04BjMQahjUuiXC57kPTohRYeBqM8MviYKm144U
 

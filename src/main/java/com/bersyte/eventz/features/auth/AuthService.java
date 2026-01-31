@@ -1,11 +1,11 @@
 package com.bersyte.eventz.features.auth;
 
-import com.bersyte.eventz.common.AppUser;
-import com.bersyte.eventz.common.UserMapper;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
 import com.bersyte.eventz.features.email.EmailService;
-import com.bersyte.eventz.exceptions.AuthException;
+import com.bersyte.eventz.common.presentation.exceptions.AuthException;
 import com.bersyte.eventz.security.JWTService;
-import com.bersyte.eventz.features.users.UserRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,15 +25,15 @@ import java.util.Random;
 
 @Service
 public class AuthService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder encoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
-    private final UserMapper userMapper;
+    private final UserEntityMapper userMapper;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager, EmailService emailService, UserMapper userMapper) {
-        this.userRepository = userRepository;
+    public AuthService(UserJpaRepository userJpaRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager, EmailService emailService, UserEntityMapper userMapper) {
+        this.userJpaRepository = userJpaRepository;
         this.encoder = encoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -43,7 +43,7 @@ public class AuthService {
 
     public AuthResponseDto signup(RegisterDto requestDTO) {
         try {
-            AppUser newUser = userMapper.toUserEntity (requestDTO);
+            UserEntity newUser = userMapper.toUserEntity (requestDTO);
             newUser.setPassword(encoder.encode(newUser.getPassword()));
 
             if (hasUser(requestDTO.email())) {
@@ -54,7 +54,7 @@ public class AuthService {
                     LocalDateTime.now().plusMinutes(15)
             );
             newUser.setEnabled(false);
-            final AppUser savedUser = userRepository.save(newUser);
+            final UserEntity savedUser = userJpaRepository.save(newUser);
             sendVerificationEmail(savedUser);
             return getAuthResponse(savedUser);
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class AuthService {
         try {
             String email = requestDTO.email();
             String password = requestDTO.password();
-            AppUser user = authenticate(email, password);
+            UserEntity user = authenticate(email, password);
 
             return getAuthResponse(user);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class AuthService {
         }
     }
 
-    private AuthResponseDto getAuthResponse(AppUser user) {
+    private AuthResponseDto getAuthResponse(UserEntity user) {
         String token = jwtService.generateToken(user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         Date expiration = jwtService.extractExpiration(token);
@@ -95,7 +95,7 @@ public class AuthService {
 
             final String refreshToken = authHeader.substring(7);
             final String email = jwtService.extractUsername(refreshToken);
-            final AppUser user = findAuthUserByEmail(email);
+            final UserEntity user = findAuthUserByEmail(email);
 
             if (jwtService.isTokenValid(refreshToken, user)) {
                 String accessToken = jwtService.generateToken(email);
@@ -115,13 +115,13 @@ public class AuthService {
         }
     }
 
-//    private void revokeAllUserTokens(AppUser user) {
+//    private void revokeAllUserTokens(UserEntity user) {
 //
 //    }
 
     public void verifyUser(VerifyUserDto data) {
         try {
-            AppUser user = findAuthUserByEmail(data.getEmail());
+            UserEntity user = findAuthUserByEmail(data.getEmail());
 
             if (user.isEnabled()) {
                 throw new AuthException("User already verified");
@@ -138,7 +138,7 @@ public class AuthService {
             user.setVerificationExpiration(null);
             user.setVerificationCode(null);
             user.setEnabled(true);
-            userRepository.save(user);
+            userJpaRepository.save(user);
         } catch (Exception e) {
             throw new AuthException(
                     "Something went wrong while verifying user - " + e.getLocalizedMessage()
@@ -148,9 +148,9 @@ public class AuthService {
 
     }
 
-    private AppUser authenticate(String email, String password) {
+    private UserEntity authenticate(String email, String password) {
         try {
-            AppUser user = findAuthUserByEmail(email);
+            UserEntity user = findAuthUserByEmail(email);
 
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -168,9 +168,9 @@ public class AuthService {
     }
 
 
-    private AppUser findAuthUserByEmail(String email) {
+    private UserEntity findAuthUserByEmail(String email) {
         try {
-            final Optional<AppUser> userOptional = userRepository.findByEmail(email);
+            final Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
             if (userOptional.isEmpty()) {
                 throw new AuthException("User not found");
             }
@@ -184,7 +184,7 @@ public class AuthService {
 
     private boolean hasUser(String email) {
         try {
-            final Optional<AppUser> userOptional = userRepository.findByEmail(email);
+            final Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
             return userOptional.isPresent();
         } catch (Exception e) {
             throw new AuthException(
@@ -200,7 +200,7 @@ public class AuthService {
     }
 
 
-    private void sendVerificationEmail(AppUser user) {
+    private void sendVerificationEmail(UserEntity user) {
         String subject = "Eventz Email Verification Code";
         String verificationCode = user.getVerificationCode();
         String htmlBody = "<html>"
@@ -226,7 +226,7 @@ public class AuthService {
 
     public void resendVerificationCode(String email) {
         try {
-            AppUser user = findAuthUserByEmail(email);
+            UserEntity user = findAuthUserByEmail(email);
 
             if (user.isEnabled()) {
                 throw new AuthException("User already verified");
@@ -237,7 +237,7 @@ public class AuthService {
                     LocalDateTime.now().plusMinutes(15)
             );
             sendVerificationEmail(user);
-            userRepository.save(user);
+            userJpaRepository.save(user);
         } catch (Exception e) {
             throw new AuthException(
                     "Failed to resend verification email  " + e.getLocalizedMessage()

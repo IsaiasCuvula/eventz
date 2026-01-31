@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.infrastructure.persistence.entities;
 
-import com.bersyte.eventz.common.UserEntity;
-import com.bersyte.eventz.features.event_participation.EventParticipation;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +41,7 @@ public class EventEntity {
     private UserEntity organizer;
 
     @OneToMany(mappedBy = "event")
-    private List<EventParticipation> participants;
+    private List<EventRegistrationEntity> participants;
     
     Integer participantsCount;
 }

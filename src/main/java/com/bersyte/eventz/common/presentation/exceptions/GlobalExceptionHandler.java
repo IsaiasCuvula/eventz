@@ -1,4 +1,4 @@
-package com.bersyte.eventz.exceptions;
+package com.bersyte.eventz.common.presentation.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationExceptions(
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(
             MethodArgumentNotValidException exception,
             HttpServletRequest request
     ){
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
             defaultMessage.set(objectError.getDefaultMessage());
         }
 
-        ApiError error = new ApiError(
+        ErrorResponse error = new ErrorResponse(
                 request.getRequestURI(),
                 defaultMessage.toString(),
                 exception.getStatusCode().value(),
@@ -38,11 +38,11 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(DatabaseOperationException.class)
-    public ResponseEntity<ApiError> handleDatabaseExceptions(
+    public ResponseEntity<ErrorResponse> handleDatabaseExceptions(
             DatabaseOperationException e,
             HttpServletRequest request
     ) {
-        ApiError error = new ApiError(
+        ErrorResponse error = new ErrorResponse(
                 request.getRequestURI(),
                 e.getLocalizedMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -53,11 +53,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiError> accessDeniedException(
+    public ResponseEntity<ErrorResponse> accessDeniedException(
             AccessDeniedException e,
             HttpServletRequest request
     ) {
-        ApiError error = new ApiError(
+        ErrorResponse error = new ErrorResponse(
                 request.getRequestURI(),
                 e.getLocalizedMessage(),
                 HttpStatus.FORBIDDEN.value(),
@@ -68,11 +68,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EventRegistrationException.class)
-    public ResponseEntity<ApiError> eventRegistrationException(
+    public ResponseEntity<ErrorResponse> eventRegistrationException(
             EventRegistrationException e,
             HttpServletRequest request
     ) {
-        ApiError error = new ApiError(
+        ErrorResponse error = new ErrorResponse(
                 request.getRequestURI(),
                 e.getLocalizedMessage(),
                 HttpStatus.CONFLICT.value(),
@@ -82,11 +82,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ApiError> authException(
+    public ResponseEntity<ErrorResponse> authException(
             AuthException e,
             HttpServletRequest request
     ) {
-        ApiError error = new ApiError(
+        ErrorResponse error = new ErrorResponse(
                 request.getRequestURI(),
                 e.getLocalizedMessage(),
                 HttpStatus.BAD_REQUEST.value(),

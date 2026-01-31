@@ -100,7 +100,6 @@ public class AppUser {
     }
     
     public boolean canManageEvents(){
-        
         return this.isAdmin() || this.isOrganizer();
     }
     

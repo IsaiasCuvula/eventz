@@ -1,10 +1,10 @@
 package com.bersyte.eventz.users;
 
-import com.bersyte.eventz.common.AppUser;
-import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.features.event_participation.EventParticipation;
-import com.bersyte.eventz.features.events.EventEntity;
-import com.bersyte.eventz.features.users.UserRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +22,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRepositoryTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
 
     @BeforeEach
     void setUp() {
 
         List<EventEntity> events = List.of ();
-        List<EventParticipation> registrations = List.of ();
+        List<EventRegistrationEntity> registrations = List.of ();
 
-        AppUser user = new AppUser (
+        UserEntity user = new UserEntity(
                 1L,
                 "isaias@gmail.com",
                 "123456",
@@ -47,7 +47,7 @@ class UserRepositoryTest {
                 true
         );
 
-        userRepository.save (user);
+        userJpaRepository.save (user);
 
     }
 
@@ -57,7 +57,7 @@ class UserRepositoryTest {
         String email = "isaias@gmail.com";
 
         //When
-        Optional<AppUser> userOptional = userRepository.findByEmail (email);
+        Optional<UserEntity> userOptional = userJpaRepository.findByEmail (email);
 
         //Assert
         assertTrue (userOptional.isPresent ());
@@ -71,7 +71,7 @@ class UserRepositoryTest {
         String email = "doesnotexist@gmail.com";
 
         //Act
-        Optional<AppUser> userOptional = userRepository.findByEmail (email);
+        Optional<UserEntity> userOptional = userJpaRepository.findByEmail (email);
 
         //Assert
         assertFalse (userOptional.isPresent ());

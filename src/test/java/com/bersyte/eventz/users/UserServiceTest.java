@@ -1,9 +1,12 @@
 package com.bersyte.eventz.users;
 
-import com.bersyte.eventz.common.*;
-import com.bersyte.eventz.features.users.UpdateUserRequestDto;
-import com.bersyte.eventz.features.users.UserRepository;
-import com.bersyte.eventz.features.users.UserService;
+import com.bersyte.eventz.features.users.*;
+import com.bersyte.eventz.features.users.application.dtos.UpdateUserRequest;
+import com.bersyte.eventz.features.users.application.dtos.UserResponse;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,13 +34,13 @@ class UserServiceTest {
     private UserService userService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
     @Mock
     private UserCommonService userCommonService;
 
     @Mock
-    private UserMapper userMapper;
+    private UserEntityMapper userMapper;
 
 
     @Test
@@ -47,35 +50,35 @@ class UserServiceTest {
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of (page, size);
-        AppUser user1 = getUser (
+        UserEntity user1 = getUser (
                 23L,
                 "bernardo@gmail.com",
                 "232425",
                 "Bernardo"
         );
 
-        AppUser user2 = getUser (
+        UserEntity user2 = getUser (
                 3L,
                 "isaias@gmail.com",
                 "132825",
                 "Isaias"
         );
 
-        AppUser user3 = getUser (
+        UserEntity user3 = getUser (
                 5L,
                 "isa@gmail.com",
                 "932820",
                 "Isaiah"
         );
 
-        List<AppUser> users = List.of (user1, user2, user3);
-        Page<AppUser> usersPage = new PageImpl<> (users);
+        List<UserEntity> users = List.of (user1, user2, user3);
+        Page<UserEntity> usersPage = new PageImpl<> (users);
 
         //Mock
         Mockito.when (
-                userMapper.toUserResponseDTO (any ())
+                userMapper.toUserResponse(any ())
         ).thenReturn (
-                new UserResponseDto (
+                new UserResponse(
                         2L,
                         "isaias@gmail.com",
                         "firstName",
@@ -86,22 +89,22 @@ class UserServiceTest {
                 )
         );
 
-        Mockito.when (userRepository.findAll (pageable))
+        Mockito.when (userJpaRepository.findAll (pageable))
                 .thenReturn (usersPage);
 
 
         //When
-        List<UserResponseDto> result = userService.getAllUsers (page, size);
+        List<UserResponse> result = userService.getAllUsers (page, size);
 
         //Act
         assertEquals (users.size (), result.size ());
-        verify (userRepository, times (1))
+        verify (userJpaRepository, times (1))
                 .findAll (pageable);
 
         //o mapper will be called n time (result.size)
         //will map all items in result
         verify (userMapper, times (result.size ()))
-                .toUserResponseDTO (any ());
+                .toUserResponse(any ());
     }
 
 
@@ -109,7 +112,7 @@ class UserServiceTest {
     void shouldGetCurrentUserSuccessfully() {
         //Arrange
         String email = "isa@gmail.com";
-        AppUser currentUser = getUser (
+        UserEntity currentUser = getUser (
                 5L,
                 email,
                 "932820",
@@ -120,9 +123,9 @@ class UserServiceTest {
         Mockito.when (userCommonService.getUserByEmail (email))
                 .thenReturn (currentUser);
 
-        Mockito.when (userMapper.toUserResponseDTO (currentUser))
+        Mockito.when (userMapper.toUserResponse(currentUser))
                 .thenReturn (
-                        new UserResponseDto (
+                        new UserResponse(
                                 5L,
                                 email,
                                 "Isaiah",
@@ -134,7 +137,7 @@ class UserServiceTest {
                 );
 
         //When
-        UserResponseDto result = userService.getCurrentUser (email);
+        UserResponse result = userService.getCurrentUser (email);
 
         //Act - Assert
         assertEquals (currentUser.getId (), result.id ());
@@ -144,20 +147,20 @@ class UserServiceTest {
     void shouldUpdateUserSuccessfully() {
         //Arrange
         String email = "isa@gmail.com";
-        AppUser oldUser = getUser (
+        UserEntity oldUser = getUser (
                 5L,
                 email,
                 "932820",
                 "Isaiah"
         );
 
-        UpdateUserRequestDto dto = new UpdateUserRequestDto (
+        UpdateUserRequest dto = new UpdateUserRequest(
                 "Jonas",
                 "Brothers",
                 "+359989647474"
         );
 
-        AppUser updatedUser = getUser (
+        UserEntity updatedUser = getUser (
                 oldUser.getId (),
                 email,
                 "932820",
@@ -168,12 +171,12 @@ class UserServiceTest {
         Mockito.when (userCommonService.getUserByEmail (email))
                 .thenReturn (oldUser);
 
-        Mockito.when (userRepository.save (oldUser))
+        Mockito.when (userJpaRepository.save (oldUser))
                 .thenReturn (updatedUser);
 
-        Mockito.when (userMapper.toUserResponseDTO (updatedUser))
+        Mockito.when (userMapper.toUserResponse(updatedUser))
                 .thenReturn (
-                        new UserResponseDto (
+                        new UserResponse(
                                 oldUser.getId (),
                                 oldUser.getEmail (),
                                 "Jonas",
@@ -185,20 +188,20 @@ class UserServiceTest {
                 );
 
         //When
-        UserResponseDto response = userService.updateUser (
+        UserResponse response = userService.updateUser (
                 dto, email
         );
         //Assert
         assertEquals (updatedUser.getId (), response.id ());
     }
 
-    private AppUser getUser(
+    private UserEntity getUser(
             Long userId,
             String email,
             String password,
             String name
     ) {
-        return new AppUser (
+        return new UserEntity(
                 userId,
                 email,
                 password,

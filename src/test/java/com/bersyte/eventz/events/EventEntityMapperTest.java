@@ -1,7 +1,7 @@
 package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.common.UserEntity;
-import com.bersyte.eventz.common.UserRole;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;

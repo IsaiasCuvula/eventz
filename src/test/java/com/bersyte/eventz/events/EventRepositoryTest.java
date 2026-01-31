@@ -1,11 +1,11 @@
 package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.common.AppUser;
-import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.features.event_participation.EventParticipation;
-import com.bersyte.eventz.features.events.EventEntity;
-import com.bersyte.eventz.features.events.EventRepository;
-import com.bersyte.eventz.features.users.UserRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.repositories.EventJpaRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EventRepositoryTest {
 
     @Autowired
-    private EventRepository eventRepository;
+    private EventJpaRepository eventJpaRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserJpaRepository userJpaRepository;
 
     @AfterEach
     void tearDown() {
-        eventRepository.deleteAll ();
+        eventJpaRepository.deleteAll ();
     }
 
 
@@ -41,7 +41,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<EventEntity> eventsPerPage = eventRepository.findUpcomingEvents (
+        Page<EventEntity> eventsPerPage = eventJpaRepository.findUpcomingEvents (
                 new Date (), pageable
         );
 
@@ -57,7 +57,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<EventEntity> eventsPerPage = eventRepository.findEventsByDate (
+        Page<EventEntity> eventsPerPage = eventJpaRepository.findByDateBetween(
                 date, pageable
         );
 
@@ -72,7 +72,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<EventEntity> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
+        Page<EventEntity> eventsPerPage = eventJpaRepository.filterEvents(
                 "New Launch EventEntity", "Luanda", pageable
         );
 
@@ -104,7 +104,7 @@ class EventRepositoryTest {
         Pageable pageable = PageRequest.of (0, 10);
 
         //When
-        Page<EventEntity> eventsPerPage = eventRepository.filterEventsByTitleAndLocation (
+        Page<EventEntity> eventsPerPage = eventJpaRepository.filterEvents(
                 "Naval Academy", "", pageable
         );
 
@@ -114,8 +114,8 @@ class EventRepositoryTest {
 
     private void saveEventsForTest() {
 
-        List<EventParticipation> participants = List.of ();
-        AppUser organizer = getOrganizerForTest ();
+        List<EventRegistrationEntity> participants = List.of ();
+        UserEntity organizer = getOrganizerForTest ();
 
         //past event
         EventEntity event = new EventEntity();
@@ -139,15 +139,15 @@ class EventRepositoryTest {
         event2.setCreatedAt (new Date ());
         event2.setParticipants (participants);
 
-        eventRepository.saveAll (List.of (event, event2));
+        eventJpaRepository.saveAll (List.of (event, event2));
 
     }
 
 
-    private AppUser getOrganizerForTest() {
-        List<EventParticipation> registrations = List.of ();
+    private UserEntity getOrganizerForTest() {
+        List<EventRegistrationEntity> registrations = List.of ();
         List<EventEntity> events = List.of ();
-        AppUser user = new AppUser (
+        UserEntity user = new UserEntity(
                 1L,
                 "isaias@gmail.com",
                 "123456",
@@ -163,7 +163,7 @@ class EventRepositoryTest {
                 true
         );
 
-        return userRepository.save (user);
+        return userJpaRepository.save (user);
     }
 
 

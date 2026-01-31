@@ -1,7 +1,7 @@
-package com.bersyte.eventz.features.admin.event_participation;
+package com.bersyte.eventz.features.registrations;
 
 
-import com.bersyte.eventz.features.event_participation.EventParticipationResponseDto;
+import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,22 +20,22 @@ public class AdminEventParticipationController {
     }
 
     @PostMapping("/add-participant")
-    public ResponseEntity<EventParticipationResponseDto> registerUserToEvent(
+    public ResponseEntity<EventRegistrationResponse> registerUserToEvent(
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        EventParticipationResponseDto response = adminService.registerUserToEvent(
+        EventRegistrationResponse response = adminService.registerUserToEvent(
                 participantId, eventId
         );
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/remove-participant")
-    public ResponseEntity<EventParticipationResponseDto> removeParticipantFromEvent(
+    public ResponseEntity<EventRegistrationResponse> removeParticipantFromEvent(
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        final EventParticipationResponseDto response = adminService.removeParticipantFromEvent(
+        final EventRegistrationResponse response = adminService.removeParticipantFromEvent(
                 participantId,
                 eventId
         );

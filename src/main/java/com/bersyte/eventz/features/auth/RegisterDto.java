@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.auth;
 
-import com.bersyte.eventz.common.UserRole;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
 import com.bersyte.eventz.utils.Utils;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

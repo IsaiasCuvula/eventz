@@ -99,7 +99,10 @@ public class EventPersistenceAdapter implements EventRepository {
     
     @Override
     public void decrementParticipantCount(String eventId) {
-        eventJpaRepository.decrementParticipantCount(eventId);
+        int updatedRows = eventJpaRepository.decrementParticipantCount(eventId);
+        if (updatedRows == 0) {
+            throw new BusinessException("Could not decrement: Event not found or count already at zero");
+        }
     }
     
     private String sanitize(String input) {

@@ -1,12 +1,14 @@
-package com.bersyte.eventz.features.event_participation;
+package com.bersyte.eventz.features.registrations;
 
-import com.bersyte.eventz.common.AppUser;
-import com.bersyte.eventz.common.EventCommonService;
-import com.bersyte.eventz.common.EventParticipationCommonService;
-import com.bersyte.eventz.common.UserCommonService;
-import com.bersyte.eventz.features.events.EventEntity;
-import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.exceptions.EventRegistrationException;
+import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers.EventRegistrationEntityMapper;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.repository.EventParticipationJpaRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.common.presentation.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.common.presentation.exceptions.EventRegistrationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,12 @@ import java.util.Optional;
 @Service
 public class EventParticipationService {
     final private EventParticipationCommonService eventParticipationCommonService;
-    private final EventParticipationRepository registrationRepository;
+    private final EventParticipationJpaRepository registrationRepository;
     private final EventCommonService eventCommonService;
     private final UserCommonService userCommonService;
-    private final EventParticipationMapper eventParticipationMapper;
+    private final EventRegistrationEntityMapper eventParticipationMapper;
 
-    public EventParticipationService(EventParticipationCommonService eventParticipationCommonService, EventParticipationRepository registrationRepository, EventCommonService eventCommonService, UserCommonService userCommonService, EventParticipationMapper eventParticipationMapper) {
+    public EventParticipationService(EventParticipationCommonService eventParticipationCommonService, EventParticipationJpaRepository registrationRepository, EventCommonService eventCommonService, UserCommonService userCommonService, EventRegistrationEntityMapper eventParticipationMapper) {
         this.eventParticipationCommonService = eventParticipationCommonService;
         this.registrationRepository = registrationRepository;
         this.eventCommonService = eventCommonService;
@@ -31,16 +33,16 @@ public class EventParticipationService {
         this.eventParticipationMapper = eventParticipationMapper;
     }
 
-    private static EventParticipation getRegistration(
+    private static EventRegistrationEntity getRegistration(
             Long participantId,
-            Optional<EventParticipation> registration
+            Optional<EventRegistrationEntity> registration
     ) {
 
         if (registration.isEmpty()) {
             throw new EventRegistrationException("Registration not found");
         }
 
-        EventParticipation organizerRegistration = registration.get();
+        EventRegistrationEntity organizerRegistration = registration.get();
 
         Long eventParticipantId = organizerRegistration.user.getId();
 
@@ -48,22 +50,22 @@ public class EventParticipationService {
             throw new EventRegistrationException("This user is not a participant of the event");
         }
 
-        if (organizerRegistration.getStatus() == ParticipationStatus.CANCELED) {
+        if (organizerRegistration.getStatus() == RegistrationStatus.CANCELED) {
             throw new EventRegistrationException("This user is not a participant of the event");
         }
 
-        organizerRegistration.setStatus(ParticipationStatus.CANCELED);
+        organizerRegistration.setStatus(RegistrationStatus.CANCELED);
         organizerRegistration.setUpdateAt(new Date());
         return organizerRegistration;
     }
 
-    public EventParticipationResponseDto organizerAddUserToHisEvent(
+    public EventRegistrationResponse organizerAddUserToHisEvent(
             UserDetails organizerDetails,
             Long participantId,
             Long eventId
     ) {
         try {
-            AppUser organizer = this.getUserByEmail(organizerDetails);
+            UserEntity organizer = this.getUserByEmail(organizerDetails);
             EventEntity event = this.getEvent(eventId);
             Long organizerId = organizer.getId();
             Long eventOrganizerId = event.getOrganizer().getId();
@@ -74,28 +76,28 @@ public class EventParticipationService {
                 throw new EventRegistrationException("You are not the organizer of this event");
             }
 
-            Optional<EventParticipation> existingRegistration = getExistingRegistration(
+            Optional<EventRegistrationEntity> existingRegistration = getExistingRegistration(
                     participantId, event
             );
 
             if (existingRegistration.isEmpty()) {
-                AppUser participant = userCommonService.getUserById(participantId);
-                EventParticipation registration = eventParticipationMapper.toEntity (
+                UserEntity participant = userCommonService.getUserById(participantId);
+                EventRegistrationEntity registration = eventParticipationMapper.toEntity (
                         createdDate,
                         updatedDate,
                         event,
                         participant
                 );
-                registration.setStatus(ParticipationStatus.ACTIVE);
+                registration.setStatus(RegistrationStatus.ACTIVE);
                 return saveRegistration(registration);
             }
 
-            EventParticipation oldRegistration = existingRegistration.get();
-            if (oldRegistration.getStatus() == ParticipationStatus.ACTIVE) {
+            EventRegistrationEntity oldRegistration = existingRegistration.get();
+            if (oldRegistration.getStatus() == RegistrationStatus.ACTIVE) {
                 throw new EventRegistrationException("User is already participating in this event");
             }
 
-            oldRegistration.setStatus(ParticipationStatus.ACTIVE);
+            oldRegistration.setStatus(RegistrationStatus.ACTIVE);
             oldRegistration.setUpdateAt(updatedDate);
             return saveRegistration(oldRegistration);
         } catch (EventRegistrationException e) {
@@ -105,11 +107,11 @@ public class EventParticipationService {
         }
     }
 
-    public EventParticipationResponseDto removeParticipantFromEvent(
+    public EventRegistrationResponse removeParticipantFromEvent(
             UserDetails userDetails, Long participantId, Long eventId
     ) {
         try {
-            AppUser currentUser = this.getUserByEmail(userDetails);
+            UserEntity currentUser = this.getUserByEmail(userDetails);
             EventEntity event = this.getEvent(eventId);
             Long organizerId = event.getOrganizer().getId();
 
@@ -117,11 +119,11 @@ public class EventParticipationService {
                 throw new EventRegistrationException("You are not the organizer of the event");
             }
 
-            Optional<EventParticipation> registration = getExistingRegistration(
+            Optional<EventRegistrationEntity> registration = getExistingRegistration(
                     currentUser.getId(), event
             );
 
-            EventParticipation organizerRegistration = getRegistration(participantId, registration);
+            EventRegistrationEntity organizerRegistration = getRegistration(participantId, registration);
 
             return this.saveRegistration(organizerRegistration);
         } catch (EventRegistrationException e) {
@@ -138,10 +140,10 @@ public class EventParticipationService {
             Long eventId
     ) {
         try {
-            AppUser user = this.getUserByEmail(userDetails);
+            UserEntity user = this.getUserByEmail(userDetails);
             EventEntity event = this.getEvent(eventId);
 
-            Optional<EventParticipation> registration = getExistingRegistration(
+            Optional<EventRegistrationEntity> registration = getExistingRegistration(
                     user.getId(), event
             );
 
@@ -149,15 +151,15 @@ public class EventParticipationService {
                 throw new EventRegistrationException("User not registered in this event");
             }
 
-            final EventParticipation existingRegistration = registration.get();
+            final EventRegistrationEntity existingRegistration = registration.get();
 
-            if (existingRegistration.status == ParticipationStatus.CANCELED) {
+            if (existingRegistration.status == RegistrationStatus.CANCELED) {
                 throw new EventRegistrationException("User not registered in this event");
             }
 
             registrationRepository.updateRegistrationStatus(
                     user.getId(), eventId,
-                    ParticipationStatus.CANCELED,
+                    RegistrationStatus.CANCELED,
                     new Date()
             );
 
@@ -171,12 +173,12 @@ public class EventParticipationService {
         }
     }
 
-    public EventParticipationResponseDto registerUserToEvent(
+    public EventRegistrationResponse registerUserToEvent(
             Long eventId,
             UserDetails userDetails
     ) {
         try {
-            AppUser participant = this.getUserByEmail(userDetails);
+            UserEntity participant = this.getUserByEmail(userDetails);
             EventEntity event = this.getEvent(eventId);
             return eventParticipationCommonService.registerUserToEvent(
                     participant, event
@@ -188,7 +190,7 @@ public class EventParticipationService {
         }
     }
 
-    private Optional<EventParticipation> getExistingRegistration(
+    private Optional<EventRegistrationEntity> getExistingRegistration(
             Long participantId, EventEntity event
     ) {
         try {
@@ -203,7 +205,7 @@ public class EventParticipationService {
         }
     }
 
-    private EventParticipationResponseDto saveRegistration(EventParticipation registration) {
+    private EventRegistrationResponse saveRegistration(EventRegistrationEntity registration) {
         return eventParticipationCommonService.saveRegistration(registration);
     }
 
@@ -217,7 +219,7 @@ public class EventParticipationService {
         }
     }
 
-    private AppUser getUserByEmail(UserDetails userDetails) {
+    private UserEntity getUserByEmail(UserDetails userDetails) {
         try {
             String email = userDetails.getUsername();
             return userCommonService.getUserByEmail (email);

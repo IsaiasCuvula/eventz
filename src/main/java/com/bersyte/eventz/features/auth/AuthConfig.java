@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.auth;
 
-import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.features.users.UserRepository;
+import com.bersyte.eventz.common.presentation.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
@@ -18,16 +18,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class AuthConfig {
 
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
-    public AuthConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthConfig(UserJpaRepository userJpaRepository) {
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         try {
-            return username -> (UserDetails) userRepository.findByEmail(username)
+            return username -> (UserDetails) userJpaRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
         } catch (DataAccessException e) {
             throw new DatabaseOperationException("Something went wrong: " + e.getMessage());

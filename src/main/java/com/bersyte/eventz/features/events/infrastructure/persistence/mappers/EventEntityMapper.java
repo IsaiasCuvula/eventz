@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.events.infrastructure.persistence.mappers;
 
-import com.bersyte.eventz.common.UserEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;

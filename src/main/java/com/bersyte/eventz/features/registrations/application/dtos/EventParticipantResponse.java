@@ -4,15 +4,17 @@ import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus
 
 import java.time.LocalDateTime;
 
-public record EventRegistrationResponse(
+public record EventParticipantResponse(
         String registrationId,
-        String username,
-        String userId,
         String eventId,
         String eventTitle,
         String eventDescription,
+        LocalDateTime eventDate,
+        String userId,
+        String username,
+        String email,
         RegistrationStatus status,
-        LocalDateTime createdAt,
+        LocalDateTime joinedAt,
         LocalDateTime updatedAt
 ) {
 }

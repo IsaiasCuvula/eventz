@@ -1,5 +1,7 @@
-package com.bersyte.eventz.features.event_participation;
+package com.bersyte.eventz.features.registrations.presentation.controllers;
 
+import com.bersyte.eventz.features.registrations.EventParticipationService;
+import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +19,11 @@ public class EventParticipationController {
     }
 
     @PostMapping("{eventId}")
-    public ResponseEntity<EventParticipationResponseDto> registerToEvent(
+    public ResponseEntity<EventRegistrationResponse> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long eventId
     ) {
-        EventParticipationResponseDto response = registrationService.registerUserToEvent(
+        EventRegistrationResponse response = registrationService.registerUserToEvent(
                 eventId, userDetails
         );
         return ResponseEntity.ok(response);
@@ -37,12 +39,12 @@ public class EventParticipationController {
     }
 
     @PostMapping("/remove-participant")
-    public ResponseEntity<EventParticipationResponseDto> removeParticipantFromEvent(
+    public ResponseEntity<EventRegistrationResponse> removeParticipantFromEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        final EventParticipationResponseDto response = registrationService.removeParticipantFromEvent(
+        final EventRegistrationResponse response = registrationService.removeParticipantFromEvent(
                 organizerDetails,
                 participantId,
                 eventId
@@ -51,13 +53,13 @@ public class EventParticipationController {
     }
 
     @PostMapping("/add-participant")
-    public ResponseEntity<EventParticipationResponseDto> organizerAddUserToHisEvent(
+    public ResponseEntity<EventRegistrationResponse> organizerAddUserToHisEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
 
     ) {
-        final EventParticipationResponseDto response = registrationService.organizerAddUserToHisEvent(
+        final EventRegistrationResponse response = registrationService.organizerAddUserToHisEvent(
                 organizerDetails,
                 participantId,
                 eventId
