@@ -2,6 +2,7 @@ package com.bersyte.eventz.features.events.infrastructure.persistence.adapters;
 
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.exceptions.BusinessException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
@@ -90,7 +91,10 @@ public class EventPersistenceAdapter implements EventRepository {
     
     @Override
     public void incrementParticipantCount(String eventId) {
-        eventJpaRepository.incrementParticipantCount(eventId);
+       int updatedRows = eventJpaRepository.incrementParticipantCount(eventId);
+       if (updatedRows == 0) {
+            throw new BusinessException("Event is full or does not exist");
+       }
     }
     
     @Override
