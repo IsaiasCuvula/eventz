@@ -12,8 +12,8 @@ public interface EventRegistrationRepository {
     EventRegistration update(EventRegistration registration);
     EventRegistration delete(EventRegistration registration);
     Optional<EventRegistration> findById(String id);
-    Optional<EventRegistration> findByEventId(String eventId);
-    Optional<EventRegistration> findByUserId(String userId);
     boolean alreadyRegistered(String eventId, String userId);
+    Optional<EventRegistration> findUserRegistration(String eventId, String userId);
     PagedResult<EventRegistration> fetchParticipants(String eventId, Pagination pagination);
+    Optional<EventRegistration> findRegistrationByCheckInToken(String checkInToken);
 }

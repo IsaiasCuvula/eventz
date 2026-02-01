@@ -33,7 +33,7 @@ public class DeleteRegistrationUseCase implements VoidUseCase<DeleteEventRegistr
         AppUser requester = userValidationService.getRequester(requesterEmail);
         EventRegistration registration = registrationValidationService.getValidRegistrationById(registrationId);
         
-        if(!registration.canEditOrDelete(requester)){
+        if(!registration.canManage(requester)){
             throw new UnauthorizedException("You don't have permission");
         }
         

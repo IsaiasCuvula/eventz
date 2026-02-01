@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers;
 
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
@@ -18,8 +18,8 @@ public class EventRegistrationEntityMapper {
         this.eventEntityMapper = eventEntityMapper;
     }
 
-    public EventRegistrationResponse toResponseDTO(EventRegistrationEntity registration) {
-        return new EventRegistrationResponse(
+    public TicketResponse toResponseDTO(EventRegistrationEntity registration) {
+        return new TicketResponse(
                 registration.getId(),
                 eventEntityMapper.toDomain(registration.getEvent ()),
                 "Successfully registered",

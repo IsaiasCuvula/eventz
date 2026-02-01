@@ -7,7 +7,7 @@ import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationRequest;
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.application.mappers.EventRegistrationMapper;
 import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationAlreadyExistsException;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
@@ -17,7 +17,7 @@ import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import jakarta.transaction.Transactional;
 
 
-public class JoinEventUseCase implements UseCase<EventRegistrationRequest, EventRegistrationResponse> {
+public class JoinEventUseCase implements UseCase<EventRegistrationRequest, TicketResponse> {
     private final EventRegistrationRepository eventRegistrationRepository;
     private final EventValidationService eventValidationService;
     private final UserValidationService userValidationService;
@@ -43,9 +43,9 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Event
     
     @Transactional
     @Override
-    public EventRegistrationResponse execute(EventRegistrationRequest request) {
-        String eventId = request.eventId();
+    public TicketResponse execute(EventRegistrationRequest request) {
         String userId = request.userId();
+        String eventId = request.eventId();
         boolean registered= eventRegistrationRepository.alreadyRegistered(eventId, userId);
         if(registered){
             throw new EventRegistrationAlreadyExistsException(eventId);
@@ -58,7 +58,8 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Event
             throw new BusinessException("The event is already full");
         }
         String registrationId = idGenerator.generateUuid();
-        EventRegistration registration = registrationMapper.toDomain(event, user,registrationId);
+        String checkInToken = idGenerator.generateCheckInToken();
+        EventRegistration registration = registrationMapper.toDomain(registrationId, checkInToken, event, user);
         
         //Payment can be handled here ... before registration
         
@@ -67,6 +68,6 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Event
         
         //Email will be handled here ....
         
-        return registrationMapper.toResponse(savedRegistration);
+        return registrationMapper.toTicketResponse(savedRegistration);
     }
 }

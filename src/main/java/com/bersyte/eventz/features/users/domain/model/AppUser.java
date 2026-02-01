@@ -99,6 +99,11 @@ public class AppUser {
         return this.role == UserRole.ORGANIZER;
     }
     
+    public boolean canDeleteOrUpdateUser(String targetId){
+        return this.canManageEvents() || this.id.equals(targetId);
+    }
+    
+    
     public boolean canManageEvents(){
         return this.isAdmin() || this.isOrganizer();
     }
@@ -108,10 +113,7 @@ public class AppUser {
         return this.isAdmin() || this.id.equals(targetId);
     }
     
-    public boolean canDeleteOrUpdateUser(String targetId){
-        return this.isAdmin() || this.id.equals(targetId);
-    }
-    
+   
     public String getFullName() {
         return firstName + " " + lastName;
     }

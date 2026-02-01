@@ -2,7 +2,7 @@ package com.bersyte.eventz.features.registrations;
 
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.common.presentation.exceptions.EventRegistrationException;
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers.EventRegistrationEntityMapper;
@@ -24,7 +24,7 @@ public class EventParticipationCommonService {
         this.eventParticipationMapper = eventParticipationMapper;
     }
 
-    public EventRegistrationResponse registerUserToEvent(
+    public TicketResponse registerUserToEvent(
             UserEntity participant,
             EventEntity event
     ) {
@@ -66,7 +66,7 @@ public class EventParticipationCommonService {
     }
 
 
-    public EventRegistrationResponse saveRegistration(EventRegistrationEntity registration) {
+    public TicketResponse saveRegistration(EventRegistrationEntity registration) {
         try {
             final EventRegistrationEntity result = eventParticipationJpaRepository.save(registration);
             return eventParticipationMapper.toResponseDTO (result);

@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.registrations.presentation.controllers;
 
 import com.bersyte.eventz.features.registrations.EventParticipationService;
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/v1/event-registration")
+@RequestMapping("/api/v1/registrations")
 public class EventParticipationController {
 
     private final EventParticipationService registrationService;
@@ -17,13 +17,20 @@ public class EventParticipationController {
     public EventParticipationController(EventParticipationService registrationService) {
         this.registrationService = registrationService;
     }
+    
+ 
+    
+    @PostMapping("/check-in/{checkInToken}")
+    public ResponseEntity<?> checkIn(@PathVariable String checkInToken){
+    
+    }
 
     @PostMapping("{eventId}")
-    public ResponseEntity<EventRegistrationResponse> registerToEvent(
+    public ResponseEntity<TicketResponse> registerToEvent(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long eventId
+            @PathVariable String eventId
     ) {
-        EventRegistrationResponse response = registrationService.registerUserToEvent(
+        TicketResponse response = registrationService.registerUserToEvent(
                 eventId, userDetails
         );
         return ResponseEntity.ok(response);
@@ -39,12 +46,12 @@ public class EventParticipationController {
     }
 
     @PostMapping("/remove-participant")
-    public ResponseEntity<EventRegistrationResponse> removeParticipantFromEvent(
+    public ResponseEntity<TicketResponse> removeParticipantFromEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
     ) {
-        final EventRegistrationResponse response = registrationService.removeParticipantFromEvent(
+        final TicketResponse response = registrationService.removeParticipantFromEvent(
                 organizerDetails,
                 participantId,
                 eventId
@@ -53,13 +60,13 @@ public class EventParticipationController {
     }
 
     @PostMapping("/add-participant")
-    public ResponseEntity<EventRegistrationResponse> organizerAddUserToHisEvent(
+    public ResponseEntity<TicketResponse> organizerAddUserToHisEvent(
             @AuthenticationPrincipal UserDetails organizerDetails,
             @RequestParam Long participantId,
             @RequestParam Long eventId
 
     ) {
-        final EventRegistrationResponse response = registrationService.organizerAddUserToHisEvent(
+        final TicketResponse response = registrationService.organizerAddUserToHisEvent(
                 organizerDetails,
                 participantId,
                 eventId

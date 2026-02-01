@@ -13,14 +13,21 @@ public class EventRegistrationValidationService {
     }
     
     
+    public EventRegistration getValidRegistrationByCheckInToken(String token){
+        return registrationRepository.findRegistrationByCheckInToken(
+                token
+        ).orElseThrow(()-> new ResourceNotFoundException("Ticket", token));
+    }
+    
+    
     public EventRegistration getValidRegistrationById(String registrationId){
         return registrationRepository.findById(registrationId)
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", registrationId));
     }
     
     
-    public EventRegistration getValidRegistrationByEvent(String eventId){
-        return registrationRepository.findByEventId(eventId)
+    public EventRegistration getValidTicketByEvent(String eventId, String userId){
+        return registrationRepository.findUserRegistration(eventId,userId)
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", eventId));
     }
 }

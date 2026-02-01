@@ -3,7 +3,7 @@ package com.bersyte.eventz.features.registrations.application.mappers;
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.registrations.application.dtos.EventParticipantResponse;
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
@@ -39,26 +39,31 @@ public class EventRegistrationMapper {
                 user.getEmail(),
                 registration.getStatus(),
                 registration.getCreatedAt(),
-                registration.getUpdateAt()
+                registration.getUpdatedAt()
         );
     }
     
-    public EventRegistration toDomain(Event event, AppUser user, String id){
-        return EventRegistration.create(id, event, user);
+    public EventRegistration toDomain(String id, String checkInToken, Event event, AppUser user){
+        return EventRegistration.create(id, checkInToken, event, user);
     }
     
-    public EventRegistrationResponse toResponse(EventRegistration registration){
+    public TicketResponse toTicketResponse(EventRegistration registration){
+        AppUser user = registration.getUser();
+        Event event = registration.getEvent();
         
-        return new EventRegistrationResponse(
+        return new TicketResponse(
                 registration.getId(),
-                registration.getUser().getFullName(),
-                registration.getUser().getId(),
-                registration.getEvent().getId(),
-                registration.getEvent().getTitle(),
-                registration.getEvent().getDescription(),
+                user.getFullName(),
+                user.getId(),
+                event.getId(),
+                event.getTitle(),
+                event.getDescription(),
+                event.getLocation(),
+                event.getDate(),
+                registration.getCheckInToken(),
                 registration.getStatus(),
                 registration.getCreatedAt(),
-                registration.getUpdateAt()
+                registration.getUpdatedAt()
         );
     }
 }

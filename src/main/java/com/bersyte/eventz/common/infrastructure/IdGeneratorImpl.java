@@ -9,6 +9,15 @@ import java.util.UUID;
 public class IdGeneratorImpl implements IdGenerator {
     @Override
     public String generateUuid() {
+        return getRandomUUID();
+    }
+    
+    @Override
+    public String generateCheckInToken() {
+        return "TKT_" + getRandomUUID().replace("-", "");
+    }
+    
+    private String getRandomUUID(){
         return UUID.randomUUID().toString();
     }
 }

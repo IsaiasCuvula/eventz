@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.registrations;
 
-import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationResponse;
+import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers.EventRegistrationEntityMapper;
@@ -32,7 +32,7 @@ public class AdminEventParticipationService {
     }
  
     
-    public EventRegistrationResponse registerUserToEvent(
+    public TicketResponse registerUserToEvent(
             Long participantId, Long eventId
     ) {
         try {
@@ -48,7 +48,7 @@ public class AdminEventParticipationService {
         }
     }
 
-    public EventRegistrationResponse removeParticipantFromEvent(
+    public TicketResponse removeParticipantFromEvent(
             Long participantId, Long eventId
     ) {
         try {

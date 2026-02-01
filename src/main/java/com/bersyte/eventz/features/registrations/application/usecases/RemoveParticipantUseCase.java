@@ -1,4 +1,6 @@
 package com.bersyte.eventz.features.registrations.application.usecases;
 
-public class RemoveParticipantUseCase {
+import com.bersyte.eventz.common.application.usecases.UseCase;
+
+public class RemoveParticipantUseCase implements UseCase<> {
 }
