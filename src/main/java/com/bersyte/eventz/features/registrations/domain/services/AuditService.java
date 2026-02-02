@@ -43,5 +43,7 @@ public class AuditService {
                 registration.getCheckInToken(), "NONE",
                 requester.getId(),requester.getFullName(),actionDateTime
         );
+        
+        auditLogRepository.save(auditLog);
     }
 }

@@ -19,7 +19,11 @@ public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticip
     private final EventRegistrationMapper registrationMapper;
     private final EventValidationService eventValidationService;
     
-    public FetchEventParticipantsUseCase(EventRegistrationRepository eventRegistrationRepository, UserValidationService userValidationService, EventRegistrationMapper registrationMapper, EventValidationService eventValidationService) {
+    public FetchEventParticipantsUseCase(
+            EventRegistrationRepository eventRegistrationRepository,
+            UserValidationService userValidationService,
+            EventRegistrationMapper registrationMapper, EventValidationService eventValidationService
+    ) {
         this.eventRegistrationRepository = eventRegistrationRepository;
         this.userValidationService = userValidationService;
         this.registrationMapper = registrationMapper;

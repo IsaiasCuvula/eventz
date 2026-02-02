@@ -23,7 +23,11 @@ public class RemoveParticipantUseCase implements VoidUseCase<DeleteEventRegistra
     private final Clock clock;
     private final AuditService auditService;
     
-    public RemoveParticipantUseCase(UserValidationService userValidationService, EventRegistrationRepository registrationRepository, EventRegistrationValidationService registrationValidationService, EventRepository eventRepository, Clock clock, AuditService auditService) {
+    public RemoveParticipantUseCase(
+            UserValidationService userValidationService, EventRegistrationRepository registrationRepository,
+            EventRegistrationValidationService registrationValidationService,
+            EventRepository eventRepository, Clock clock, AuditService auditService
+    ) {
         this.userValidationService = userValidationService;
         this.registrationRepository = registrationRepository;
         this.registrationValidationService = registrationValidationService;
