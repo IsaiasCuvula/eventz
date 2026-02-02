@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class RegistrationAuditLog {
     private final String id;
     private final String registrationId;
-    private final TicketSecurityAction action;
+    private final AuditAction action;
     private final String oldToken;
     private final String newToken;
     private final String actorId;
@@ -15,8 +15,8 @@ public class RegistrationAuditLog {
     
     public RegistrationAuditLog(
             String id, String registrationId,
-            TicketSecurityAction action, String oldToken,
-            String newToken, String actorId,String actorName, LocalDateTime createdAt
+            AuditAction action, String oldToken,
+            String newToken, String actorId, String actorName, LocalDateTime createdAt
     ) {
         this.id = id;
         this.registrationId = registrationId;
@@ -44,7 +44,7 @@ public class RegistrationAuditLog {
         return id;
     }
     
-    public TicketSecurityAction getAction() {
+    public AuditAction getAction() {
         return action;
     }
     

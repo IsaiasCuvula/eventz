@@ -443,7 +443,7 @@ class EventServiceTest {
     public void shouldThrowAccessDeniedExceptionWhenUserNotAuthorizedToDeleteEvent() {
         //Arrange
         Long eventId = 4L;
-        String expectedMsg = "You do not have permission to delete this event";
+        String expectedMsg = "You do not have permission to cancel this event";
         String email = "bernardo@gmail.com";
         EventEntity event = getEvent (
                 eventId,

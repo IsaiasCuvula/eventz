@@ -86,6 +86,18 @@ public class EventRegistration {
         return this;
     }
     
+    public EventRegistration cancel(AppUser requester, LocalDateTime now){
+        if(this.status == RegistrationStatus.USED){
+            throw new BusinessException("Cannot cancel a ticket that has already been used.");
+        }
+        if(this.status == RegistrationStatus.CANCELLED){
+            throw new BusinessException("Cannot cancel a ticket that has already been canceled.");
+        }
+        this.status = RegistrationStatus.CANCELLED;
+        this.updatedAt = now;
+        return this;
+    }
+    
     public boolean isTheUserItself(AppUser user){
         return user.getId().equals(this.user.getId());
     }

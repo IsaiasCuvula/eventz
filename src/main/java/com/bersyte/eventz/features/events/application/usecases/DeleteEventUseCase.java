@@ -27,7 +27,7 @@ public class DeleteEventUseCase implements VoidUseCase<DeleteEventInput> {
         AppUser requester = userValidationService.getAuthorizedOrganizer(userEmail);
         Event event = eventValidationService.getValidEventById(eventId);
         if(!event.canManage(requester)){
-            throw new UnauthorizedException("You cannot delete an event you don't own.");
+            throw new UnauthorizedException("You cannot cancel an event you don't own.");
         }
         repository.deleteEvent(eventId);
     }
