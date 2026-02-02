@@ -10,12 +10,12 @@ import com.bersyte.eventz.features.registrations.domain.services.EventRegistrati
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
-public class GetUserTicketUseCase implements UseCase<GetTicketRequest, TicketResponse> {
+public class GetUserValidTicketUseCase implements UseCase<GetTicketRequest, TicketResponse> {
     private final UserValidationService userValidationService;
     private final EventRegistrationValidationService registrationValidationService;
     private final EventRegistrationMapper eventRegistrationMapper;
     
-    public GetUserTicketUseCase(
+    public GetUserValidTicketUseCase(
             UserValidationService userValidationService,
             EventRegistrationValidationService registrationValidationService,
             EventRegistrationMapper eventRegistrationMapper
@@ -29,7 +29,7 @@ public class GetUserTicketUseCase implements UseCase<GetTicketRequest, TicketRes
     public TicketResponse execute(GetTicketRequest request) {
         AppUser requester = userValidationService.getRequester(request.requesterEmail());
        
-        EventRegistration registration = registrationValidationService.getValidTicketByEvent(
+        EventRegistration registration = registrationValidationService.getValidActiveRegistration(
                 request.eventId(),request.userId()
         );
         

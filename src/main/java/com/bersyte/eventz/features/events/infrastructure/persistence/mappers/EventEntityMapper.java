@@ -18,7 +18,7 @@ public class EventEntityMapper {
     private final UserEntityMapper userEntityMapper;
     
     public PagedResult<Event> toPagedResult(Page<EventEntity> eventEntityPage){
-        List<Event> eventList = eventEntityPage.stream().map(this::toDomain).toList();
+        List<Event> eventList = eventEntityPage.getContent().stream().map(this::toDomain).toList();
         return new PagedResult<>(
                 eventList, eventEntityPage.getTotalElements(),
                 eventEntityPage.getTotalPages(),

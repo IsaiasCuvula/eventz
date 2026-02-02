@@ -4,7 +4,7 @@ import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers.EventRegistrationEntityMapper;
-import com.bersyte.eventz.features.registrations.infrastructure.persistence.repository.EventParticipationJpaRepository;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.repository.EventRegistrationJpaRepository;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.event_participation.*;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
@@ -18,12 +18,12 @@ import java.util.Optional;
 @Service
 public class AdminEventParticipationService {
     final private EventParticipationCommonService eventParticipationCommonService;
-    final private EventParticipationJpaRepository eventParticipationJpaRepository;
+    final private EventRegistrationJpaRepository eventParticipationJpaRepository;
     final private EventCommonService eventCommonService;
     final private UserCommonService userCommonService;
     final private EventRegistrationEntityMapper eventParticipationMapper;
 
-    public AdminEventParticipationService(EventParticipationCommonService eventParticipationCommonService, EventParticipationJpaRepository eventParticipationJpaRepository, EventCommonService eventCommonService, UserCommonService userCommonService, EventRegistrationEntityMapper eventParticipationMapper) {
+    public AdminEventParticipationService(EventParticipationCommonService eventParticipationCommonService, EventRegistrationJpaRepository eventParticipationJpaRepository, EventCommonService eventCommonService, UserCommonService userCommonService, EventRegistrationEntityMapper eventParticipationMapper) {
         this.eventParticipationCommonService = eventParticipationCommonService;
         this.eventParticipationJpaRepository = eventParticipationJpaRepository;
         this.eventCommonService = eventCommonService;

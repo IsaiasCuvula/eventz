@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping("/v1/events")
+@RequestMapping("/api/v1/events")
 public class PublicEventController {
     
     private final GetEventsByDateUseCase getEventsByDateUseCase;

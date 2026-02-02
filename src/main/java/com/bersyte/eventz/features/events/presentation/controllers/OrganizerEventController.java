@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("v1/organizers/events")
+@RequestMapping("/api/v1/organizers/events")
 @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
 public class OrganizerEventController {
     

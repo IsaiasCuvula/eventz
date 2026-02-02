@@ -6,7 +6,7 @@ import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers.EventRegistrationEntityMapper;
-import com.bersyte.eventz.features.registrations.infrastructure.persistence.repository.EventParticipationJpaRepository;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.repository.EventRegistrationJpaRepository;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ import java.util.Optional;
 @Service
 public class EventParticipationCommonService {
 
-    private final EventParticipationJpaRepository eventParticipationJpaRepository;
+    private final EventRegistrationJpaRepository eventParticipationJpaRepository;
     private final EventRegistrationEntityMapper eventParticipationMapper;
 
-    public EventParticipationCommonService(EventParticipationJpaRepository eventParticipationJpaRepository, EventRegistrationEntityMapper eventParticipationMapper) {
+    public EventParticipationCommonService(EventRegistrationJpaRepository eventParticipationJpaRepository, EventRegistrationEntityMapper eventParticipationMapper) {
         this.eventParticipationJpaRepository = eventParticipationJpaRepository;
         this.eventParticipationMapper = eventParticipationMapper;
     }

@@ -54,12 +54,12 @@ public class EventRegistrationConfig {
     }
     
     @Bean
-    GetUserTicketUseCase getUserTicketUseCase(
+    GetUserValidTicketUseCase getUserTicketUseCase(
             UserValidationService userValidationService,
             EventRegistrationValidationService registrationValidationService,
             EventRegistrationMapper eventRegistrationMapper
     ){
-        return new GetUserTicketUseCase(
+        return new GetUserValidTicketUseCase(
                 userValidationService, registrationValidationService, eventRegistrationMapper) ;
     }
     
@@ -69,12 +69,13 @@ public class EventRegistrationConfig {
             EventValidationService eventValidationService,
             UserValidationService userValidationService,
             EventRegistrationMapper registrationMapper,
-            EventRepository eventRepository, IdGenerator idGenerator
+            EventRepository eventRepository, IdGenerator idGenerator,
+            Clock clock
     ){
         return new JoinEventUseCase(
                 eventRegistrationRepository, eventValidationService,
                 userValidationService, registrationMapper,
-                eventRepository, idGenerator
+                eventRepository, idGenerator,clock
         ) ;
     }
     

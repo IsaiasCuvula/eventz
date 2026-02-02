@@ -17,18 +17,24 @@ import java.time.LocalDateTime;
 @Table(name = "event_registrations")
 public class EventRegistrationEntity {
     @Id
-    String id;
+    private String id;
 
     @Enumerated(EnumType.STRING)
-    RegistrationStatus status;
+    private RegistrationStatus status;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
-    EventEntity event;
+    private EventEntity event;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    UserEntity user;
-    LocalDateTime registeredAt;
-    LocalDateTime updateAt;
+    private UserEntity user;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime checkedInAt;
+    private String checkInToken;
+    
+    @ManyToOne
+    @JoinColumn(name = "checked_in_by")
+    private UserEntity checkedInBy;
 }

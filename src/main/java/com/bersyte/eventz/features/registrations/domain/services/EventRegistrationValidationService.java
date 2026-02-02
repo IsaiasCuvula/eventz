@@ -2,6 +2,7 @@ package com.bersyte.eventz.features.registrations.domain.services;
 
 import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
+import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;
 
 public class EventRegistrationValidationService {
@@ -25,9 +26,13 @@ public class EventRegistrationValidationService {
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", registrationId));
     }
     
+    public EventRegistration getValidActiveRegistration(String eventId, String userId){
+        return getValidRegistrationByStatus(eventId, userId, RegistrationStatus.ACTIVE);
+    }
     
-    public EventRegistration getValidTicketByEvent(String eventId, String userId){
-        return registrationRepository.findUserRegistration(eventId,userId)
+    
+    private EventRegistration getValidRegistrationByStatus(String eventId, String userId, RegistrationStatus status){
+        return registrationRepository.findUserRegistrationByStatus(eventId,userId, status)
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", eventId));
     }
 }

@@ -43,5 +43,5 @@ public class EventEntity {
     @OneToMany(mappedBy = "event")
     private List<EventRegistrationEntity> participants;
     
-    Integer participantsCount;
+    private Integer participantsCount;
 }

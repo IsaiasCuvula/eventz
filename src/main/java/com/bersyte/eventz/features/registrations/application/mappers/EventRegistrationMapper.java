@@ -43,10 +43,6 @@ public class EventRegistrationMapper {
         );
     }
     
-    public EventRegistration toDomain(String id, String checkInToken, Event event, AppUser user){
-        return EventRegistration.create(id, checkInToken, event, user);
-    }
-    
     public TicketResponse toTicketResponse(EventRegistration registration){
         AppUser user = registration.getUser();
         Event event = registration.getEvent();

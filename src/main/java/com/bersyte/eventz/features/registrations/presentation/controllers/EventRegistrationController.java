@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/registrations")
-public class EventParticipationController {
+public class EventRegistrationController {
 
     private final EventParticipationService registrationService;
 
-    public EventParticipationController(EventParticipationService registrationService) {
+    public EventRegistrationController(EventParticipationService registrationService) {
         this.registrationService = registrationService;
     }
     

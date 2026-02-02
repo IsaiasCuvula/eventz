@@ -16,6 +16,8 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import jakarta.transaction.Transactional;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 public class JoinEventUseCase implements UseCase<EventRegistrationRequest, TicketResponse> {
     private final EventRegistrationRepository eventRegistrationRepository;
@@ -24,6 +26,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     private final EventRegistrationMapper registrationMapper;
     private final EventRepository eventRepository;
     private final IdGenerator idGenerator;
+    private final Clock clock;
     
     
     public JoinEventUseCase(
@@ -31,7 +34,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
             EventValidationService eventValidationService,
             UserValidationService userValidationService,
             EventRegistrationMapper registrationMapper,
-            EventRepository eventRepository, IdGenerator idGenerator
+            EventRepository eventRepository, IdGenerator idGenerator, Clock clock
     ) {
         this.eventRegistrationRepository = eventRegistrationRepository;
         this.eventValidationService = eventValidationService;
@@ -39,6 +42,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         this.registrationMapper = registrationMapper;
         this.eventRepository = eventRepository;
         this.idGenerator = idGenerator;
+        this.clock = clock;
     }
     
     @Transactional
@@ -46,7 +50,11 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     public TicketResponse execute(EventRegistrationRequest request) {
         String userId = request.userId();
         String eventId = request.eventId();
-        boolean registered= eventRegistrationRepository.alreadyRegistered(eventId, userId);
+        
+        boolean registered= eventRegistrationRepository.alreadyRegistered(
+                eventId, userId, EventRegistration.BLOCKING_STATUSES
+        );
+        
         if(registered){
             throw new EventRegistrationAlreadyExistsException(eventId);
         }
@@ -59,7 +67,8 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         }
         String registrationId = idGenerator.generateUuid();
         String checkInToken = idGenerator.generateCheckInToken();
-        EventRegistration registration = registrationMapper.toDomain(registrationId, checkInToken, event, user);
+        LocalDateTime createdAt = LocalDateTime.now(clock);
+        EventRegistration registration = EventRegistration.create(registrationId, checkInToken, event, user, createdAt);
         
         //Payment can be handled here ... before registration
         

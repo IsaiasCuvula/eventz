@@ -17,7 +17,7 @@ public class UserEntityMapper {
     
     
     public PagedResult<AppUser> toPagedResult(Page<UserEntity> userEntityPage){
-        List<AppUser> usersList = userEntityPage.stream().map(this::toDomain).toList();
+        List<AppUser> usersList = userEntityPage.getContent().stream().map(this::toDomain).toList();
         return new PagedResult<>(
                 usersList, userEntityPage.getTotalElements(),
                 userEntityPage.getTotalPages(),

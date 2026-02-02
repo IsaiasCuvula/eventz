@@ -5,6 +5,7 @@ import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EventRegistration {
     private final String id;
@@ -22,7 +23,7 @@ public class EventRegistration {
     private EventRegistration(
             String id, RegistrationStatus status,String checkInToken,
             Event event, AppUser user, LocalDateTime createdAt,
-            LocalDateTime updateAt
+            LocalDateTime updateAt,AppUser checkedInBy, LocalDateTime checkedInAt
     ){
         this.id = id;
         this.event = event;
@@ -31,26 +32,28 @@ public class EventRegistration {
         this.createdAt = createdAt;
         this.updatedAt = updateAt;
         this.checkInToken = checkInToken;
+        this.checkedInBy = checkedInBy;
+        this.checkedInAt = checkedInAt;
     }
     
     public static EventRegistration create(
             String id,String checkInToken,
-            Event event, AppUser user
+            Event event, AppUser user,  LocalDateTime createdAt
     ){
-        LocalDateTime now =     LocalDateTime.now();
         return new EventRegistration(
-                id,  RegistrationStatus.ACTIVE,checkInToken,
-                event, user,now , now
+                id,  RegistrationStatus.ACTIVE, checkInToken,
+                event, user,createdAt , createdAt, null, null
         );
     }
+    
     
     public static EventRegistration restore(
             String id, RegistrationStatus status,String checkInToken,
             Event event, AppUser user, LocalDateTime createdAt,
-            LocalDateTime updateAt
+            LocalDateTime updateAt, AppUser checkedInBy, LocalDateTime checkedInAt
     ){
         return new EventRegistration(
-                id, status,checkInToken, event, user,createdAt, updateAt
+                id, status,checkInToken, event, user,createdAt, updateAt,checkedInBy,checkedInAt
         );
     }
     
@@ -62,6 +65,10 @@ public class EventRegistration {
     public boolean canManage(AppUser requester){
         return requester.isAdmin() || this.event.isOwnedBy(requester)|| this.user.getId().equals(requester.getId());
     }
+    
+    //Statuses that block user to register twice in the same event
+    public static final List<RegistrationStatus> BLOCKING_STATUSES =
+            List.of(RegistrationStatus.ACTIVE, RegistrationStatus.USED);
     
     public EventRegistration markAsUsed(AppUser staff, LocalDateTime checkedInAt){
         if (this.status == RegistrationStatus.CANCELLED) {
