@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.auth;
+package com.bersyte.eventz.features.auth.application.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

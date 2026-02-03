@@ -80,17 +80,17 @@ public class EventRegistrationConfig {
     }
     
     @Bean
-    RemoveParticipantUseCase removeParticipantUseCase(
+    CancelEventRegistrationUseCase cancelEventRegistrationUseCase(
             UserValidationService userValidationService, EventRegistrationRepository registrationRepository,
-            EventRegistrationValidationService registrationValidationService,
+            EventRegistrationValidationService registrationValidationService, EventRegistrationMapper eventRegistrationMapper,
             EventRepository eventRepository, Clock clock, AuditService auditService
     ){
-        return new RemoveParticipantUseCase(
-                userValidationService, registrationRepository,
-                registrationValidationService, eventRepository,
-                clock, auditService
+        return new CancelEventRegistrationUseCase(
+              userValidationService, registrationRepository, registrationValidationService,
+                eventRegistrationMapper, eventRepository, clock, auditService
         );
     }
+    
     @Bean
     UpdateTicketCheckInTokenUseCase updateTicketCheckInTokenUseCase(
             EventRegistrationRepository eventRegistrationRepository,

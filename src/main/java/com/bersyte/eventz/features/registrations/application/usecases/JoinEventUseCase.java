@@ -3,6 +3,7 @@ package com.bersyte.eventz.features.registrations.application.usecases;
 import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.domain.IdGenerator;
 import com.bersyte.eventz.common.domain.exceptions.BusinessException;
+import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
@@ -48,28 +49,45 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     @Transactional
     @Override
     public TicketResponse execute(EventRegistrationRequest request) {
-        String userId = request.userId();
+        String requesterEmail = request.requesterEmail();
+        String targetId = request.userId();
         String eventId = request.eventId();
         
-        boolean registered= eventRegistrationRepository.alreadyRegistered(
-                eventId, userId, EventRegistration.BLOCKING_STATUSES
+        AppUser requester = userValidationService.getRequester(requesterEmail);
+        
+        Event event = eventValidationService.getValidEventById(eventId);
+        
+        if(!event.canAcceptMoreParticipants()){
+            throw new BusinessException("The event is already full");
+        }
+       
+        boolean registered = eventRegistrationRepository.alreadyRegistered(
+                eventId, targetId, EventRegistration.BLOCKING_STATUSES
         );
         
         if(registered){
             throw new EventRegistrationAlreadyExistsException(eventId);
         }
         
-        Event event = eventValidationService.getValidEventById(eventId);
-        AppUser user = userValidationService.getValidUserById(userId);
-        
-        if(!event.canAcceptMoreParticipants()){
-            throw new BusinessException("The event is already full");
-        }
+        AppUser target;
         String registrationId = idGenerator.generateUuid();
         String checkInToken = idGenerator.generateCheckInToken();
         LocalDateTime createdAt = LocalDateTime.now(clock);
-        EventRegistration registration = EventRegistration.create(registrationId, checkInToken, event, user, createdAt);
         
+        if(requester.getId().equals(targetId)){
+            target = requester;
+        }else{
+            if(!requester.canManageEvents()){
+                throw new UnauthorizedException("You do not have permission");
+            }
+            target = userValidationService.getValidUserById(targetId);
+        }
+        
+        EventRegistration registration = EventRegistration.create(
+                registrationId, checkInToken, event, target,
+                createdAt
+        );
+       
         //Payment can be handled here ... before registration
         
         EventRegistration savedRegistration = eventRegistrationRepository.joinEvent(registration);

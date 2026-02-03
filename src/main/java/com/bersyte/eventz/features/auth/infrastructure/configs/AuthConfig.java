@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.auth;
+package com.bersyte.eventz.features.auth.infrastructure.configs;
 
 import com.bersyte.eventz.common.presentation.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;

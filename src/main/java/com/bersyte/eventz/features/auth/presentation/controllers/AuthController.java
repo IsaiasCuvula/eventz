@@ -1,5 +1,10 @@
-package com.bersyte.eventz.features.auth;
+package com.bersyte.eventz.features.auth.presentation.controllers;
 
+import com.bersyte.eventz.features.auth.*;
+import com.bersyte.eventz.features.auth.application.dtos.AuthResponseDto;
+import com.bersyte.eventz.features.auth.application.dtos.LoginDto;
+import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
+import com.bersyte.eventz.features.auth.application.dtos.VerifyUserDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

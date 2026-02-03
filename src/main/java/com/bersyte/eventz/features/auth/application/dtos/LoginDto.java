@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.auth;
+package com.bersyte.eventz.features.auth.application.dtos;
 
 import com.bersyte.eventz.utils.Utils;
 import jakarta.validation.constraints.Email;

@@ -1,5 +1,9 @@
 package com.bersyte.eventz.features.auth;
 
+import com.bersyte.eventz.features.auth.application.dtos.AuthResponseDto;
+import com.bersyte.eventz.features.auth.application.dtos.LoginDto;
+import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
+import com.bersyte.eventz.features.auth.application.dtos.VerifyUserDto;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
 import com.bersyte.eventz.features.email.EmailService;

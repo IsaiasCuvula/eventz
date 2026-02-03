@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.features.auth.RegisterDto;
+import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
