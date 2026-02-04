@@ -1,10 +1,10 @@
 package com.bersyte.eventz.features.auth.presentation.controllers;
 
 import com.bersyte.eventz.features.auth.*;
-import com.bersyte.eventz.features.auth.application.dtos.AuthResponseDto;
-import com.bersyte.eventz.features.auth.application.dtos.LoginDto;
-import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
-import com.bersyte.eventz.features.auth.application.dtos.VerifyUserDto;
+import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
+import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
+import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
+import com.bersyte.eventz.features.auth.application.dtos.VerifyUserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,20 +27,20 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponseDto> signup(@Valid @RequestBody RegisterDto requestDTO) {
-        AuthResponseDto response = authService.signup (requestDTO);
+    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignupRequest requestDTO) {
+        AuthResponse response = authService.signup (requestDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto requestDTO) {
-        AuthResponseDto response = authService.login (requestDTO);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest requestDTO) {
+        AuthResponse response = authService.login (requestDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify")
     public ResponseEntity<String> verifyUser(
-            @RequestBody VerifyUserDto verifyUserDto
+            @RequestBody VerifyUserRequest verifyUserDto
     ) {
         authService.verifyUser(verifyUserDto);
         return ResponseEntity.ok("User verified successfully");

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,8 +27,14 @@ public class JWTService {
 
     @Value("${security.jwt.expiration-time}")
     private long tokenExpiration;
-
-
+    
+    
+    public UserTokens createUserTokens(String email) {
+        String token = generateToken(email);
+        String refreshToken = generateRefreshToken(email);
+        LocalDateTime expiration = extractExpiration(token);
+        return new UserTokens(token, refreshToken, expiration);
+    }
 
     public String generateToken(String username) {
         Map<String, Object> extraClaims = new HashMap<>();
@@ -87,10 +94,10 @@ public class JWTService {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).isBefore(LocalDateTime.now());
     }
 
-    public Date extractExpiration(String token) {
+    public LocalDateTime extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 }

@@ -40,6 +40,11 @@ public class UserPersistenceAdapter implements UserRepository {
     }
     
     @Override
+    public boolean alreadyExistsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
+    }
+    
+    @Override
     public AppUser save(AppUser user) {
         UserEntity entity = userEntityMapper.toUserEntity(user);
         UserEntity savedUser= userJpaRepository.save(entity);

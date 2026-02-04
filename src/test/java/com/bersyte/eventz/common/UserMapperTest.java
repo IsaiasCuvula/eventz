@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
+import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
@@ -28,7 +28,7 @@ class UserMapperTest {
     @Test
     public void shouldMapRegisterRequestDtoToAppUserEntity() {
         // Given
-        RegisterDto dto = new RegisterDto (
+        SignupRequest dto = new SignupRequest(
                 "may@gmail.com",
                 "123456",
                 UserRole.USER,

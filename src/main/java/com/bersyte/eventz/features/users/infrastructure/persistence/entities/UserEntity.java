@@ -28,7 +28,6 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Column(nullable = false, unique = true)
     private String email;

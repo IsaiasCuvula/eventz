@@ -12,4 +12,5 @@ public interface UserRepository {
      Optional<AppUser> findById(String id);
      Optional<AppUser> findByEmail(String email);
      PagedResult<AppUser> fetchUsers(Pagination pagination);
+    boolean alreadyExistsByEmail(String email);
 }

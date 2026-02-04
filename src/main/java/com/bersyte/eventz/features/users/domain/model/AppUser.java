@@ -20,21 +20,22 @@ public class AppUser {
     
     
     
-    private AppUser(String id, String email, String firstName,
-                    String lastName, String phone,
-                    UserRole role, boolean enabled,
-                    LocalDateTime createdAt, LocalDateTime updatedAt
-    ) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.role = role;
-        this.enabled = enabled;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+//    private AppUser(String id, String email, String firstName,
+//                    String lastName, String phone,
+//                    UserRole role, boolean enabled,
+//                    LocalDateTime createdAt, LocalDateTime updatedAt
+//    ) {
+//        this.id = id;
+//        this.email = email;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.phone = phone;
+//        this.role = role;
+//        this.enabled = enabled;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//    }
+    
     private AppUser(String id, String email, String firstName,
                     String lastName, String phone,
                     UserRole role, boolean enabled,
@@ -59,19 +60,17 @@ public class AppUser {
     
     /**
      * Factory method for CREATING a new user.
-     * Defines the initial state: generated ID, creation dates, and enabled status.
+     * Defines the initial state: role, and enabled status.
      */
-    public static AppUser create(String id, String email, String firstName, String lastName, String phone) {
+    public static AppUser create(
+            String id, String email, String firstName, String lastName,
+            String phone, LocalDateTime createdAt,  String verificationCode,
+            String password, LocalDateTime verificationExpiration
+    ) {
         return new AppUser(
-                id,
-                email,
-                firstName,
-                lastName,
-                phone,
-                UserRole.USER,
-                true,
-                LocalDateTime.now(),
-                LocalDateTime.now()
+                id, email, firstName, lastName, phone, UserRole.USER,
+                true, createdAt, createdAt,
+                verificationCode,password,verificationExpiration
         );
     }
     
@@ -127,48 +126,24 @@ public class AppUser {
         return email;
     }
     
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
     public String getFirstName() {
         return firstName;
-    }
-    
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
     
     public String getLastName() {
         return lastName;
     }
     
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    
     public String getPhone() {
         return phone;
-    }
-    
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
     
     public UserRole getRole() {
         return role;
     }
     
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-    
     public boolean isEnabled() {
         return enabled;
-    }
-    
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
     
     public LocalDateTime getCreatedAt() {
@@ -179,32 +154,17 @@ public class AppUser {
         return updatedAt;
     }
     
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
     public String getVerificationCode() {
         return verificationCode;
-    }
-    
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
     }
     
     public String getPassword() {
         return password;
     }
     
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
     public LocalDateTime getVerificationExpiration() {
         return verificationExpiration;
     }
-    
-    public void setVerificationExpiration(LocalDateTime verificationExpiration) {
-        this.verificationExpiration = verificationExpiration;
-    }
+
     
 }

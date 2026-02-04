@@ -1,9 +1,9 @@
 package com.bersyte.eventz.features.auth;
 
-import com.bersyte.eventz.features.auth.application.dtos.AuthResponseDto;
-import com.bersyte.eventz.features.auth.application.dtos.LoginDto;
-import com.bersyte.eventz.features.auth.application.dtos.RegisterDto;
-import com.bersyte.eventz.features.auth.application.dtos.VerifyUserDto;
+import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
+import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
+import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
+import com.bersyte.eventz.features.auth.application.dtos.VerifyUserRequest;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
 import com.bersyte.eventz.features.email.EmailService;
@@ -11,7 +11,6 @@ import com.bersyte.eventz.common.presentation.exceptions.AuthException;
 import com.bersyte.eventz.security.JWTService;
 import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
@@ -45,28 +44,7 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
-    public AuthResponseDto signup(RegisterDto requestDTO) {
-        try {
-            UserEntity newUser = userMapper.toUserEntity (requestDTO);
-            newUser.setPassword(encoder.encode(newUser.getPassword()));
-
-            if (hasUser(requestDTO.email())) {
-                throw new AuthException("User already exists");
-            }
-            newUser.setVerificationCode(generateVerificationCode());
-            newUser.setVerificationExpiration(
-                    LocalDateTime.now().plusMinutes(15)
-            );
-            newUser.setEnabled(false);
-            final UserEntity savedUser = userJpaRepository.save(newUser);
-            sendVerificationEmail(savedUser);
-            return getAuthResponse(savedUser);
-        } catch (Exception e) {
-            throw new AuthException(e.getMessage());
-        }
-    }
-
-    public AuthResponseDto login(LoginDto requestDTO) {
+    public AuthResponse login(LoginRequest requestDTO) {
         try {
             String email = requestDTO.email();
             String password = requestDTO.password();
@@ -78,12 +56,12 @@ public class AuthService {
         }
     }
 
-    private AuthResponseDto getAuthResponse(UserEntity user) {
+    private AuthResponse getAuthResponse(UserEntity user) {
         String token = jwtService.generateToken(user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
         Date expiration = jwtService.extractExpiration(token);
         //saveUserToken(user, token)
-        return new AuthResponseDto (token, refreshToken, expiration);
+        return new AuthResponse(token, refreshToken, expiration);
     }
 
     public void refreshToken(
@@ -106,7 +84,7 @@ public class AuthService {
 
                 //revokeAllUserToken(user)
                 //saveUserToken(user, accessToken)
-                AuthResponseDto authResponse = new AuthResponseDto (
+                AuthResponse authResponse = new AuthResponse(
                         accessToken,
                         refreshToken,
                         jwtService.extractExpiration(accessToken)
@@ -123,7 +101,7 @@ public class AuthService {
 //
 //    }
 
-    public void verifyUser(VerifyUserDto data) {
+    public void verifyUser(VerifyUserRequest data) {
         try {
             UserEntity user = findAuthUserByEmail(data.getEmail());
 
@@ -203,31 +181,7 @@ public class AuthService {
         return String.valueOf(code);
     }
 
-
-    private void sendVerificationEmail(UserEntity user) {
-        String subject = "Eventz Email Verification Code";
-        String verificationCode = user.getVerificationCode();
-        String htmlBody = "<html>"
-                + "<body style=\"font-family: Arial, sans-serif;\">"
-                + "<div style=\"background-color: #f5f5f5; padding: 20px;\">"
-                + "<h2 style=\"color: #333;\">Welcome to our app!</h2>"
-                + "<p style=\"font-size: 16px;\">Please enter the verification code below to continue:</p>"
-                + "<div style=\"background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);\">"
-                + "<h3 style=\"color: #333;\">Verification Code:</h3>"
-                + "<p style=\"font-size: 18px; font-weight: bold; color: #007bff;\">" + verificationCode + "</p>"
-                + "</div>"
-                + "</div>"
-                + "</body>"
-                + "</html>";
-        try {
-            emailService.sendVerificationEmail(
-                    user.getEmail(), subject, htmlBody
-            );
-        } catch (MessagingException e) {
-            throw new AuthException(e.getLocalizedMessage());
-        }
-    }
-
+   
     public void resendVerificationCode(String email) {
         try {
             UserEntity user = findAuthUserByEmail(email);
