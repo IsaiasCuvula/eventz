@@ -1,4 +1,4 @@
-package com.bersyte.eventz.security;
+package com.bersyte.eventz.common.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,12 +21,12 @@ import java.time.LocalDateTime;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JWTService jwtService;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public JwtFilter(
-            JWTService jwtService,
+            JwtService jwtService,
             UserDetailsService userDetailsService,
             HandlerExceptionResolver handlerExceptionResolver
     ) {
