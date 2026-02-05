@@ -4,7 +4,7 @@ import com.bersyte.eventz.features.auth.*;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
-import com.bersyte.eventz.features.auth.application.dtos.VerifyUserRequest;
+import com.bersyte.eventz.features.auth.application.dtos.VerificationRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -40,7 +40,7 @@ public class AuthController {
 
     @PostMapping("/verify")
     public ResponseEntity<String> verifyUser(
-            @RequestBody VerifyUserRequest verifyUserDto
+            @RequestBody VerificationRequest verifyUserDto
     ) {
         authService.verifyUser(verifyUserDto);
         return ResponseEntity.ok("User verified successfully");

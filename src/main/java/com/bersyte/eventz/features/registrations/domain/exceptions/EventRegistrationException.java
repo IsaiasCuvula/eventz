@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.presentation.exceptions;
+package com.bersyte.eventz.features.registrations.domain.exceptions;
 
 public class EventRegistrationException extends RuntimeException {
 

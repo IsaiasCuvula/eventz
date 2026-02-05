@@ -2,7 +2,7 @@ package com.bersyte.eventz.events;
 
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.domain.model.UserRole;
-import com.bersyte.eventz.common.presentation.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;

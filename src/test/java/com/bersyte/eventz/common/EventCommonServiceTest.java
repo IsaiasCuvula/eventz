@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.common.presentation.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;

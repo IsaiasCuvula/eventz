@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.presentation.exceptions;
+package com.bersyte.eventz.features.auth.domain.exceptions;
 
 public class AuthException extends RuntimeException {
 

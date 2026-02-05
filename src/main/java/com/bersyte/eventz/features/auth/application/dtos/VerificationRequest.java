@@ -3,7 +3,7 @@ package com.bersyte.eventz.features.auth.application.dtos;
 
 
 
-public record VerifyUserRequest(
+public record VerificationRequest(
      String email,
      String verificationCode
 ){

@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.presentation.exceptions;
+package com.bersyte.eventz.common.domain.exceptions;
 
 public class DatabaseOperationException extends RuntimeException {
 

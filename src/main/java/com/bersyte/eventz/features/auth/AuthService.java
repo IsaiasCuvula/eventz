@@ -2,13 +2,12 @@ package com.bersyte.eventz.features.auth;
 
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
-import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
-import com.bersyte.eventz.features.auth.application.dtos.VerifyUserRequest;
+import com.bersyte.eventz.features.auth.application.dtos.VerificationRequest;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
 import com.bersyte.eventz.features.email.EmailService;
-import com.bersyte.eventz.common.presentation.exceptions.AuthException;
-import com.bersyte.eventz.security.JWTService;
+import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
+import com.bersyte.eventz.common.security.JwtService;
 import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,12 +29,12 @@ import java.util.Random;
 public class AuthService {
     private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder encoder;
-    private final JWTService jwtService;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final UserEntityMapper userMapper;
 
-    public AuthService(UserJpaRepository userJpaRepository, PasswordEncoder encoder, JWTService jwtService, AuthenticationManager authenticationManager, EmailService emailService, UserEntityMapper userMapper) {
+    public AuthService(UserJpaRepository userJpaRepository, PasswordEncoder encoder, JwtService jwtService, AuthenticationManager authenticationManager, EmailService emailService, UserEntityMapper userMapper) {
         this.userJpaRepository = userJpaRepository;
         this.encoder = encoder;
         this.jwtService = jwtService;
@@ -101,7 +100,7 @@ public class AuthService {
 //
 //    }
 
-    public void verifyUser(VerifyUserRequest data) {
+    public void verifyUser(VerificationRequest data) {
         try {
             UserEntity user = findAuthUserByEmail(data.getEmail());
 

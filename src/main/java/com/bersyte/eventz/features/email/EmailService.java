@@ -1,8 +1,7 @@
 package com.bersyte.eventz.features.email;
 
-import com.bersyte.eventz.common.presentation.exceptions.AuthException;
+import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
-import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;

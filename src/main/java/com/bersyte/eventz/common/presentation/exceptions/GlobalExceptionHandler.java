@@ -1,5 +1,8 @@
 package com.bersyte.eventz.common.presentation.exceptions;
 
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
+import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
