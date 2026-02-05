@@ -14,14 +14,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
@@ -43,25 +40,7 @@ public class AuthService {
         this.userMapper = userMapper;
     }
 
-    public AuthResponse login(LoginRequest requestDTO) {
-        try {
-            String email = requestDTO.email();
-            String password = requestDTO.password();
-            UserEntity user = authenticate(email, password);
-
-            return getAuthResponse(user);
-        } catch (Exception e) {
-            throw new AuthException(e.getMessage());
-        }
-    }
-
-    private AuthResponse getAuthResponse(UserEntity user) {
-        String token = jwtService.generateToken(user.getEmail());
-        String refreshToken = jwtService.generateRefreshToken(user.getEmail());
-        Date expiration = jwtService.extractExpiration(token);
-        //saveUserToken(user, token)
-        return new AuthResponse(token, refreshToken, expiration);
-    }
+   
 
     public void refreshToken(
             HttpServletRequest request,
@@ -127,25 +106,6 @@ public class AuthService {
         }
 
 
-    }
-
-    private UserEntity authenticate(String email, String password) {
-        try {
-            UserEntity user = findAuthUserByEmail(email);
-
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            email, password
-                    )
-            );
-            if (!authentication.isAuthenticated()) {
-                throw new AuthException("Authentication failed");
-            }
-
-            return user;
-        } catch (Exception e) {
-            throw new AuthException(e.getMessage());
-        }
     }
 
 

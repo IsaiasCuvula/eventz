@@ -6,36 +6,41 @@ import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
-import com.bersyte.eventz.features.auth.domain.service.AuthService;
+import com.bersyte.eventz.features.auth.domain.model.TokenPair;
+import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
+import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
+import com.bersyte.eventz.features.auth.domain.service.PasswordHasher;
+import com.bersyte.eventz.features.auth.domain.service.TokenService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
-import com.bersyte.eventz.common.security.JwtService;
 import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     private final UserRepository userRepository;
-    private final AuthService authRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final PasswordHasher passwordEncoder;
+    private final CodeGenerator codeGenerator;
+    private final TokenService tokenService;
     private final IdGenerator idGenerator;
     private final AuthMapper authMapper;
+    private final AuthSettings authSettings;
     private final Clock clock;
     
     public SignUpUseCase(
             UserRepository userRepository,
-            AuthService authRepository, PasswordEncoder passwordEncoder,
-            JwtService jwtService, IdGenerator idGenerator, AuthMapper authMapper, Clock clock
+            PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
+            TokenService tokenService, IdGenerator idGenerator, AuthMapper authMapper, AuthSettings authSettings, Clock clock
     ) {
         this.userRepository = userRepository;
-        this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
+        this.codeGenerator = codeGenerator;
+        this.tokenService = tokenService;
         this.idGenerator = idGenerator;
         this.authMapper = authMapper;
+        this.authSettings = authSettings;
         this.clock = clock;
     }
     
@@ -51,19 +56,18 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
         String userId = idGenerator.generateUuid();
         LocalDateTime now = LocalDateTime.now(clock);
         String encodedPassword = passwordEncoder.encode(request.password());
-        String verificationCode = authRepository.generateVerificationCode();
+        String verificationCode = codeGenerator.generate();
+        Duration expirationTime =  authSettings.getVerificationCodeExpiration();
         
         AppUser newUser = AppUser.create(userId,
                 request.email(), request.firstName(), request.lastName(),
-                request.phone(), now,verificationCode,encodedPassword, now.plusMinutes(15)
+                request.phone(), now,verificationCode,encodedPassword,
+                now.plusMinutes(expirationTime.toMinutes())
         );
+        
         AppUser savedUser = userRepository.save(newUser);
-        
-        //emailService.sendVerificationEmail(savedUser);
-        
-        return authMapper.toResponse(
-                jwtService.createUserTokens(savedUser.getEmail()),
-                savedUser
-        );
+        //emailService.sendVerificationEmail(savedUser); (events)
+        TokenPair tokens = tokenService.createUserTokens(savedUser.getEmail());
+        return authMapper.toResponse(tokens, savedUser);
     }
 }

@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +18,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
+    private final JwtConfiguration jwtConfig;
     
-    @Value("${refresh.token.expiration-time}")
-    private long refreshTokenExpiration;
-    
-    @Value("${security.jwt.expiration-time}")
-    private long tokenExpiration;
-    
+    public JwtService(JwtConfiguration jwtConfig) {
+        this.jwtConfig = jwtConfig;
+    }
     
     public String refreshAccessToken(String oldRefreshToken) {
         if (!isRefreshToken(oldRefreshToken)) {
@@ -44,12 +39,14 @@ public class JwtService {
     
     public String generateToken(String username) {
         Map<String, Object> extraClaims = Map.of("type", "access");
-        return buildToken(username, extraClaims, tokenExpiration);
+        long expirationMs = jwtConfig.getAccessTokenExpiration().toMillis();
+        return buildToken(username, extraClaims, expirationMs);
     }
     
     public String generateRefreshToken(String username) {
         Map<String, Object> extraClaims = Map.of("type", "refresh");
-        return buildToken(username, extraClaims, refreshTokenExpiration);
+        long expirationMs = jwtConfig.getRefreshTokenExpiration().toMillis();
+        return buildToken(username, extraClaims, expirationMs);
     }
     
     
@@ -82,7 +79,7 @@ public class JwtService {
     }
     
     private SecretKey getKey() {
-        byte[] encodedKey = Base64.getDecoder().decode(secretKey);
+        byte[] encodedKey = Base64.getDecoder().decode(jwtConfig.getJwtSecretKey());
         return Keys.hmacShaKeyFor(encodedKey);
     }
     
