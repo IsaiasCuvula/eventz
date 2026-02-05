@@ -23,7 +23,13 @@ public class AuthConfig {
     public AuthConfig(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
     }
-
+    
+    
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+    
     @Bean
     public UserDetailsService userDetailsService() {
         try {
@@ -35,10 +41,12 @@ public class AuthConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(
+            UserDetailsService userDetailsService, PasswordEncoder passwordEncoder
+    ) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder);
+        authProvider.setUserDetailsService(userDetailsService);
         return authProvider;
     }
 
@@ -49,8 +57,4 @@ public class AuthConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
 }
