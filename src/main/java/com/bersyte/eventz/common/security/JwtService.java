@@ -1,6 +1,7 @@
 package com.bersyte.eventz.common.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -89,11 +90,17 @@ public class JwtService {
     }
     
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                       .verifyWith(getKey())
-                       .build()
-                       .parseSignedClaims(token)
-                       .getPayload();
+        try {
+            return Jwts.parser()
+                           .verifyWith(getKey())
+                           .build()
+                           .parseSignedClaims(token)
+                           .getPayload();
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException("The token has expired. Please log in again.");
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new JwtAuthenticationException("Invalid access token.");
+        }
     }
     
     private boolean isTokenExpired(String token) {
@@ -118,8 +125,8 @@ public class JwtService {
                            .and()
                            .signWith(getKey())
                            .compact();
-        } catch (JwtException e) {
-            throw new JwtException("Error while generating token", e);
+        } catch (Exception e) {
+            throw new JwtAuthenticationException("Error while generating token");
         }
     }
     

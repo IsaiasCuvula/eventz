@@ -1,6 +1,7 @@
 package com.bersyte.eventz.common.presentation.exceptions;
 
 import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.common.security.JwtAuthenticationException;
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,21 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    
+    
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleJwtError(
+            JwtAuthenticationException exception,
+            HttpServletRequest request
+    ) {
+        ErrorResponse error = new ErrorResponse(
+                request.getRequestURI(),
+                exception.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(
