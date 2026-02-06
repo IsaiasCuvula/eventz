@@ -8,22 +8,18 @@ import com.bersyte.eventz.features.auth.domain.model.TokenPair;
 import com.bersyte.eventz.features.auth.domain.service.AuthService;
 import com.bersyte.eventz.features.auth.domain.service.TokenService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
-import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
 public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
     private final AuthService authService;
     private final AuthMapper authMapper;
     private final TokenService tokenService;
-    private final UserValidationService userValidationService;
     
     public LoginUseCase(
-            AuthService authService, AuthMapper authMapper, TokenService tokenService,
-            UserValidationService userValidationService
+            AuthService authService, AuthMapper authMapper, TokenService tokenService
     ) {
         this.authService = authService;
         this.authMapper = authMapper;
         this.tokenService = tokenService;
-        this.userValidationService = userValidationService;
     }
     
     
