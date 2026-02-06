@@ -80,28 +80,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
-            errorResponse (response, request, e.getLocalizedMessage ());
         }
-    }
-
-    private void errorResponse(
-            HttpServletResponse response,
-            HttpServletRequest request,
-            String errorMessage
-    ) throws IOException {
-        // Prepare response map values
-        String path = request.getRequestURI ();
-        int status = HttpServletResponse.SC_UNAUTHORIZED;
-        String timestamp = LocalDateTime.now ().toString ();
-
-        // Build JSON response manually
-        String jsonResponse = String.format ("{\"path\":\"%s\",\"error\":\"%s\"," +
-                        "\"timestamp\":\"%s\",\"status\":%d,}",
-                path, errorMessage, timestamp, status);
-
-        // Write JSON response
-        response.setStatus (HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType ("application/json");
-        response.getWriter ().write (jsonResponse);
     }
 }
