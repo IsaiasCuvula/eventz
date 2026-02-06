@@ -32,13 +32,9 @@ public class AuthConfig {
     
     @Bean
     public UserDetailsService userDetailsService() {
-        try {
-            return username -> userJpaRepository.findByEmail(username)
-                     .map(AppUserPrincipal::new)
-                    .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
-        } catch (DataAccessException e) {
-            throw new DatabaseOperationException("Something went wrong: " + e.getMessage());
-        }
+         return username -> userJpaRepository.findByEmail(username)
+                .map(AppUserPrincipal::new)
+                .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
     @Bean
