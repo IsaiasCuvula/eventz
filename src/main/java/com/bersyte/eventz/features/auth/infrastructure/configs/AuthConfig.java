@@ -1,11 +1,8 @@
 package com.bersyte.eventz.features.auth.infrastructure.configs;
 
-import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,8 +29,7 @@ public class AuthConfig {
     
     @Bean
     public UserDetailsService userDetailsService() {
-         return username -> userJpaRepository.findByEmail(username)
-                .map(AppUserPrincipal::new)
+         return username -> userJpaRepository.findPrincipalByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
