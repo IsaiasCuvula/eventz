@@ -23,9 +23,8 @@ public class FetchUsersUseCase implements UseCase<FetchUsersRequest, PagedResult
     
     @Override
     public PagedResult<UserResponse> execute(FetchUsersRequest request) {
-        String requesterEmail = request.requesterEmail();
-        
-        AppUser requester = validationService.getRequester(requesterEmail);
+        String requesterId = request.requesterId();
+        AppUser requester = validationService.getRequesterById(requesterId);
         if (!requester.isAdmin()){
             throw new UnauthorizedException("You don't have permission");
         }

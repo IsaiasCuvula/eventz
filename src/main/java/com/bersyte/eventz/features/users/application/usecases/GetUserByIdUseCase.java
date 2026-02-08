@@ -20,8 +20,8 @@ public class GetUserByIdUseCase implements UseCase<GetUserByIdInput, UserRespons
     @Override
     public UserResponse execute(GetUserByIdInput input) {
         String targetId = input.targetId();
-        String requesterEmail = input.requesterEmail();
-        AppUser requester = validationService.getRequester(requesterEmail);
+        String requesterId = input.requesterId();
+        AppUser requester = validationService.getRequesterById(requesterId);
         
         if(!requester.getId().equals(targetId)){
             return userMapper.toResponse(requester);

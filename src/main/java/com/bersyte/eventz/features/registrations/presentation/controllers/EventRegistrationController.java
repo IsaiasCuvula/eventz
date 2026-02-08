@@ -2,13 +2,13 @@ package com.bersyte.eventz.features.registrations.presentation.controllers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.registrations.application.dtos.*;
 import com.bersyte.eventz.features.registrations.application.usecases.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -36,12 +36,12 @@ public class EventRegistrationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ORGANIZER')")
     @PostMapping("/check-in/{checkInToken}/{deviceScannerId}")
     public ResponseEntity<TicketResponse> checkIn(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String checkInToken,
             @PathVariable String deviceScannerId
     ){
         CheckInRequest request = new CheckInRequest(
-                userDetails.getUsername(),checkInToken, deviceScannerId
+                currentUser.id(), checkInToken, deviceScannerId
         );
         TicketResponse response =  checkInUseCase.execute(request);
         return ResponseEntity.ok(response);
@@ -50,14 +50,14 @@ public class EventRegistrationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'ORGANIZER')")
     @GetMapping("{eventId}")
     public ResponseEntity<PagedResult<EventParticipantResponse>> fetchEventParticipants(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable  String eventId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
         Pagination pagination = new Pagination(page, size);
         FetchEventParticipantsRequest request = new FetchEventParticipantsRequest(
-                eventId, userDetails.getUsername(),pagination
+                eventId, currentUser.id(), pagination
         );
         PagedResult<EventParticipantResponse> response = fetchEventParticipantsUseCase.execute(request);
         return ResponseEntity.ok(response);
@@ -65,12 +65,12 @@ public class EventRegistrationController {
 
     @PostMapping("{eventId}/{userId}")
     public ResponseEntity<TicketResponse> joinEvent(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String eventId,
             @PathVariable String userId
     ) {
         EventRegistrationRequest request = new EventRegistrationRequest(
-                eventId, userId, userDetails.getUsername()
+                eventId, userId, currentUser.id()
         );
         TicketResponse response = joinEventUseCase.execute(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -78,11 +78,11 @@ public class EventRegistrationController {
 
     @PostMapping("/cancel/{ticketId}")
     public ResponseEntity<TicketResponse> cancelRegistration(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String ticketId
     ) {
         CancelEventRegistrationRequest request = new CancelEventRegistrationRequest(
-                ticketId, userDetails.getUsername()
+                ticketId, currentUser.id()
         );
         final TicketResponse response = cancelRegistrationUseCase.execute(request);
         return ResponseEntity.ok(response);
@@ -90,12 +90,12 @@ public class EventRegistrationController {
     
     @GetMapping("{eventId}/{userId}")
     public ResponseEntity<TicketResponse> getUserTicket(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String eventId,
             @PathVariable String userId
     ){
         GetTicketRequest request = new GetTicketRequest(
-                userDetails.getUsername(), userId, eventId
+                currentUser.id(), userId, eventId
         );
         TicketResponse response = getUserValidTicketUseCase.execute(request);
         return ResponseEntity.ok(response);
@@ -103,11 +103,11 @@ public class EventRegistrationController {
     
     @PostMapping("{token}/rotate")
     public ResponseEntity<TicketResponse> updateCheckInToken(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String token
     ){
         UpdateTicketCheckInTokenRequest request = new UpdateTicketCheckInTokenRequest(
-                userDetails.getUsername(), token
+                currentUser.id(), token
         );
         TicketResponse response = updateTicketCheckInTokenUseCase.execute(request);
         return ResponseEntity.ok(response);

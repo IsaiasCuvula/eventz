@@ -17,8 +17,12 @@ public class UserValidationService {
         return this.getValidUserByEmail(email);
     }
     
-    public AppUser getAuthorizedOrganizer(String email) {
-        AppUser user = getValidUserByEmail(email);
+    public AppUser getRequesterById(String id){
+        return this.getValidUserById(id);
+    }
+    
+    public AppUser getAuthorizedOrganizerById(String id) {
+        AppUser user = this.getValidUserById(id);
         if (!user.canManageEvents()) {
             throw new UnauthorizedException("User cannot organize events");
         }
@@ -32,7 +36,7 @@ public class UserValidationService {
         );
     }
     
-    public AppUser getValidUserByEmail(String email){
+    private AppUser getValidUserByEmail(String email){
         return repository.findByEmail(email).orElseThrow(
                 ()-> new ResourceNotFoundException("User", email)
         );

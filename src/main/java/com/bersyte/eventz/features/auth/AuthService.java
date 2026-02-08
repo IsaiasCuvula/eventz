@@ -39,6 +39,34 @@ public class AuthService {
         this.emailService = emailService;
         this.userMapper = userMapper;
     }
+    
+    
+    public void verifyUser(VerificationRequest data) {
+        try {
+            UserEntity user = findAuthUserByEmail(data.getEmail());
+            
+            if (user.isEnabled()) {
+                throw new AuthException("User already verified");
+            }
+            
+            if (user.getVerificationExpiration().isBefore(LocalDateTime.now())) {
+                throw new AuthException("Verification code has expired");
+            }
+            
+            if (!user.getVerificationCode().equals(data.getVerificationCode())) {
+                throw new AuthException("Invalid verification code");
+            }
+            
+            user.setVerificationExpiration(null);
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userJpaRepository.save(user);
+        } catch (Exception e) {
+            throw new AuthException(
+                    "Something went wrong while verifying user - " + e.getLocalizedMessage()
+            );
+        }
+    }
 
    
 
@@ -75,72 +103,7 @@ public class AuthService {
         }
     }
 
-//    private void revokeAllUserTokens(UserEntity user) {
-//
-//    }
 
-    public void verifyUser(VerificationRequest data) {
-        try {
-            UserEntity user = findAuthUserByEmail(data.getEmail());
-
-            if (user.isEnabled()) {
-                throw new AuthException("User already verified");
-            }
-
-            if (user.getVerificationExpiration().isBefore(LocalDateTime.now())) {
-                throw new AuthException("Verification code has expired");
-            }
-
-            if (!user.getVerificationCode().equals(data.getVerificationCode())) {
-                throw new AuthException("Invalid verification code");
-            }
-
-            user.setVerificationExpiration(null);
-            user.setVerificationCode(null);
-            user.setEnabled(true);
-            userJpaRepository.save(user);
-        } catch (Exception e) {
-            throw new AuthException(
-                    "Something went wrong while verifying user - " + e.getLocalizedMessage()
-            );
-        }
-
-
-    }
-
-
-    private UserEntity findAuthUserByEmail(String email) {
-        try {
-            final Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
-            if (userOptional.isEmpty()) {
-                throw new AuthException("User not found");
-            }
-            return userOptional.get();
-        } catch (Exception e) {
-            throw new AuthException(
-                    "Failed to find auth user - " + e.getMessage()
-            );
-        }
-    }
-
-    private boolean hasUser(String email) {
-        try {
-            final Optional<UserEntity> userOptional = userJpaRepository.findByEmail(email);
-            return userOptional.isPresent();
-        } catch (Exception e) {
-            throw new AuthException(
-                    "Failed to get user by email- " + e.getMessage()
-            );
-        }
-    }
-
-    private String generateVerificationCode() {
-        Random random = new Random();
-        int code = random.nextInt(900000) + 100000;
-        return String.valueOf(code);
-    }
-
-   
     public void resendVerificationCode(String email) {
         try {
             UserEntity user = findAuthUserByEmail(email);

@@ -16,8 +16,8 @@ public class GetCurrentUserUseCase implements UseCase<String, UserResponse> {
     }
     
     @Override
-    public UserResponse execute(String requesterEmail) {
-        AppUser currentUser = validationService.getRequester(requesterEmail);
+    public UserResponse execute(String requesterId) {
+        AppUser currentUser = validationService.getRequesterById(requesterId);
         return userMapper.toResponse(currentUser);
     }
 }

@@ -18,9 +18,9 @@ public class DeleteUserUseCase implements VoidUseCase<DeleteUserRequest> {
     
     @Override
     public void execute(DeleteUserRequest request) {
-        String requesterEmail = request.requesterEmail();
-        String targetId = request.userId();
-        AppUser requester = validationService.getRequester(requesterEmail);
+        String requesterId = request.requesterId();
+        String targetId = request.targetUserId();
+        AppUser requester = validationService.getRequesterById(requesterId);
         if(!requester.canDeleteOrUpdateUser(targetId)){
             throw new UnauthorizedException("You don't have permission to perform this operation");
         }

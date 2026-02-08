@@ -2,6 +2,7 @@ package com.bersyte.eventz.features.users.presentation.controllers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.users.application.dtos.*;
 import com.bersyte.eventz.features.users.application.usecases.*;
 import jakarta.validation.Valid;
@@ -27,7 +28,8 @@ public class UserController {
             SaveUserUseCase   saveUserUseCase,
             UpdateUserUseCase updateUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
-            GetCurrentUserUseCase getCurrentUserUseCase) {
+            GetCurrentUserUseCase getCurrentUserUseCase
+    ) {
         this.fetchUsersUseCase = fetchUsersUseCase;
         this.saveUserUseCase = saveUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
@@ -38,45 +40,47 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<PagedResult<UserResponse>> fetchUsers(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pagination pagination = new Pagination(page, size);
-        String requesterEmail = userDetails.getUsername();;
-        FetchUsersRequest request = new FetchUsersRequest(requesterEmail,pagination);
+        FetchUsersRequest request = new FetchUsersRequest(
+                currentUser.id() ,pagination
+        );
         PagedResult<UserResponse> result = fetchUsersUseCase.execute(request);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/current-user")
     public ResponseEntity<UserResponse> getCurrentUser(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal AppUserPrincipal currentUser
     ) {
-        String email = userDetails.getUsername();
-        final UserResponse response = getCurrentUserUseCase.execute(email);
+        final UserResponse response = getCurrentUserUseCase.execute(currentUser.getId());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("{id}")
     public ResponseEntity<UserResponse> updateUser(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @Valid @RequestBody UpdateUserRequest request,
             @PathVariable String id
     ) {
-        String email = userDetails.getUsername();
-        UpdateUserInput input = new UpdateUserInput(request, email,id);
-        final UserResponse response =updateUserUseCase.execute(input);
+        UpdateUserInput input = new UpdateUserInput(
+                request, currentUser.id(),
+                id
+        );
+        final UserResponse response = updateUserUseCase.execute(input);
         return ResponseEntity.ok(response);
     }
     
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String id
     ) {
         DeleteUserRequest request = new DeleteUserRequest(
-                userDetails.getUsername(), id
+                currentUser.id(), id
         );
         deleteUserUseCase.execute(request);
         return ResponseEntity.noContent().build();

@@ -2,6 +2,7 @@ package com.bersyte.eventz.features.events.presentation.controllers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
 import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.events.application.dtos.*;
 import com.bersyte.eventz.features.events.application.usecases.*;
 import jakarta.validation.Valid;
@@ -32,11 +33,11 @@ public class OrganizerEventController {
     
     @PostMapping
     public ResponseEntity<EventResponse> create(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @Valid @RequestBody CreateEventRequest request
     ) {
         CreateEventInput input = new CreateEventInput(
-                userDetails.getUsername(),request
+                currentUser.email(),request
         );
         EventResponse response = createEventUseCase.execute(input);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -45,12 +46,12 @@ public class OrganizerEventController {
     
     @PutMapping("{id}")
     public ResponseEntity<EventResponse> updateEvent(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable String id,
-            @Valid @RequestBody UpdateEventRequest request
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
+            @Valid @RequestBody UpdateEventRequest request,
+            @PathVariable String id
     ) {
         UpdateEventInput input = new UpdateEventInput(
-                request , id,  userDetails.getUsername()
+                request , id,  currentUser.id()
         );
         EventResponse response = updateEventUseCase.execute(input);
         return ResponseEntity.ok(response);
@@ -58,11 +59,11 @@ public class OrganizerEventController {
     
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteEvent(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable String id
     ) {
         DeleteEventInput input = new DeleteEventInput(
-                id,  userDetails.getUsername()
+                id,  currentUser.id()
         );
         deleteEventUseCase.execute(input);
         return ResponseEntity.noContent().build();
@@ -70,13 +71,13 @@ public class OrganizerEventController {
     
     @GetMapping("/organizer")
     public ResponseEntity<PagedResult<EventResponse>> eventByOrganizer(
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @AuthenticationPrincipal UserDetails userDetails
+            @RequestParam(defaultValue = "10") int size
     ) {
         Pagination pagination = new Pagination(page, size);
         EventsByOrganizerInput input = new EventsByOrganizerInput(
-                pagination,  userDetails.getUsername()
+                pagination,  currentUser.id()
         );
         PagedResult<EventResponse>  response = fetchEventsByOrganizerUseCase.execute(input);
         return ResponseEntity.ok(response);

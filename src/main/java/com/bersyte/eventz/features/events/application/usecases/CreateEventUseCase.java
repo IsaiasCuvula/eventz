@@ -27,8 +27,8 @@ public class CreateEventUseCase implements UseCase<CreateEventInput, EventRespon
     @Override
     public EventResponse execute(CreateEventInput input) {
         CreateEventRequest request = input.request();
-        String userEmail = input.userEmail();
-        AppUser organizer = userValidationService.getAuthorizedOrganizer(userEmail);
+        String requesterId = input.requesterId();
+        AppUser organizer = userValidationService.getAuthorizedOrganizerById(requesterId);
         String eventId = idGenerator.generateUuid();
         Event event = mapper.toDomain(eventId, organizer, request);
         Event savedEvent = repository.createEvent(event);

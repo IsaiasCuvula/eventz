@@ -37,7 +37,7 @@ public class CheckInUseCase implements UseCase<CheckInRequest, TicketResponse> {
     
     @Override
     public TicketResponse execute(CheckInRequest request) {
-        AppUser requester = userValidationService.getRequester(request.requesterEmail());
+        AppUser requester = userValidationService.getRequesterById(request.requesterId());
         
         if(!requester.canManageEvents()){
             throw new UnauthorizedException("You dont have permission");

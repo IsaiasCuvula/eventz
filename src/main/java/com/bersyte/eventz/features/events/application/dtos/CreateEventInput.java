@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.events.application.dtos;
 
 public record CreateEventInput(
-        String userEmail,
+        String requesterId,
         CreateEventRequest request
 ) {}

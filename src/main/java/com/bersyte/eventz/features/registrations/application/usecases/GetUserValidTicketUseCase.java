@@ -27,10 +27,10 @@ public class GetUserValidTicketUseCase implements UseCase<GetTicketRequest, Tick
     
     @Override
     public TicketResponse execute(GetTicketRequest request) {
-        AppUser requester = userValidationService.getRequester(request.requesterEmail());
+        AppUser requester = userValidationService.getRequester(request.requesterId());
        
         EventRegistration registration = registrationValidationService.getValidActiveRegistration(
-                request.eventId(),request.userId()
+                request.eventId(), request.targetUserId()
         );
         
         if(!registration.canManage(requester)){

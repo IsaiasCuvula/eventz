@@ -49,11 +49,11 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     @Transactional
     @Override
     public TicketResponse execute(EventRegistrationRequest request) {
-        String requesterEmail = request.requesterEmail();
-        String targetId = request.userId();
+        String requesterId = request.requesterId();
+        String targetId = request.targetUserId();
         String eventId = request.eventId();
         
-        AppUser requester = userValidationService.getRequester(requesterEmail);
+        AppUser requester = userValidationService.getRequester(requesterId);
         
         Event event = eventValidationService.getValidEventById(eventId);
         

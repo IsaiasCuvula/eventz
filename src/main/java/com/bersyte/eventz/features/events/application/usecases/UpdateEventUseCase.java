@@ -29,16 +29,16 @@ public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventRespon
     @Override
     public EventResponse execute(UpdateEventInput input) {
         String eventId = input.eventId();
-        String userEmail = input.userEmail();
+        String requesterId = input.requesterId();
         UpdateEventRequest request  = input.request();
         
         if (isRequestEmpty(request)) {
             throw new IllegalArgumentException("At least one field must be completed for the update.");
         }
-        AppUser user = userValidationService.getAuthorizedOrganizer(userEmail);
+        AppUser requester = userValidationService.getAuthorizedOrganizerById(requesterId);
         Event event = eventValidationService.getValidEventById(eventId);
         
-        if(!user.isAdmin() && !event.isOwnedBy(user)){
+        if(!requester.isAdmin() && !event.isOwnedBy(requester)){
             throw new UnauthorizedException("You don't own this event");
         }
 

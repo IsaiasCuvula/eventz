@@ -22,9 +22,9 @@ public class DeleteEventUseCase implements VoidUseCase<DeleteEventInput> {
     
     @Override
     public void execute(DeleteEventInput input) {
-        String userEmail = input.userEmail();
+        String requesterId = input.requesterId();
         String eventId = input.eventId();
-        AppUser requester = userValidationService.getAuthorizedOrganizer(userEmail);
+        AppUser requester = userValidationService.getAuthorizedOrganizerById(requesterId);
         Event event = eventValidationService.getValidEventById(eventId);
         if(!event.canManage(requester)){
             throw new UnauthorizedException("You cannot cancel an event you don't own.");

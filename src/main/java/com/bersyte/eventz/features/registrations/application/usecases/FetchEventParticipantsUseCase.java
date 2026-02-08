@@ -32,9 +32,8 @@ public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticip
     
     @Override
     public PagedResult<EventParticipantResponse> execute(FetchEventParticipantsRequest request) {
-        String requesterEmail = request.requesterEmail();
         String eventId = request.eventId();
-        AppUser requester = userValidationService.getRequester(requesterEmail);
+        AppUser requester = userValidationService.getRequester(request.requesterId());
         
         if(!requester.canManageEvents()){
             throw new UnauthorizedException("You don't have permission");
@@ -44,7 +43,9 @@ public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticip
         if(!requester.isAdmin() && !event.isOwnedBy(requester)){
             throw new UnauthorizedException("You don't have permission");
         }
-        PagedResult<EventRegistration>  result = eventRegistrationRepository.fetchParticipants(eventId,request.pagination());
+        PagedResult<EventRegistration>  result = eventRegistrationRepository.fetchParticipants(
+                eventId,request.pagination()
+        );
         return registrationMapper.toPagedParticipants(result);
     }
 }

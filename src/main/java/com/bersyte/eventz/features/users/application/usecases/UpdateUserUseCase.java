@@ -23,10 +23,10 @@ public class UpdateUserUseCase implements UseCase<UpdateUserInput, UserResponse>
     
     @Override
     public UserResponse execute(UpdateUserInput input) {
-        String targetId= input.userId();
-        String requestEmail = input.email();
+        String targetId= input.targetUserId();
+        String requestId = input.requesterId();
         UpdateUserRequest request = input.request();
-        AppUser requester =  validationService.getRequester(requestEmail);
+        AppUser requester =  validationService.getRequesterById(requestId);
         
         if (!requester.canDeleteOrUpdateUser(targetId)){
             throw  new UnauthorizedException("You don't have permission");

@@ -43,10 +43,10 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
     @Transactional
     @Override
     public TicketResponse execute(CancelEventRegistrationRequest request) {
-        String requesterEmail = request.requesterEmail();
+        String requesterId = request.requesterId();
         String registrationId = request.registrationId();
         
-        AppUser requester = userValidationService.getRequester(requesterEmail);
+        AppUser requester = userValidationService.getRequesterById(requesterId);
         EventRegistration registration = registrationValidationService.getValidRegistrationById(registrationId);
         
         if(!registration.canManage(requester)){

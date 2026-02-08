@@ -165,6 +165,40 @@ public class AppUser {
     public LocalDateTime getVerificationExpiration() {
         return verificationExpiration;
     }
-
     
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+    
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+    
+    public void setVerificationExpiration(LocalDateTime verificationExpiration) {
+        this.verificationExpiration = verificationExpiration;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
