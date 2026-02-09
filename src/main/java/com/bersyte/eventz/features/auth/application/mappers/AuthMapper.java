@@ -58,7 +58,7 @@ public class AuthMapper {
           );
     }
     
-    private AuthUser fromAppUser(AppUser appUser){
+    public AuthUser fromAppUser(AppUser appUser){
         return new AuthUser(
                 appUser.getId(),
                 appUser.getEmail(),

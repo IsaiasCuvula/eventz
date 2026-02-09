@@ -74,27 +74,4 @@ public class AuthService {
         }
     }
 
-
-    public void resendVerificationCode(String email) {
-        try {
-            UserEntity user = findAuthUserByEmail(email);
-
-            if (user.isEnabled()) {
-                throw new AuthException("User already verified");
-            }
-
-            user.setVerificationCode(generateVerificationCode());
-            user.setVerificationExpiration(
-                    LocalDateTime.now().plusMinutes(15)
-            );
-            sendVerificationEmail(user);
-            userJpaRepository.save(user);
-        } catch (Exception e) {
-            throw new AuthException(
-                    "Failed to resend verification email  " + e.getLocalizedMessage()
-            );
-        }
-
-    }
-
 }

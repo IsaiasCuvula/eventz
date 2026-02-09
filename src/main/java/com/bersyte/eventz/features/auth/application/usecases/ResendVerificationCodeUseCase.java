@@ -1,10 +1,6 @@
 package com.bersyte.eventz.features.auth.application.usecases;
 
-import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.application.usecases.VoidUseCase;
-import com.bersyte.eventz.common.domain.IdGenerator;
-import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
-import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.domain.service.*;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
