@@ -6,10 +6,8 @@ import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrinci
 import com.bersyte.eventz.features.users.application.dtos.*;
 import com.bersyte.eventz.features.users.application.usecases.*;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,20 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final FetchUsersUseCase fetchUsersUseCase;
-    private final SaveUserUseCase saveUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetCurrentUserUseCase getCurrentUserUseCase;
     
     public UserController(
             FetchUsersUseCase fetchUsersUseCase,
-            SaveUserUseCase   saveUserUseCase,
             UpdateUserUseCase updateUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
             GetCurrentUserUseCase getCurrentUserUseCase
     ) {
         this.fetchUsersUseCase = fetchUsersUseCase;
-        this.saveUserUseCase = saveUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
@@ -84,14 +79,6 @@ public class UserController {
         );
         deleteUserUseCase.execute(request);
         return ResponseEntity.noContent().build();
-    }
-    
-    @PostMapping
-    public ResponseEntity<UserResponse> create(
-            @Valid @RequestBody CreateUserRequest request
-    ) {
-        UserResponse response = saveUserUseCase.execute(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 }

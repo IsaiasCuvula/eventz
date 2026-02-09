@@ -13,10 +13,6 @@ public class UserValidationService {
     }
     
     
-    public AppUser getRequester(String email){
-        return this.getValidUserByEmail(email);
-    }
-    
     public AppUser getRequesterById(String id){
         return this.getValidUserById(id);
     }
@@ -36,7 +32,7 @@ public class UserValidationService {
         );
     }
     
-    private AppUser getValidUserByEmail(String email){
+    public AppUser getValidUserByEmail(String email){
         return repository.findByEmail(email).orElseThrow(
                 ()-> new ResourceNotFoundException("User", email)
         );

@@ -4,10 +4,10 @@ import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
+import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.model.TokenPair;
 import com.bersyte.eventz.features.auth.domain.service.AuthService;
 import com.bersyte.eventz.features.auth.domain.service.TokenService;
-import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
     private final AuthService authService;
@@ -25,8 +25,13 @@ public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
     
     @Override
     public AuthResponse execute(LoginRequest request) {
-        AppUser authenticatedUser = authService.authenticate(request.email(), request.password());
-        TokenPair tokens = tokenService.createUserTokens(authenticatedUser.getEmail());
+        AuthUser authenticatedUser = authService.authenticate(request.email(), request.password());
+        if(!authenticatedUser.isVerified()){
+            //the tokens will be null meaning the user do not have permission
+            // to access the system data if not verified
+            return authMapper.toUserNotVerifiedResponse(authenticatedUser);
+        }
+        TokenPair tokens = tokenService.createUserTokens(authenticatedUser.id());
         return authMapper.toResponse(tokens, authenticatedUser);
     }
 }

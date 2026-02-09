@@ -1,5 +1,7 @@
 package com.bersyte.eventz.features.users.domain.model;
 
+import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
+
 import java.time.LocalDateTime;
 
 public class AppUser {
@@ -10,6 +12,7 @@ public class AppUser {
     private String phone;
     private UserRole role;
     private boolean enabled;
+    private boolean verified;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
@@ -19,26 +22,9 @@ public class AppUser {
     private LocalDateTime verificationExpiration;
     
     
-    
-//    private AppUser(String id, String email, String firstName,
-//                    String lastName, String phone,
-//                    UserRole role, boolean enabled,
-//                    LocalDateTime createdAt, LocalDateTime updatedAt
-//    ) {
-//        this.id = id;
-//        this.email = email;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.phone = phone;
-//        this.role = role;
-//        this.enabled = enabled;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//    }
-    
     private AppUser(String id, String email, String firstName,
                     String lastName, String phone,
-                    UserRole role, boolean enabled,
+                    UserRole role, boolean enabled,boolean verified,
                     LocalDateTime createdAt, LocalDateTime updatedAt,
                     String verificationCode,
                     String password,
@@ -51,6 +37,7 @@ public class AppUser {
         this.phone = phone;
         this.role = role;
         this.enabled = enabled;
+        this.verified = verified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.verificationCode = verificationCode;
@@ -69,7 +56,7 @@ public class AppUser {
     ) {
         return new AppUser(
                 id, email, firstName, lastName, phone, UserRole.USER,
-                true, createdAt, createdAt,
+                true, false,createdAt, createdAt,
                 verificationCode,password,verificationExpiration
         );
     }
@@ -78,15 +65,29 @@ public class AppUser {
      * Factory Method to RESTORE an existing user (coming from Infrastructure/Database).
      */
     public static AppUser restore(String id, String email, String firstName, String lastName, String phone,
-                                  UserRole role, boolean enabled,
+                                  UserRole role, boolean enabled,boolean verified,
                                   LocalDateTime createdAt, LocalDateTime updatedAt,
                                   String verificationCode,
                                   String password,
                                   LocalDateTime verificationExpiration
     ) {
-        return new AppUser(id, email, firstName, lastName, phone, role, enabled, createdAt, updatedAt,
+        return new AppUser(id, email, firstName, lastName, phone, role, enabled,verified, createdAt, updatedAt,
                verificationCode, password,verificationExpiration
         );
+    }
+    
+    public AppUser updateVerificationCode(
+             LocalDateTime updatedAt,
+             String verificationCode,
+             LocalDateTime verificationExpiration
+    ) {
+      if (this.isVerified()){
+            throw new AuthException("User already verified");
+      }
+      this.verificationCode = verificationCode;
+      this.verificationExpiration = verificationExpiration;
+      this.updatedAt = updatedAt;
+      return this;
     }
     
     
@@ -117,6 +118,26 @@ public class AppUser {
         return firstName + " " + lastName;
     }
     
+    
+    public boolean isVerificationCodeExpired(LocalDateTime verificationTime){
+        return verificationTime.isAfter(this.verificationExpiration);
+    }
+    
+    public boolean isVerified() {
+        return verified;
+    }
+    
+    public AppUser verifyCode(String givenCode, LocalDateTime updatedAt){
+        boolean isVerified = this.verificationCode.equals(givenCode);
+        if(!isVerified){
+            throw new AuthException("Invalid code");
+        }
+        this.verified = true;
+        this.verificationExpiration = null;
+        this.verificationCode = null;
+        this.updatedAt = updatedAt;
+        return this;
+    }
     
     public String getId() {
         return id;
@@ -180,22 +201,6 @@ public class AppUser {
     
     public void setRole(UserRole role) {
         this.role = role;
-    }
-    
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
-    
-    public void setVerificationExpiration(LocalDateTime verificationExpiration) {
-        this.verificationExpiration = verificationExpiration;
     }
     
     public void setPassword(String password) {

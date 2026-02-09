@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +13,12 @@ public record AppUserPrincipal(
         String id,
         String email,
         String password,
-        UserRole role
+        UserRole role,
+        String firstName,
+        String lastName,
+        String phone,
+        boolean verified,
+        LocalDateTime createdAt
 ) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

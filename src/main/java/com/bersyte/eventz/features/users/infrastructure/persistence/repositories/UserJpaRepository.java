@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findByEmail(String email);
     
-    @Query("SELECT u.id, u.email, u.password, u.role FROM UserEntity u WHERE u.email = :email")
+    @Query("SELECT u.id, u.email, u.password, u.role, u.firstName, u.lastName, u.phone, u.verified, u.createdAt FROM UserEntity u WHERE u.email = :email")
     Optional<AppUserPrincipal> findPrincipalByEmail(@Param("email") String email);
     
     boolean existsByEmail(String email);

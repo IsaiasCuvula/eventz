@@ -1,7 +1,6 @@
 package com.bersyte.eventz.features.auth;
 
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
-import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
 import com.bersyte.eventz.features.auth.application.dtos.VerificationRequest;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
@@ -40,34 +39,6 @@ public class AuthService {
         this.userMapper = userMapper;
     }
     
-    
-    public void verifyUser(VerificationRequest data) {
-        try {
-            UserEntity user = findAuthUserByEmail(data.getEmail());
-            
-            if (user.isEnabled()) {
-                throw new AuthException("User already verified");
-            }
-            
-            if (user.getVerificationExpiration().isBefore(LocalDateTime.now())) {
-                throw new AuthException("Verification code has expired");
-            }
-            
-            if (!user.getVerificationCode().equals(data.getVerificationCode())) {
-                throw new AuthException("Invalid verification code");
-            }
-            
-            user.setVerificationExpiration(null);
-            user.setVerificationCode(null);
-            user.setEnabled(true);
-            userJpaRepository.save(user);
-        } catch (Exception e) {
-            throw new AuthException(
-                    "Something went wrong while verifying user - " + e.getLocalizedMessage()
-            );
-        }
-    }
-
    
 
     public void refreshToken(

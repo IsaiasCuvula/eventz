@@ -48,7 +48,7 @@ public class UpdateTicketCheckInTokenUseCase implements UseCase<UpdateTicketChec
     public TicketResponse execute(UpdateTicketCheckInTokenRequest request) {
         String requesterId = request.requesterId();
         String oldToken = request.oldToken();
-        AppUser requester = userValidationService.getRequester(requesterId);
+        AppUser requester = userValidationService.getRequesterById(requesterId);
         
         if(!requester.canManageEvents()){
             throw new UnauthorizedException("You don't have permission");

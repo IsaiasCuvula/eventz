@@ -33,7 +33,7 @@ public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticip
     @Override
     public PagedResult<EventParticipantResponse> execute(FetchEventParticipantsRequest request) {
         String eventId = request.eventId();
-        AppUser requester = userValidationService.getRequester(request.requesterId());
+        AppUser requester = userValidationService.getRequesterById(request.requesterId());
         
         if(!requester.canManageEvents()){
             throw new UnauthorizedException("You don't have permission");

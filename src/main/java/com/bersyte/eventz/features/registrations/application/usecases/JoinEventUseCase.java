@@ -53,7 +53,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         String targetId = request.targetUserId();
         String eventId = request.eventId();
         
-        AppUser requester = userValidationService.getRequester(requesterId);
+        AppUser requester = userValidationService.getRequesterById(requesterId);
         
         Event event = eventValidationService.getValidEventById(eventId);
         

@@ -38,18 +38,17 @@ public class JwtService {
         return generateToken(username);
     }
     
-    public String generateToken(String username) {
+    public String generateToken(String userId) {
         Map<String, Object> extraClaims = Map.of("type", "access");
         long expirationMs = jwtConfig.getAccessTokenExpiration().toMillis();
-        return buildToken(username, extraClaims, expirationMs);
+        return buildToken(userId, extraClaims, expirationMs);
     }
     
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String userId) {
         Map<String, Object> extraClaims = Map.of("type", "refresh");
         long expirationMs = jwtConfig.getRefreshTokenExpiration().toMillis();
-        return buildToken(username, extraClaims, expirationMs);
+        return buildToken(userId, extraClaims, expirationMs);
     }
-    
     
     
     public boolean isRefreshToken(String token) {
@@ -108,9 +107,7 @@ public class JwtService {
     }
     
     private String buildToken(
-            String username,
-            Map<String, Object> claims,
-            long expirationTime
+            String userId, Map<String, Object> claims, long expirationTime
     ) {
         try {
             Instant now = Instant.now();
@@ -119,7 +116,7 @@ public class JwtService {
             return Jwts.builder()
                            .claims()
                            .add(claims)
-                           .subject(username)
+                           .subject(userId)
                            .issuedAt(Date.from(now))
                            .expiration(Date.from(expiry))
                            .and()

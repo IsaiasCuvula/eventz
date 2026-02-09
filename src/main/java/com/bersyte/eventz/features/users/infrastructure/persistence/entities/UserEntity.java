@@ -48,6 +48,7 @@ public class UserEntity {
     private LocalDateTime verificationExpiration;
 
     private boolean enabled;
+    private boolean verified;
     
     @LastModifiedDate
     private LocalDateTime updateAt;

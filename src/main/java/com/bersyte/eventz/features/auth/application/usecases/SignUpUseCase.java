@@ -6,7 +6,6 @@ import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
-import com.bersyte.eventz.features.auth.domain.model.TokenPair;
 import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
 import com.bersyte.eventz.features.auth.domain.service.PasswordHasher;
@@ -32,7 +31,8 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     public SignUpUseCase(
             UserRepository userRepository,
             PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
-            TokenService tokenService, IdGenerator idGenerator, AuthMapper authMapper, AuthSettings authSettings, Clock clock
+            TokenService tokenService, IdGenerator idGenerator, AuthMapper authMapper,
+            AuthSettings authSettings, Clock clock
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -64,10 +64,9 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
                 request.phone(), now,verificationCode,encodedPassword,
                 now.plusMinutes(expirationTime.toMinutes())
         );
-        
         AppUser savedUser = userRepository.save(newUser);
         //emailService.sendVerificationEmail(savedUser); (events)
-        TokenPair tokens = tokenService.createUserTokens(savedUser.getEmail());
-        return authMapper.toResponse(tokens, savedUser);
+       //User only has access tokens after verifying the email.
+        return authMapper.toSignUpResponse(savedUser);
     }
 }

@@ -1,7 +1,6 @@
 package com.bersyte.eventz.features.users.application.mappers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.features.users.application.dtos.CreateUserRequest;
 import com.bersyte.eventz.features.users.application.dtos.UserResponse;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import java.util.List;
@@ -18,16 +17,6 @@ public class UserMapper {
                 pagedResult.totalElements(),
                 pagedResult.totalPages(), pagedResult.isLast()
         );
-    }
-    
-    public AppUser toDomain(String userId, CreateUserRequest request){
-          return AppUser.create(
-                userId,
-                request.email(),
-                request.firstName(),
-                request.lastName(),
-                request.phone()
-         );
     }
     
     public UserResponse toResponse(AppUser user){
