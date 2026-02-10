@@ -8,6 +8,8 @@ import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.model.TokenPair;
 import com.bersyte.eventz.features.auth.domain.service.AuthService;
 import com.bersyte.eventz.features.auth.domain.service.TokenService;
+import jakarta.transaction.Transactional;
+
 
 public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
     private final AuthService authService;
@@ -15,14 +17,15 @@ public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
     private final TokenService tokenService;
     
     public LoginUseCase(
-            AuthService authService, AuthMapper authMapper, TokenService tokenService
+            AuthService authService, AuthMapper authMapper,
+            TokenService tokenService
     ) {
         this.authService = authService;
         this.authMapper = authMapper;
         this.tokenService = tokenService;
     }
     
-    
+    @Transactional
     @Override
     public AuthResponse execute(LoginRequest request) {
         AuthUser authenticatedUser = authService.authenticate(request.email(), request.password());
@@ -31,7 +34,11 @@ public class LoginUseCase implements UseCase<LoginRequest, AuthResponse> {
             // to access the system data if not verified
             return authMapper.toUserNotVerifiedResponse(authenticatedUser);
         }
-        TokenPair tokens = tokenService.createUserTokens(authenticatedUser.id());
+        
+        //In case we want to restrict the numbers of devices logged in with the same account
+        //Before saving the new token, count how many tokens the userId already has.
+        //If it's greater than 4 (devices), you prevent login or delete the oldest one.
+        TokenPair tokens = tokenService.createAndPersistTokens(authenticatedUser);
         return authMapper.toResponse(tokens, authenticatedUser);
     }
 }

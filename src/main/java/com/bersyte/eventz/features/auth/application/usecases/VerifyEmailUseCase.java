@@ -11,6 +11,7 @@ import com.bersyte.eventz.features.auth.domain.service.TokenService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
+import jakarta.transaction.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -33,6 +34,7 @@ public class VerifyEmailUseCase implements UseCase<VerificationRequest, AuthResp
         this.clock = clock;
     }
     
+    @Transactional
     @Override
     public AuthResponse execute(VerificationRequest request) {
         AppUser requester = userValidationService.getValidUserById(request.requesterId());
@@ -44,8 +46,8 @@ public class VerifyEmailUseCase implements UseCase<VerificationRequest, AuthResp
         AppUser verifiedUser = requester.verifyCode(verificationCode, verificationTime);
         AppUser updatedUser = userRepository.update(verifiedUser);
         //Sending email to the user updatedUser.getEmail();
-        TokenPair tokens = tokenService.createUserTokens(updatedUser.getId());
         AuthUser authenticatedUser = mapper.fromAppUser(updatedUser);
+        TokenPair tokens = tokenService.createAndPersistTokens(authenticatedUser);
         return mapper.toResponse(tokens, authenticatedUser);
     }
 }

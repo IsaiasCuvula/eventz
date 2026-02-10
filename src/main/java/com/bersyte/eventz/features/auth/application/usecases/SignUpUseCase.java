@@ -9,7 +9,6 @@ import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
 import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
 import com.bersyte.eventz.features.auth.domain.service.PasswordHasher;
-import com.bersyte.eventz.features.auth.domain.service.TokenService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -22,7 +21,6 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     private final UserRepository userRepository;
     private final PasswordHasher passwordEncoder;
     private final CodeGenerator codeGenerator;
-    private final TokenService tokenService;
     private final IdGenerator idGenerator;
     private final AuthMapper authMapper;
     private final AuthSettings authSettings;
@@ -31,13 +29,12 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     public SignUpUseCase(
             UserRepository userRepository,
             PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
-            TokenService tokenService, IdGenerator idGenerator, AuthMapper authMapper,
+            IdGenerator idGenerator, AuthMapper authMapper,
             AuthSettings authSettings, Clock clock
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.codeGenerator = codeGenerator;
-        this.tokenService = tokenService;
         this.idGenerator = idGenerator;
         this.authMapper = authMapper;
         this.authSettings = authSettings;

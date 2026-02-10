@@ -56,7 +56,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/refresh-token")
+    @PostMapping("/refresh")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

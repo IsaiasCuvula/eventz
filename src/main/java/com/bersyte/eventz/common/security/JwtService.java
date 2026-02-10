@@ -1,11 +1,9 @@
 package com.bersyte.eventz.common.security;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -25,17 +23,12 @@ public class JwtService {
         this.jwtConfig = jwtConfig;
     }
     
-    public String refreshAccessToken(String oldRefreshToken) {
-        if (!isRefreshToken(oldRefreshToken)) {
-            throw new JwtException("Not a refresh token");
+    public boolean isAccessTokenValid(String token) {
+        try {
+            return isAccessToken(token) && !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
         }
-        
-        if (isTokenExpired(oldRefreshToken)) {
-            throw new JwtException("Refresh token expired - LOGIN REQUIRED");
-        }
-        
-        String username = extractUsername(oldRefreshToken);
-        return generateToken(username);
     }
     
     public String generateToken(String userId) {
@@ -56,17 +49,21 @@ public class JwtService {
         return "refresh".equals(type);
     }
     
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).isBefore(LocalDateTime.now());
     }
+    
     
     public boolean isAccessToken(String token) {
         String type = extractClaim(token, claims -> claims.get("type", String.class));
         return "access".equals(type);
     }
     
-    public String extractUsername(String token) {
+    public String extractTokenId(String token) {
+        return extractClaim(token, Claims::getId);
+    }
+    
+    public String extractUserId(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     
@@ -89,22 +86,13 @@ public class JwtService {
     }
     
     private Claims extractAllClaims(String token) {
-        try {
             return Jwts.parser()
                            .verifyWith(getKey())
                            .build()
                            .parseSignedClaims(token)
                            .getPayload();
-        } catch (ExpiredJwtException e) {
-            throw new JwtAuthenticationException("The token has expired. Please log in again.");
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Invalid access token.");
-        }
     }
     
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).isBefore(LocalDateTime.now());
-    }
     
     private String buildToken(
             String userId, Map<String, Object> claims, long expirationTime
@@ -114,6 +102,7 @@ public class JwtService {
             Instant expiry = now.plusMillis(expirationTime);
             
             return Jwts.builder()
+                           .id(java.util.UUID.randomUUID().toString())
                            .claims()
                            .add(claims)
                            .subject(userId)

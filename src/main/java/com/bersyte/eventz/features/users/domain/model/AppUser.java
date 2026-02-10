@@ -1,6 +1,7 @@
 package com.bersyte.eventz.features.users.domain.model;
 
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
+import com.bersyte.eventz.features.auth.domain.exceptions.InvalidVerificationCodeException;
 
 import java.time.LocalDateTime;
 
@@ -130,7 +131,7 @@ public class AppUser {
     public AppUser verifyCode(String givenCode, LocalDateTime updatedAt){
         boolean isVerified = this.verificationCode.equals(givenCode);
         if(!isVerified){
-            throw new AuthException("Invalid code");
+            throw new InvalidVerificationCodeException("Invalid verification code");
         }
         this.verified = true;
         this.verificationExpiration = null;
