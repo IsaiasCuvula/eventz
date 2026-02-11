@@ -41,11 +41,13 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventRegistrationEntity> registrations;
 
-    @Column(name = "verification_code")
     private String verificationCode;
 
-    @Column(name = "verification_expiration")
     private LocalDateTime verificationExpiration;
+    
+    private LocalDateTime recoveryCodeExpiresAt;
+    
+    private String recoveryCode;
 
     private boolean enabled;
     private boolean verified;

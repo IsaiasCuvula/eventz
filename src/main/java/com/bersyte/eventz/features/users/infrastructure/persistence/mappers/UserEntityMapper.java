@@ -1,8 +1,6 @@
 package com.bersyte.eventz.features.users.infrastructure.persistence.mappers;
 
 import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.features.events.domain.model.Event;
-import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import jakarta.persistence.*;
@@ -35,11 +33,14 @@ public class UserEntityMapper {
              entity.getPhone(),
              entity.getRole(),
              entity.isEnabled(),
+             entity.isVerified(),
              entity.getCreatedAt(),
              entity.getUpdateAt(),
              entity.getVerificationCode(),
              entity.getPassword(),
-             entity.getVerificationExpiration()
+             entity.getVerificationExpiration(),
+             entity.getRecoveryCode(),
+             entity.getRecoveryCodeExpiresAt()
         );
     }
 

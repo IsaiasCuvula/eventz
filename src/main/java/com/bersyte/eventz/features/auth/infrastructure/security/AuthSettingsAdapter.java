@@ -18,7 +18,7 @@ public class AuthSettingsAdapter implements AuthSettings, JwtConfiguration {
     @Value("${refresh.token.expiration-time}")
     private Duration refreshTokenExpiration;
     
-    @Value("${auth.verification.code-expiration}")
+    @Value("${auth.verification.code-expiration-minutes}")
     private Duration verificationCodeExpiration;
     
     @Override

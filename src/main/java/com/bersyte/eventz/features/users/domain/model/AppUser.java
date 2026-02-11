@@ -3,11 +3,12 @@ package com.bersyte.eventz.features.users.domain.model;
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.domain.exceptions.InvalidVerificationCodeException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class AppUser {
     private final String id;
-    private String email;
+    private final String email;
     private String firstName;
     private String lastName;
     private String phone;
@@ -21,15 +22,15 @@ public class AppUser {
     private String verificationCode;
     private String password;
     private LocalDateTime verificationExpiration;
+    private String recoveryCode;
+    private LocalDateTime recoveryCodeExpiresAt;
     
     
     private AppUser(String id, String email, String firstName,
-                    String lastName, String phone,
-                    UserRole role, boolean enabled,boolean verified,
-                    LocalDateTime createdAt, LocalDateTime updatedAt,
-                    String verificationCode,
-                    String password,
-                    LocalDateTime verificationExpiration
+                    String lastName, String phone, UserRole role, boolean enabled,
+                    boolean verified, LocalDateTime createdAt, LocalDateTime updatedAt,
+                    String verificationCode, String password, LocalDateTime verificationExpiration,
+                    String recoveryCode, LocalDateTime recoveryCodeExpiresAt
     ) {
         this.id = id;
         this.email = email;
@@ -41,9 +42,11 @@ public class AppUser {
         this.verified = verified;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.verificationCode = verificationCode;
+        this.recoveryCode = recoveryCode;
         this.password = password;
         this.verificationExpiration= verificationExpiration;
+        this.verificationCode = verificationCode;
+        this.recoveryCodeExpiresAt = recoveryCodeExpiresAt;
     }
     
     /**
@@ -58,22 +61,21 @@ public class AppUser {
         return new AppUser(
                 id, email, firstName, lastName, phone, UserRole.USER,
                 true, false,createdAt, createdAt,
-                verificationCode,password,verificationExpiration
+                verificationCode,password,verificationExpiration, null, null
         );
     }
     
     /**
      * Factory Method to RESTORE an existing user (coming from Infrastructure/Database).
      */
-    public static AppUser restore(String id, String email, String firstName, String lastName, String phone,
-                                  UserRole role, boolean enabled,boolean verified,
-                                  LocalDateTime createdAt, LocalDateTime updatedAt,
-                                  String verificationCode,
-                                  String password,
-                                  LocalDateTime verificationExpiration
+    public static AppUser restore(
+            String id, String email, String firstName, String lastName, String phone,
+            UserRole role, boolean enabled,boolean verified, LocalDateTime createdAt,
+            LocalDateTime updatedAt, String verificationCode, String password,
+            LocalDateTime verificationExpiration, String recoveryCode,LocalDateTime recoveryCodeExpiresAt
     ) {
         return new AppUser(id, email, firstName, lastName, phone, role, enabled,verified, createdAt, updatedAt,
-               verificationCode, password,verificationExpiration
+               verificationCode, password,verificationExpiration,recoveryCode,recoveryCodeExpiresAt
         );
     }
     
@@ -114,6 +116,35 @@ public class AppUser {
         return this.isAdmin() || this.id.equals(targetId);
     }
     
+    
+    public AppUser requestRecoveryCode(
+            String code, LocalDateTime now, Duration validity
+    ){
+        if(this.recoveryCode != null){
+            LocalDateTime threshold = now.minusMinutes(1);
+            
+            if(this.updatedAt.isBefore(threshold)){
+                throw new AuthException("Please wait a moment before requesting a new code.");
+            }
+        }
+        this.recoveryCode = code;
+        this.verificationExpiration = now.plus(validity);
+        this.updatedAt = now;
+        return this;
+    }
+    
+    public AppUser changePassword(
+            String recoveryCode, String newPasswordEncoded, LocalDateTime updatedAt
+    ){
+        if(!this.recoveryCode.equals(recoveryCode)){
+            throw new AuthException("Invalid request");
+        }
+        this.password = newPasswordEncoded;
+        this.recoveryCode= null;
+        this.recoveryCodeExpiresAt = null;
+        this.updatedAt = updatedAt;
+        return this;
+    }
    
     public String getFullName() {
         return firstName + " " + lastName;
