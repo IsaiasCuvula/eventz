@@ -1,10 +1,10 @@
 package com.bersyte.eventz.features.auth.presentation.controllers;
 
-import com.bersyte.eventz.features.auth.*;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.auth.application.dtos.VerificationRequest;
+import com.bersyte.eventz.features.auth.application.usecases.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,15 +20,36 @@ import java.io.IOException;
 @RequestMapping("/v1/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final SignUpUseCase signUpUseCase;
+    private final LoginUseCase loginUseCase;
+    private final LogoutUseCase logoutUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
+    private final VerifyEmailUseCase verifyEmailUseCase;
+    private final ResetPasswordConfirmUseCase resetPasswordConfirmUseCase;
+    private final ResendVerificationCodeUseCase resendVerificationCodeUseCase;
+    private final ResetPasswordUseCase resetPasswordUseCase;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(
+            SignUpUseCase signUpUseCase, LoginUseCase loginUseCase,
+            LogoutUseCase logoutUseCase, RefreshTokenUseCase refreshTokenUseCase,
+            VerifyEmailUseCase verifyEmailUseCase,
+            ResetPasswordConfirmUseCase resetPasswordConfirmUseCase,
+            ResendVerificationCodeUseCase resendVerificationCodeUseCase,
+            ResetPasswordUseCase resetPasswordUseCase
+    ) {
+        this.signUpUseCase = signUpUseCase;
+        this.loginUseCase = loginUseCase;
+        this.logoutUseCase = logoutUseCase;
+        this.refreshTokenUseCase = refreshTokenUseCase;
+        this.verifyEmailUseCase = verifyEmailUseCase;
+        this.resetPasswordConfirmUseCase = resetPasswordConfirmUseCase;
+        this.resendVerificationCodeUseCase = resendVerificationCodeUseCase;
+        this.resetPasswordUseCase = resetPasswordUseCase;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignupRequest requestDTO) {
-        AuthResponse response = authService.signup (requestDTO);
+    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignupRequest request) {
+        AuthResponse response = signUpUseCase.execute (request);
         return ResponseEntity.ok(response);
     }
 

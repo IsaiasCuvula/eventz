@@ -6,7 +6,7 @@ import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
-import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
+import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
 import com.bersyte.eventz.features.auth.domain.service.PasswordHasher;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
@@ -23,14 +23,14 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     private final CodeGenerator codeGenerator;
     private final IdGenerator idGenerator;
     private final AuthMapper authMapper;
-    private final AuthSettings authSettings;
+    private final AuthProperties authSettings;
     private final Clock clock;
     
     public SignUpUseCase(
             UserRepository userRepository,
             PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
             IdGenerator idGenerator, AuthMapper authMapper,
-            AuthSettings authSettings, Clock clock
+            AuthProperties authSettings, Clock clock
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

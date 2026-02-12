@@ -1,14 +1,14 @@
 package com.bersyte.eventz.features.auth.infrastructure.security;
 
 import com.bersyte.eventz.common.security.JwtConfiguration;
-import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
+import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 @Component
-public class AuthSettingsAdapter implements AuthSettings, JwtConfiguration {
+public class AuthPropertiesAdapter implements AuthProperties, JwtConfiguration {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
     

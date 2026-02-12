@@ -13,17 +13,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class AuthConfig {
+public class SecurityBeanConfig {
 
     private final UserJpaRepository userJpaRepository;
 
-    public AuthConfig(UserJpaRepository userJpaRepository) {
+    public SecurityBeanConfig(UserJpaRepository userJpaRepository) {
         this.userJpaRepository = userJpaRepository;
     }
     
     
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
     

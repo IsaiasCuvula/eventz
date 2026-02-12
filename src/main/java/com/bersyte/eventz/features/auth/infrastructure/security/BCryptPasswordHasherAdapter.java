@@ -5,10 +5,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BCryptPasswordHasher implements PasswordHasher {
+public class BCryptPasswordHasherAdapter implements PasswordHasher {
     private final PasswordEncoder springEncoder;
     
-    public BCryptPasswordHasher(PasswordEncoder springEncoder) {
+    public BCryptPasswordHasherAdapter(PasswordEncoder springEncoder) {
         this.springEncoder = springEncoder;
     }
     

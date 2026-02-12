@@ -14,12 +14,12 @@ public class ResendVerificationCodeUseCase implements VoidUseCase<String> {
     private final UserValidationService userValidationService;
     private final UserRepository userRepository;
     private final CodeGenerator codeGenerator;
-    private final AuthSettings authSettings;
+    private final AuthProperties authSettings;
     private final Clock clock;
     
     public ResendVerificationCodeUseCase(
             UserValidationService userValidationService, UserRepository userRepository,
-            CodeGenerator codeGenerator, AuthSettings authSettings, Clock clock
+            CodeGenerator codeGenerator, AuthProperties authSettings, Clock clock
     ) {
         this.userValidationService = userValidationService;
         this.userRepository = userRepository;

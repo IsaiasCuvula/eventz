@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.auth.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.VoidUseCase;
-import com.bersyte.eventz.features.auth.domain.service.AuthSettings;
+import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
@@ -15,13 +15,13 @@ public class ResetPasswordUseCase implements VoidUseCase<String> {
     private final UserValidationService userValidationService;
     private final CodeGenerator codeGenerator;
     private final UserRepository userRepository;
-    private final AuthSettings authSettings;
+    private final AuthProperties authSettings;
     private final Clock clock;
     
     public ResetPasswordUseCase(
             UserValidationService userValidationService,
             CodeGenerator codeGenerator, UserRepository userRepository,
-            AuthSettings authSettings, Clock clock
+            AuthProperties authSettings, Clock clock
     ) {
         this.userValidationService = userValidationService;
         this.codeGenerator = codeGenerator;
