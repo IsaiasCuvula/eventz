@@ -3,6 +3,7 @@ package com.bersyte.eventz.features.auth.application.usecases;
 import com.bersyte.eventz.common.application.usecases.VoidUseCase;
 import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
+import com.bersyte.eventz.features.users.application.dtos.ForgotPasswordRequest;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
@@ -11,7 +12,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class ResetPasswordUseCase implements VoidUseCase<String> {
+public class ResetPasswordUseCase implements VoidUseCase<ForgotPasswordRequest> {
     private final UserValidationService userValidationService;
     private final CodeGenerator codeGenerator;
     private final UserRepository userRepository;
@@ -31,8 +32,8 @@ public class ResetPasswordUseCase implements VoidUseCase<String> {
     }
     
     @Override
-    public void execute(String email) {
-        AppUser targetUser = userValidationService.getValidUserByEmail(email);
+    public void execute(ForgotPasswordRequest request) {
+        AppUser targetUser = userValidationService.getValidUserByEmail(request.email());
         String recoveryCode = codeGenerator.generate();
         Duration validity = authSettings.getVerificationCodeExpiration();
         LocalDateTime createdAt = LocalDateTime.now(clock);

@@ -6,11 +6,12 @@ import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
 import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.model.TokenPair;
 import com.bersyte.eventz.features.auth.domain.service.TokenService;
+import com.bersyte.eventz.features.users.application.dtos.RefreshTokenRequest;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import jakarta.transaction.Transactional;
 
-public class RefreshTokenUseCase implements UseCase<String, AuthResponse> {
+public class RefreshTokenUseCase implements UseCase<RefreshTokenRequest, AuthResponse> {
     private final TokenService tokenService;
     private final UserValidationService userValidationService;
     private final AuthMapper authMapper;
@@ -23,7 +24,8 @@ public class RefreshTokenUseCase implements UseCase<String, AuthResponse> {
     
     @Transactional
     @Override
-    public AuthResponse execute(String refreshToken) {
+    public AuthResponse execute(RefreshTokenRequest request) {
+        String refreshToken = request.refreshToken();
         String userId = tokenService.validateRefreshToken(refreshToken);
         AppUser appUser = userValidationService.getRequesterById(userId);
         AuthUser authUser = authMapper.fromAppUser(appUser);

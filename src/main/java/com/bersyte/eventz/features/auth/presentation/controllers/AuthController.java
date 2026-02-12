@@ -1,20 +1,14 @@
 package com.bersyte.eventz.features.auth.presentation.controllers;
 
-import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
-import com.bersyte.eventz.features.auth.application.dtos.LoginRequest;
-import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
-import com.bersyte.eventz.features.auth.application.dtos.VerificationRequest;
+import com.bersyte.eventz.features.auth.application.dtos.*;
 import com.bersyte.eventz.features.auth.application.usecases.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.bersyte.eventz.features.users.application.dtos.ForgotPasswordRequest;
+import com.bersyte.eventz.features.users.application.dtos.LogoutRequest;
+import com.bersyte.eventz.features.users.application.dtos.RefreshTokenRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -25,9 +19,10 @@ public class AuthController {
     private final LogoutUseCase logoutUseCase;
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final VerifyEmailUseCase verifyEmailUseCase;
-    private final ResetPasswordConfirmUseCase resetPasswordConfirmUseCase;
     private final ResendVerificationCodeUseCase resendVerificationCodeUseCase;
     private final ResetPasswordUseCase resetPasswordUseCase;
+    private final ResetPasswordConfirmUseCase resetPasswordConfirmUseCase;
+    
 
     public AuthController(
             SignUpUseCase signUpUseCase, LoginUseCase loginUseCase,
@@ -54,34 +49,49 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest requestDTO) {
-        AuthResponse response = authService.login (requestDTO);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthResponse response = loginUseCase.execute (request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/verify")
     public ResponseEntity<String> verifyUser(
-            @RequestBody VerificationRequest verifyUserDto
+            @RequestBody VerificationRequest request
     ) {
-        authService.verifyUser(verifyUserDto);
-        return ResponseEntity.ok("User verified successfully");
+        verifyEmailUseCase.execute(request);
+        return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/resend")
-    public ResponseEntity<?> resend(@RequestBody String email) {
-        try {
-            authService.resendVerificationCode(email);
-            return ResponseEntity.ok("Code verification resent");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    
+    @PostMapping("/resend-code/{userId}")
+    public ResponseEntity<?> resend(@PathVariable String userId) {
+        resendVerificationCodeUseCase.execute(userId);
+        return ResponseEntity.noContent().build();
+    }
+    
+    
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody LogoutRequest request){
+        logoutUseCase.execute(request);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/refresh")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        authService.refreshToken(request, response);
+    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        AuthResponse response = refreshTokenUseCase.execute(request);
+        return ResponseEntity.ok(response);
     }
+    
+    
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request){
+        resetPasswordUseCase.execute(request);
+        return ResponseEntity.accepted().build();
+    }
+    
+    @PostMapping("/password-reset/confirm")
+    public ResponseEntity<?> resetPassword(@RequestBody ConfirmPasswordRequest request){
+        resetPasswordConfirmUseCase.execute(request);
+        return ResponseEntity.noContent().build();
+    }
+    
 }

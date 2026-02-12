@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/registrations")
+@RequestMapping("/v1/registrations")
 public class EventRegistrationController {
     private final JoinEventUseCase joinEventUseCase;
     private final CancelEventRegistrationUseCase cancelRegistrationUseCase;
