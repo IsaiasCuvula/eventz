@@ -1,8 +1,12 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.auth.RegisterDto;
-import com.bersyte.eventz.event_participation.EventParticipation;
-import com.bersyte.eventz.events.Event;
+import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
+import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.application.dtos.UserResponse;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
+import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,17 +18,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserMapperTest {
 
-    private UserMapper userMapper;
+    private UserEntityMapper userMapper;
 
     @BeforeEach
     void setUp() {
-        userMapper = new UserMapper ();
+        userMapper = new UserEntityMapper();
     }
 
     @Test
     public void shouldMapRegisterRequestDtoToAppUserEntity() {
         // Given
-        RegisterDto dto = new RegisterDto (
+        SignupRequest dto = new SignupRequest(
                 "may@gmail.com",
                 "123456",
                 UserRole.USER,
@@ -35,7 +39,7 @@ class UserMapperTest {
         );
 
         // When
-        AppUser user = userMapper.toUserEntity (dto);
+        UserEntity user = userMapper.toUserEntity (dto);
 
         //Then - Assert
         assertNotNull (user);
@@ -51,10 +55,10 @@ class UserMapperTest {
     @Test
     public void shouldMapUserEntityToUserResponseDto() {
         // Given
-        List<Event> events = List.of ();
-        List<EventParticipation> registrations = List.of ();
+        List<EventEntity> events = List.of ();
+        List<EventRegistrationEntity> registrations = List.of ();
 
-        AppUser user = new AppUser (
+        UserEntity user = new UserEntity(
                 1L,
                 "may@gmail.com",
                 "123456",
@@ -71,7 +75,7 @@ class UserMapperTest {
         );
 
         // When
-        UserResponseDto response = userMapper.toUserResponseDTO (user);
+        UserResponse response = userMapper.toUserResponse(user);
 
         //Then - Assert
         assertNotNull (user);
@@ -100,7 +104,7 @@ class UserMapperTest {
     public void shouldThrowExceptionWhenUserEntityIsNull() {
         //Given
         Exception exception = assertThrows (
-                NullPointerException.class, () -> userMapper.toUserResponseDTO (null)
+                NullPointerException.class, () -> userMapper.toUserResponse(null)
         );
 
         //Assert

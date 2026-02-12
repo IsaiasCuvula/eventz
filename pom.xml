@@ -71,6 +71,17 @@
 		</dependency>
 		<!-- End Database -->
 
+		<!-- Migration -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+		<!-- End Migration -->
+
 		<!-- Lombok annotations -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

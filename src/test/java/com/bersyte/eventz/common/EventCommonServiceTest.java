@@ -1,7 +1,13 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.events.*;
-import com.bersyte.eventz.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
+import com.bersyte.eventz.features.events.application.dtos.EventResponse;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
+import com.bersyte.eventz.features.events.infrastructure.persistence.repositories.EventJpaRepository;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,14 +29,14 @@ class EventCommonServiceTest {
     @InjectMocks
     private EventCommonService eventCommonService;
     @Mock
-    private EventRepository eventRepository;
+    private EventJpaRepository eventJpaRepository;
     @Mock
-    private EventMappers eventMappers;
+    private EventEntityMapper eventEntityMapper;
 
     @Test
     void shouldFindEventByIdSuccessfully() {
         // Arrange
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 2L,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -42,11 +48,11 @@ class EventCommonServiceTest {
         );
 
         //Mock calls
-        Mockito.when (eventRepository.findById (2L))
+        Mockito.when (eventJpaRepository.findById (2L))
                 .thenReturn (Optional.of (event));
 
         //When
-        Event foundEvent = eventCommonService.findEventById (2L);
+        EventEntity foundEvent = eventCommonService.findEventById (2L);
 
         //Act - Assert
         assertEquals (event, foundEvent);
@@ -65,7 +71,7 @@ class EventCommonServiceTest {
         );
 
         //Act - Assert
-        assertEquals ("Could not find event with id: " + eventId, exception.getMessage ());
+        assertEquals ("Could not find event with eventId: " + eventId, exception.getMessage ());
     }
 
     @Test
@@ -77,9 +83,9 @@ class EventCommonServiceTest {
         String location = "Training Room 3";
         Date eventDate = new Date (1726472944000L);
         Date createdAt = new Date ();
-        AppUser organizer = getOrganizerForTest ();
+        UserEntity organizer = getOrganizerForTest ();
 
-        EventRequestDto dto = new EventRequestDto (
+        CreateEventRequest dto = new CreateEventRequest(
                 title,
                 description,
                 location,
@@ -87,7 +93,7 @@ class EventCommonServiceTest {
                 createdAt.getTime ()
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 id,
                 title,
                 description,
@@ -98,7 +104,7 @@ class EventCommonServiceTest {
                 createdAt
         );
 
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 id,
                 dto.title (),
                 dto.description (),
@@ -110,22 +116,22 @@ class EventCommonServiceTest {
         );
 
         // Mock calls
-        Mockito.when (eventRepository.save (event))
+        Mockito.when (eventJpaRepository.save (event))
                 .thenReturn (event);
 
-        Mockito.when (eventMappers.toResponseDTO (event))
+        Mockito.when (eventEntityMapper.toDomain(event))
                 .thenReturn (response);
 
         //When
-        EventResponseDto updatedEvent = eventCommonService.updateEventOnDb (event, dto);
+        EventResponse updatedEvent = eventCommonService.updateEventOnDb (event, dto);
 
         //
         assertEquals (response, updatedEvent);
     }
 
 
-    private AppUser getOrganizerForTest() {
-        return new AppUser (
+    private UserEntity getOrganizerForTest() {
+        return new UserEntity(
                 2L,
                 "isaias@gmail.com",
                 "123456",

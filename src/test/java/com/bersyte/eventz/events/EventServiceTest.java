@@ -1,10 +1,13 @@
 package com.bersyte.eventz.events;
 
-import com.bersyte.eventz.common.AppUser;
-import com.bersyte.eventz.common.EventCommonService;
-import com.bersyte.eventz.common.UserRole;
-import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.users.UserService;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
+import com.bersyte.eventz.features.events.application.dtos.EventResponse;
+import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
+import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
+import com.bersyte.eventz.features.events.infrastructure.persistence.repositories.EventJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,13 +37,13 @@ class EventServiceTest {
     private EventService eventService;
 
     @Mock
-    private EventRepository eventRepository;
+    private EventJpaRepository eventJpaRepository;
     @Mock
     private UserService usersService;
     @Mock
     private EventCommonService eventCommonService;
     @Mock
-    private EventMappers eventMappers;
+    private EventEntityMapper eventEntityMapper;
     @Mock
     private UserDetails userDetails;
 
@@ -53,9 +56,9 @@ class EventServiceTest {
         String location = "Training Room 3";
         long eventDate = new Date (1726472944000L).getTime ();
         long createdAt = new Date ().getTime ();
-        AppUser organizer = getOrganizerForTest ();
+        UserEntity organizer = getOrganizerForTest ();
 
-        EventRequestDto dto = new EventRequestDto (
+        CreateEventRequest dto = new CreateEventRequest(
                 title,
                 description,
                 location,
@@ -63,7 +66,7 @@ class EventServiceTest {
                 createdAt
         );
 
-        Event event = new Event (
+        EventEntity event = new EventEntity(
                 2L,
                 title,
                 description,
@@ -74,7 +77,7 @@ class EventServiceTest {
                 List.of ()
         );
 
-        Event savedEvent = new Event (
+        EventEntity savedEvent = new EventEntity(
                 2L,
                 title,
                 description,
@@ -92,15 +95,15 @@ class EventServiceTest {
         Mockito.when (usersService.getUserByEmail (email))
                 .thenReturn (organizer);
 
-        Mockito.when (eventMappers.toEventEntity (dto))
+        Mockito.when (eventEntityMapper.toEventEntity (dto))
                 .thenReturn (event);
 
-        Mockito.when (eventRepository.save (event))
+        Mockito.when (eventJpaRepository.save (event))
                 .thenReturn (savedEvent);
 
-        Mockito.when (eventMappers.toResponseDTO (savedEvent))
+        Mockito.when (eventEntityMapper.toDomain(savedEvent))
                 .thenReturn (
-                        new EventResponseDto (
+                        new EventResponse(
                                 2L,
                                 title,
                                 description,
@@ -113,21 +116,21 @@ class EventServiceTest {
                 );
 
         //When
-        EventResponseDto responseDto = eventService.createEvent (dto, userDetails);
+        EventResponse responseDto = eventService.createEvent (dto, userDetails);
 
         //Assert
         assertNotNull (responseDto);
 
         assertEquals (dto.title (), responseDto.title ());
 
-        verify (eventMappers, times (1))
+        verify (eventEntityMapper, times (1))
                 .toEventEntity (dto);
 
-        verify (eventRepository, times (1))
+        verify (eventJpaRepository, times (1))
                 .save (event);
 
-        verify (eventMappers, times (1))
-                .toResponseDTO (savedEvent);
+        verify (eventEntityMapper, times (1))
+                .toDomain(savedEvent);
 
     }
 
@@ -137,28 +140,28 @@ class EventServiceTest {
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
                 "Room 89"
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 9L,
                 "title",
                 "description",
@@ -169,26 +172,26 @@ class EventServiceTest {
                 new Date (1726172944000L)
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
-        Mockito.when (eventRepository.findAll (pageable))
+        Mockito.when (eventJpaRepository.findAll (pageable))
                 .thenReturn (eventsPage);
 
-        Mockito.when (eventMappers.toResponseDTO (any ()))
+        Mockito.when (eventEntityMapper.toDomain(any ()))
                 .thenReturn (response);
 
         //When
-        List<EventResponseDto> result = eventService.getAllEvents (page, size);
+        List<EventResponse> result = eventService.getAllEvents (page, size);
 
         //Act - Assert
         assertNotNull (result);
         assertEquals (events.size (), result.size ());
-        verify (eventMappers, times (result.size ()))
-                .toResponseDTO (any ());
+        verify (eventEntityMapper, times (result.size ()))
+                .toDomain(any ());
 
-        verify (eventRepository, times (1))
+        verify (eventJpaRepository, times (1))
                 .findAll (pageable);
     }
 
@@ -200,28 +203,28 @@ class EventServiceTest {
         int size = 10;
         Date date = new Date (1724831344000L);
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
                 "Room 89"
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 9L,
                 "title",
                 "description",
@@ -232,27 +235,27 @@ class EventServiceTest {
                 new Date (1726172944000L)
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
-        Mockito.when (eventRepository.findUpcomingEvents (date, pageable))
+        Mockito.when (eventJpaRepository.findUpcomingEvents (date, pageable))
                 .thenReturn (eventsPage);
 
-        Mockito.when (eventMappers.toResponseDTO (any ()))
+        Mockito.when (eventEntityMapper.toDomain(any ()))
                 .thenReturn (response);
 
         //When
-        List<EventResponseDto> result =
+        List<EventResponse> result =
                 eventService.getUpcomingEvents (date, page, size);
 
         //Act - Assert
         assertNotNull (result);
         assertEquals (events.size (), result.size ());
-        verify (eventMappers, times (result.size ()))
-                .toResponseDTO (any ());
+        verify (eventEntityMapper, times (result.size ()))
+                .toDomain(any ());
 
-        verify (eventRepository, times (1))
+        verify (eventJpaRepository, times (1))
                 .findUpcomingEvents (date, pageable);
     }
 
@@ -261,14 +264,14 @@ class EventServiceTest {
         //Arrange
         Long eventId = 4L;
 
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3"
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 eventId,
                 event1.getTitle (),
                 event1.getDescription (),
@@ -283,11 +286,11 @@ class EventServiceTest {
         Mockito.when (eventCommonService.findEventById (eventId))
                 .thenReturn (event1);
 
-        Mockito.when (eventMappers.toResponseDTO (event1))
+        Mockito.when (eventEntityMapper.toDomain(event1))
                 .thenReturn (response);
 
         //When
-        EventResponseDto result = eventService.getEventById (eventId);
+        EventResponse result = eventService.getEventById (eventId);
 
         assertNotNull (result);
         assertEquals (response, result);
@@ -324,7 +327,7 @@ class EventServiceTest {
         Date eventDate = new Date (1726472944000L);
         Date createdAt = new Date (1721472944000L);
 
-        EventRequestDto dto = new EventRequestDto (
+        CreateEventRequest dto = new CreateEventRequest(
                 title,
                 description,
                 location,
@@ -332,14 +335,14 @@ class EventServiceTest {
                 createdAt.getTime ()
         );
 
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 title,
                 description,
                 location
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 eventId,
                 event.getTitle (),
                 event.getDescription (),
@@ -361,7 +364,7 @@ class EventServiceTest {
                 .thenReturn (response);
 
         //When
-        EventResponseDto result = eventService.updateEvent (eventId, dto, userDetails);
+        EventResponse result = eventService.updateEvent (eventId, dto, userDetails);
 
         //Assert
         assertNotNull (result);
@@ -376,7 +379,7 @@ class EventServiceTest {
         String expectedMsg = "You do not have permission to update this event";
         String email = "bernardoo@gmail.com";
 
-        EventRequestDto dto = new EventRequestDto (
+        CreateEventRequest dto = new CreateEventRequest(
                 "Training Workshop",
                 "Training session on new software tools",
                 "Training Room 3",
@@ -384,7 +387,7 @@ class EventServiceTest {
                 new Date (1721472944000L).getTime ()
         );
 
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -406,7 +409,7 @@ class EventServiceTest {
 
         //Assert
         assertEquals (expectedMsg, exception.getMessage ());
-        verify (eventRepository, never ()).delete (event);
+        verify (eventJpaRepository, never ()).delete (event);
     }
 
     @Test
@@ -414,7 +417,7 @@ class EventServiceTest {
         //Arrange
         String email = "isaias@gmail.com";
         Long eventId = 4L;
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -432,7 +435,7 @@ class EventServiceTest {
         eventService.deleteEvent (eventId, userDetails);
 
         //Assert
-        verify (eventRepository, times (1))
+        verify (eventJpaRepository, times (1))
                 .delete (event);
     }
 
@@ -440,9 +443,9 @@ class EventServiceTest {
     public void shouldThrowAccessDeniedExceptionWhenUserNotAuthorizedToDeleteEvent() {
         //Arrange
         Long eventId = 4L;
-        String expectedMsg = "You do not have permission to delete this event";
+        String expectedMsg = "You do not have permission to cancel this event";
         String email = "bernardo@gmail.com";
-        Event event = getEvent (
+        EventEntity event = getEvent (
                 eventId,
                 "Training Workshop",
                 "Training session on new software tools",
@@ -464,7 +467,7 @@ class EventServiceTest {
         //Act & Assert
         assertEquals (expectedMsg, exception.getMessage ());
 
-        verify (eventRepository, never ()).delete (event);
+        verify (eventJpaRepository, never ()).delete (event);
     }
 
     @Test
@@ -476,28 +479,28 @@ class EventServiceTest {
         Pageable pageable = PageRequest.of (page, size);
         String title = "Training";
         String location = "Classroom";
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Classroom 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
                 "Room 89"
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 9L,
                 "title",
                 "description",
@@ -508,28 +511,28 @@ class EventServiceTest {
                 date
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
-        Mockito.when (eventRepository.filterEventsByTitleAndLocation (title, location, pageable))
+        Mockito.when (eventJpaRepository.filterEvents(title, location, pageable))
                 .thenReturn (eventsPage);
 
-        Mockito.when (eventMappers.toResponseDTO (any ()))
+        Mockito.when (eventEntityMapper.toDomain(any ()))
                 .thenReturn (response);
 
         //When
-        List<EventResponseDto> result =
+        List<EventResponse> result =
                 eventService.getFilteredEventsByTitleAndLocation (page, size, title, location);
 
         //Act - Assert
         assertNotNull (result);
         assertEquals (events.size (), result.size ());
-        verify (eventMappers, times (result.size ()))
-                .toResponseDTO (any ());
+        verify (eventEntityMapper, times (result.size ()))
+                .toDomain(any ());
 
-        verify (eventRepository, times (1))
-                .filterEventsByTitleAndLocation (title, location, pageable);
+        verify (eventJpaRepository, times (1))
+                .filterEvents(title, location, pageable);
     }
 
 
@@ -540,28 +543,28 @@ class EventServiceTest {
         int size = 10;
         Date date = new Date (1726472944000L);
         Pageable pageable = PageRequest.of (page, size);
-        Event event1 = getEvent (
+        EventEntity event1 = getEvent (
                 4L,
                 "Training Workshop",
                 "Training session on new software tools",
                 "Classroom 3"
         );
 
-        Event event2 = getEvent (
+        EventEntity event2 = getEvent (
                 5L,
                 "Math Training",
                 "Math training session on new software tools",
                 "Classroom 5"
         );
 
-        Event event3 = getEvent (
+        EventEntity event3 = getEvent (
                 8L,
                 "Medical Workshop",
                 "Medical session on new-hires tools",
                 "Room 89"
         );
 
-        EventResponseDto response = new EventResponseDto (
+        EventResponse response = new EventResponse(
                 9L,
                 "title",
                 "description",
@@ -572,37 +575,37 @@ class EventServiceTest {
                 date
         );
 
-        List<Event> events = List.of (event1, event2, event3);
-        Page<Event> eventsPage = new PageImpl<> (events);
+        List<EventEntity> events = List.of (event1, event2, event3);
+        Page<EventEntity> eventsPage = new PageImpl<> (events);
 
         //Mock calls
-        Mockito.when (eventRepository.findEventsByDate (date, pageable))
+        Mockito.when (eventJpaRepository.findByDateBetween(date, pageable))
                 .thenReturn (eventsPage);
 
-        Mockito.when (eventMappers.toResponseDTO (any ()))
+        Mockito.when (eventEntityMapper.toDomain(any ()))
                 .thenReturn (response);
 
         //When
-        List<EventResponseDto> result = eventService.getEventsByDate (
+        List<EventResponse> result = eventService.getEventsByDate (
                 page, size, date.getTime ()
         );
         //Act - Assert
         assertNotNull (result);
         assertEquals (events.size (), result.size ());
-        verify (eventMappers, times (result.size ()))
-                .toResponseDTO (any ());
+        verify (eventEntityMapper, times (result.size ()))
+                .toDomain(any ());
 
-        verify (eventRepository, times (1))
-                .findEventsByDate (date, pageable);
+        verify (eventJpaRepository, times (1))
+                .findByDateBetween(date, pageable);
     }
 
-    private Event getEvent(
+    private EventEntity getEvent(
             Long eventId,
             String title,
             String description,
             String location
     ) {
-        return new Event (
+        return new EventEntity(
                 eventId,
                 title,
                 description,
@@ -614,8 +617,8 @@ class EventServiceTest {
         );
     }
 
-    private AppUser getOrganizerForTest() {
-        return new AppUser (
+    private UserEntity getOrganizerForTest() {
+        return new UserEntity(
                 1L,
                 "isaias@gmail.com",
                 "123456",

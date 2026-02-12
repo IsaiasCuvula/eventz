@@ -1,0 +1,43 @@
+package com.bersyte.eventz.features.auth.application.usecases;
+
+import com.bersyte.eventz.common.application.usecases.VoidUseCase;
+import com.bersyte.eventz.features.auth.domain.service.*;
+import com.bersyte.eventz.features.users.domain.model.AppUser;
+import com.bersyte.eventz.features.users.domain.repository.UserRepository;
+import com.bersyte.eventz.features.users.domain.services.UserValidationService;
+
+import java.time.Clock;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class ResendVerificationCodeUseCase implements VoidUseCase<String> {
+    private final UserValidationService userValidationService;
+    private final UserRepository userRepository;
+    private final CodeGenerator codeGenerator;
+    private final AuthProperties authSettings;
+    private final Clock clock;
+    
+    public ResendVerificationCodeUseCase(
+            UserValidationService userValidationService, UserRepository userRepository,
+            CodeGenerator codeGenerator, AuthProperties authSettings, Clock clock
+    ) {
+        this.userValidationService = userValidationService;
+        this.userRepository = userRepository;
+        this.codeGenerator = codeGenerator;
+        this.authSettings = authSettings;
+        this.clock = clock;
+    }
+    
+    
+    @Override
+    public void execute(String userId) {
+        AppUser targetUser = userValidationService.getRequesterById(userId);
+        LocalDateTime now = LocalDateTime.now(clock);
+        String verificationCode = codeGenerator.generate();
+        Duration expirationTime =  authSettings.getVerificationCodeExpiration();
+        LocalDateTime verificationExpiration = now.plus(expirationTime);
+        AppUser updatedUser = targetUser.updateVerificationCode(now, verificationCode, verificationExpiration);
+        AppUser savedUser = userRepository.update(updatedUser);
+        //Send new verification code email (events)
+    }
+}

@@ -1,7 +1,9 @@
 package com.bersyte.eventz.common;
 
-import com.bersyte.eventz.exceptions.DatabaseOperationException;
-import com.bersyte.eventz.users.UserRepository;
+import com.bersyte.eventz.common.domain.exceptions.DatabaseOperationException;
+import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
+import com.bersyte.eventz.features.users.infrastructure.persistence.repositories.UserJpaRepository;
+import com.bersyte.eventz.features.users.domain.model.UserRole;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,21 +26,21 @@ class UserCommonServiceTest {
     UserCommonService userCommonService;
 
     @Mock
-    UserRepository userRepository;
+    UserJpaRepository userJpaRepository;
 
 
     @Test
     void shouldGetUserByIdSuccessfully() {
         //Given
         Long userId = 1L;
-        AppUser user = getOrganizerForTest ();
+        UserEntity user = getOrganizerForTest ();
 
         //Mock calls
-        Mockito.when (userRepository.findById (userId))
+        Mockito.when (userJpaRepository.findById (userId))
                 .thenReturn (Optional.of (user));
 
         //When
-        AppUser returnedUser = userCommonService.getUserById (userId);
+        UserEntity returnedUser = userCommonService.getUserById (userId);
 
         //Act - Assert
         assertNotNull (returnedUser);
@@ -46,7 +48,7 @@ class UserCommonServiceTest {
         assertEquals (userId, returnedUser.getId ());
         assertEquals (user, returnedUser);
 
-        verify (userRepository, times (1))
+        verify (userJpaRepository, times (1))
                 .findById (userId);
     }
 
@@ -58,10 +60,10 @@ class UserCommonServiceTest {
         //Mock calls
         doThrow (
                 new DatabaseOperationException (
-                        "Failed to get user with id " + 2 + " User not found"
+                        "Failed to get user with eventId " + 2 + " User not found"
                 )
         )
-                .when (userRepository).findById (userId);
+                .when (userJpaRepository).findById (userId);
 
         //When
         DatabaseOperationException exception = assertThrows (
@@ -70,7 +72,7 @@ class UserCommonServiceTest {
         );
 
         //Act - Assert
-        assertEquals ("Failed to get user with id " + 2 + " User not found", exception.getMessage ());
+        assertEquals ("Failed to get user with eventId " + 2 + " User not found", exception.getMessage ());
     }
 
 
@@ -80,7 +82,7 @@ class UserCommonServiceTest {
         Long userId = 2L;
 
         //Mock calls
-        Mockito.when (userRepository.findById (userId))
+        Mockito.when (userJpaRepository.findById (userId))
                 .thenReturn (Optional.empty ());
 
         //When
@@ -97,14 +99,14 @@ class UserCommonServiceTest {
     public void shouldFindUserByEmailSuccessfully() {
         //Arrange
         String email = "isaias@gmail.com";
-        AppUser user = getOrganizerForTest ();
+        UserEntity user = getOrganizerForTest ();
 
         //Mock call
-        Mockito.when (userRepository.findByEmail (email))
+        Mockito.when (userJpaRepository.findByEmail (email))
                 .thenReturn (Optional.of (user));
 
         //When
-        AppUser returnedUser = userCommonService.getUserByEmail (email);
+        UserEntity returnedUser = userCommonService.getUserByEmail (email);
 
         //Act
         assertNotNull (returnedUser);
@@ -118,7 +120,7 @@ class UserCommonServiceTest {
         String expectedMsg = "User not found";
 
         // Mock call
-        Mockito.when (userRepository.findByEmail (email))
+        Mockito.when (userJpaRepository.findByEmail (email))
                 .thenReturn (Optional.empty ());
 
         //When
@@ -130,8 +132,8 @@ class UserCommonServiceTest {
         assertEquals (expectedMsg, exception.getMessage ());
     }
 
-    private AppUser getOrganizerForTest() {
-        return new AppUser (
+    private UserEntity getOrganizerForTest() {
+        return new UserEntity(
                 1L,
                 "isaias@gmail.com",
                 "123456",
