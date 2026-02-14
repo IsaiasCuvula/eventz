@@ -81,7 +81,7 @@ class UserServiceTest {
                 new UserResponse(
                         2L,
                         "isaias@gmail.com",
-                        "firstName",
+                        "fullName",
                         "lastName",
                         "+244989647474",
                         new Date (),

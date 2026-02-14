@@ -2,10 +2,12 @@ package com.bersyte.eventz.features.auth.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.features.auth.application.events.UserRegisteredEvent;
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
 import com.bersyte.eventz.features.auth.application.dtos.SignupRequest;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
+import com.bersyte.eventz.features.auth.domain.service.AuthEventPublisher;
 import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import com.bersyte.eventz.features.auth.domain.service.CodeGenerator;
 import com.bersyte.eventz.features.auth.domain.service.PasswordHasher;
@@ -25,12 +27,13 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     private final AuthMapper authMapper;
     private final AuthProperties authSettings;
     private final Clock clock;
+    private final AuthEventPublisher eventPublisher;
     
     public SignUpUseCase(
             UserRepository userRepository,
             PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
             IdGenerator idGenerator, AuthMapper authMapper,
-            AuthProperties authSettings, Clock clock
+            AuthProperties authSettings, Clock clock, AuthEventPublisher eventPublisher
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -39,6 +42,7 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
         this.authMapper = authMapper;
         this.authSettings = authSettings;
         this.clock = clock;
+        this.eventPublisher = eventPublisher;
     }
     
     @Transactional
@@ -62,8 +66,16 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
                 now.plusMinutes(expirationTime.toMinutes())
         );
         AppUser savedUser = userRepository.save(newUser);
-        //emailService.sendVerificationEmail(savedUser); (events)
+        
        //User only has access tokens after verifying the email.
+        eventPublisher.publishUserRegistered(
+            new UserRegisteredEvent(
+                    savedUser.getEmail(),
+                    savedUser.getFullName(),
+                    savedUser.getVerificationCode()
+            )
+        );
+
         return authMapper.toSignUpResponse(savedUser);
     }
 }

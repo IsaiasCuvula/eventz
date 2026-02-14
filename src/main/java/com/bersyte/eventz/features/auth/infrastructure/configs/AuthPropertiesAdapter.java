@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.auth.infrastructure.security;
+package com.bersyte.eventz.features.auth.infrastructure.configs;
 
 import com.bersyte.eventz.common.security.JwtConfiguration;
 import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
