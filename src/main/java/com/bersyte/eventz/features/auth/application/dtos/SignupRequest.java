@@ -18,7 +18,7 @@ public record SignupRequest(
         String password,
         @NotNull(message = "user role is required")
         UserRole role,
-        @NotNull(message = "user firstName is required")
+        @NotNull(message = "user fullName is required")
         String firstName,
         String lastName,
         String phone,

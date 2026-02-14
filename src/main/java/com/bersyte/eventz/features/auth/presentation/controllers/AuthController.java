@@ -20,7 +20,7 @@ public class AuthController {
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final VerifyEmailUseCase verifyEmailUseCase;
     private final ResendVerificationCodeUseCase resendVerificationCodeUseCase;
-    private final ResetPasswordUseCase resetPasswordUseCase;
+    private final ResetPasswordRequestUseCase resetPasswordUseCase;
     private final ResetPasswordConfirmUseCase resetPasswordConfirmUseCase;
     
 
@@ -30,7 +30,7 @@ public class AuthController {
             VerifyEmailUseCase verifyEmailUseCase,
             ResetPasswordConfirmUseCase resetPasswordConfirmUseCase,
             ResendVerificationCodeUseCase resendVerificationCodeUseCase,
-            ResetPasswordUseCase resetPasswordUseCase
+            ResetPasswordRequestUseCase resetPasswordUseCase
     ) {
         this.signUpUseCase = signUpUseCase;
         this.loginUseCase = loginUseCase;

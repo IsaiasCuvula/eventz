@@ -159,6 +159,10 @@ public class AppUser {
         return verified;
     }
     
+    public String getRecoveryCode() {
+        return recoveryCode;
+    }
+    
     public AppUser verifyCode(String givenCode, LocalDateTime updatedAt){
         boolean isVerified = this.verificationCode.equals(givenCode);
         if(!isVerified){

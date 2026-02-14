@@ -26,10 +26,12 @@ public class AuthBeenConfig {
             UserRepository userRepository,
             PasswordHasher passwordEncoder, CodeGenerator codeGenerator,
             IdGenerator idGenerator, AuthMapper authMapper,
-            AuthProperties authSettings, Clock clock
+            AuthProperties authSettings, Clock clock,AuthEventPublisher authEventPublisher
     ){
         return new SignUpUseCase(
-                userRepository, passwordEncoder, codeGenerator, idGenerator, authMapper, authSettings, clock);
+                userRepository, passwordEncoder, codeGenerator,
+                idGenerator, authMapper, authSettings, clock,authEventPublisher
+        );
     }
     @Bean
     public LoginUseCase loginUseCase(
@@ -42,7 +44,8 @@ public class AuthBeenConfig {
     
     @Bean
     public LogoutUseCase logoutUseCase(
-            RefreshTokenRepository refreshTokenRepository, TokenService tokenService
+            RefreshTokenRepository refreshTokenRepository,
+            TokenService tokenService
     ) {
         return new LogoutUseCase(refreshTokenRepository, tokenService);
     }
@@ -58,37 +61,52 @@ public class AuthBeenConfig {
     @Bean
     public VerifyEmailUseCase verifyEmailUseCase(
             UserValidationService userValidationService,
-            UserRepository userRepository, TokenService tokenService, AuthMapper mapper, Clock clock
+            UserRepository userRepository, TokenService tokenService,
+            AuthMapper mapper, Clock clock,AuthEventPublisher authEventPublisher
     ){
-        return new VerifyEmailUseCase(userValidationService, userRepository, tokenService, mapper, clock);
+        return new VerifyEmailUseCase(
+                userValidationService, userRepository,
+                tokenService, mapper, clock,authEventPublisher
+        );
     }
     
     @Bean
     public ResetPasswordConfirmUseCase confirmPasswordResetUseCase(
             UserValidationService userValidationService,
             UserRepository userRepository,
-            BCryptPasswordHasherAdapter passwordHasher, Clock clock
+            PasswordHasher passwordHasher,
+            Clock clock,AuthEventPublisher authEventPublisher
     ) {
         return new ResetPasswordConfirmUseCase(
-                userValidationService, userRepository, passwordHasher, clock);
+                userValidationService, userRepository,
+                passwordHasher, clock,authEventPublisher
+        );
     }
     
     @Bean
     public ResendVerificationCodeUseCase resendVerificationCodeUseCase(
-            UserValidationService userValidationService, UserRepository userRepository,
-            CodeGenerator codeGenerator, AuthProperties authSettings, Clock clock
+            UserValidationService userValidationService,
+            UserRepository userRepository, CodeGenerator codeGenerator,
+            AuthProperties authSettings, Clock clock,
+            AuthEventPublisher authEventPublisher
     ){
         return new ResendVerificationCodeUseCase(
-                userValidationService, userRepository, codeGenerator, authSettings, clock);
+                userValidationService, userRepository,
+                codeGenerator, authSettings, clock,
+                authEventPublisher
+        );
     }
     
     @Bean
-    public ResetPasswordUseCase resetPasswordUseCase(
+    public ResetPasswordRequestUseCase resetPasswordUseCase(
             UserValidationService userValidationService,
             CodeGenerator codeGenerator, UserRepository userRepository,
-            AuthProperties authSettings, Clock clock
+            AuthProperties authSettings, Clock clock,
+            AuthEventPublisher authEventPublisher
     ){
-        return new ResetPasswordUseCase(
-                userValidationService, codeGenerator, userRepository, authSettings, clock);
+        return new ResetPasswordRequestUseCase(
+                userValidationService, codeGenerator, userRepository,
+                authSettings, clock, authEventPublisher
+        );
     }
 }
