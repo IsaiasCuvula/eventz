@@ -55,10 +55,6 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
         AppUser requester = userValidationService.getRequesterById(requesterId);
         EventRegistration registration = registrationValidationService.getValidRegistrationById(registrationId);
         
-        if(!registration.canManage(requester)){
-            throw new UnauthorizedException("You don't have permission");
-        }
-        
         LocalDateTime actionDateTime = LocalDateTime.now(clock);
         
         // reverter payment only if follow certain condition (e.g.: week or month before the event)
