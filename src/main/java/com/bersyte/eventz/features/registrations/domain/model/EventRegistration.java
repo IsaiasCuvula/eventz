@@ -10,8 +10,8 @@ import java.util.List;
 public class EventRegistration {
     private final String id;
     private RegistrationStatus status;
-    private Event event;
-    private AppUser user;
+    private final Event event;
+    private final AppUser user;
     private String checkInToken;
     private AppUser checkedInBy;
     private final LocalDateTime createdAt;
