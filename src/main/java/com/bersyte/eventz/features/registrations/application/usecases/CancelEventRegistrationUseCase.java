@@ -2,13 +2,16 @@ package com.bersyte.eventz.features.registrations.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
+import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.registrations.application.dtos.CancelEventRegistrationRequest;
 import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
+import com.bersyte.eventz.features.registrations.application.events.TicketCancellationEvent;
 import com.bersyte.eventz.features.registrations.application.mappers.EventRegistrationMapper;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;
 import com.bersyte.eventz.features.registrations.domain.services.AuditService;
+import com.bersyte.eventz.features.registrations.domain.services.EventRegistrationPublisher;
 import com.bersyte.eventz.features.registrations.domain.services.EventRegistrationValidationService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
@@ -25,11 +28,13 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
     private final EventRepository eventRepository;
     private final Clock clock;
     private final AuditService auditService;
+    private final EventRegistrationPublisher eventRegistrationPublisher;
+    
     
     public CancelEventRegistrationUseCase(
             UserValidationService userValidationService, EventRegistrationRepository registrationRepository,
             EventRegistrationValidationService registrationValidationService, EventRegistrationMapper eventRegistrationMapper,
-            EventRepository eventRepository, Clock clock, AuditService auditService
+            EventRepository eventRepository, Clock clock, AuditService auditService, EventRegistrationPublisher eventRegistrationPublisher
     ) {
         this.userValidationService = userValidationService;
         this.registrationRepository = registrationRepository;
@@ -38,6 +43,7 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
         this.eventRepository = eventRepository;
         this.clock = clock;
         this.auditService = auditService;
+        this.eventRegistrationPublisher = eventRegistrationPublisher;
     }
     
     @Transactional
@@ -49,18 +55,26 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
         AppUser requester = userValidationService.getRequesterById(requesterId);
         EventRegistration registration = registrationValidationService.getValidRegistrationById(registrationId);
         
-        if(!registration.canManage(requester)){
-            throw new UnauthorizedException("You don't have permission");
-        }
-        
         LocalDateTime actionDateTime = LocalDateTime.now(clock);
         
         // reverter payment only if follow certain condition (e.g.: week or month before the event)
         EventRegistration cancelledRegistration = registration.cancel(requester, actionDateTime);
         EventRegistration updatedRegistration = registrationRepository.update(cancelledRegistration);
-        eventRepository.decrementParticipantCount(registration.getEvent().getId());
+        
+        Event targetEvent = updatedRegistration.getEvent();
+        
+        eventRepository.decrementParticipantCount(targetEvent.getId());
         
         //Send cancellation email
+        eventRegistrationPublisher.publishTicketCancellation(
+                new TicketCancellationEvent(
+                        updatedRegistration.getUser().getEmail(),
+                        targetEvent.getTitle(),
+                        targetEvent.getDescription(),
+                        targetEvent.getDate(),
+                        updatedRegistration.getStatus()
+                )
+        );
         
         auditService.logCancellation(registration, requester, actionDateTime);
         return eventRegistrationMapper.toTicketResponse(updatedRegistration);
