@@ -9,10 +9,12 @@ import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrationRequest;
 import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
+import com.bersyte.eventz.features.registrations.application.events.EventRegistrationEvent;
 import com.bersyte.eventz.features.registrations.application.mappers.EventRegistrationMapper;
 import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationAlreadyExistsException;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;
+import com.bersyte.eventz.features.registrations.domain.services.EventRegistrationPublisher;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import jakarta.transaction.Transactional;
@@ -28,6 +30,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     private final EventRepository eventRepository;
     private final IdGenerator idGenerator;
     private final Clock clock;
+    private final EventRegistrationPublisher eventRegistrationPublisher;
     
     
     public JoinEventUseCase(
@@ -35,7 +38,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
             EventValidationService eventValidationService,
             UserValidationService userValidationService,
             EventRegistrationMapper registrationMapper,
-            EventRepository eventRepository, IdGenerator idGenerator, Clock clock
+            EventRepository eventRepository, IdGenerator idGenerator, Clock clock, EventRegistrationPublisher eventRegistrationPublisher
     ) {
         this.eventRegistrationRepository = eventRegistrationRepository;
         this.eventValidationService = eventValidationService;
@@ -44,6 +47,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         this.eventRepository = eventRepository;
         this.idGenerator = idGenerator;
         this.clock = clock;
+        this.eventRegistrationPublisher = eventRegistrationPublisher;
     }
     
     @Transactional
@@ -94,6 +98,18 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         eventRepository.incrementParticipantCount(eventId);
         
         //Email will be handled here ....
+        eventRegistrationPublisher.publishJoinEvent(
+                new EventRegistrationEvent(
+                        target.getEmail(),
+                        target.getFullName(),
+                        event.getTitle(),
+                        event.getDescription(),
+                        event.getLocation(),
+                        event.getDate(),
+                        savedRegistration.getCheckInToken(),
+                        savedRegistration.getStatus()
+                )
+        );
         
         return registrationMapper.toTicketResponse(savedRegistration);
     }

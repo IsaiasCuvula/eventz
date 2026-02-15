@@ -1,6 +1,7 @@
 package com.bersyte.eventz.features.registrations.domain.model;
 
 import com.bersyte.eventz.common.domain.exceptions.BusinessException;
+import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
@@ -10,8 +11,8 @@ import java.util.List;
 public class EventRegistration {
     private final String id;
     private RegistrationStatus status;
-    private Event event;
-    private AppUser user;
+    private final Event event;
+    private final AppUser user;
     private String checkInToken;
     private AppUser checkedInBy;
     private final LocalDateTime createdAt;
@@ -94,6 +95,10 @@ public class EventRegistration {
     }
     
     public EventRegistration cancel(AppUser requester, LocalDateTime now){
+        if(!this.canManage(requester)){
+            throw new UnauthorizedException("You don't have permission");
+        }
+        
         if(this.status == RegistrationStatus.USED){
             throw new BusinessException("Cannot cancel a ticket that has already been used.");
         }
@@ -148,8 +153,5 @@ public class EventRegistration {
     public void setStatus(RegistrationStatus status) {
         this.status = status;
     }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+  
 }

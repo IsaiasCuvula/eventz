@@ -89,9 +89,6 @@ public class Event {
     }
     
     
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
-    }
     
     public AppUser getOrganizer() {
         return organizer;
@@ -99,10 +96,6 @@ public class Event {
     
     public Integer getParticipantsCount() {
         return participantsCount;
-    }
-    
-    public void setParticipantsCount(Integer participantsCount) {
-        this.participantsCount = participantsCount;
     }
     
     public void setOrganizer(AppUser organizer) {
