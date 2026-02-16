@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventInput;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;

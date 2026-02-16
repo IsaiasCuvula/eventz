@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.users.infrastructure.config;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.users.application.mappers.UserMapper;
 import com.bersyte.eventz.features.users.application.usecases.*;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;

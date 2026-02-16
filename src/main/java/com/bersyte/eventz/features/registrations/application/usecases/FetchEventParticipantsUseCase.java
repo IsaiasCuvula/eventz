@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.registrations.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;

@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.domain;
+package com.bersyte.eventz.common.domain.services;
 
 public interface IdGenerator {
     String generateUuid();

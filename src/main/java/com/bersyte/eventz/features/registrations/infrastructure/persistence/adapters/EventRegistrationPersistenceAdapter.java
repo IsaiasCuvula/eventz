@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.registrations.infrastructure.persistence.adapters;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;

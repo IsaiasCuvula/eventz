@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.users.presentation.controllers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.users.application.dtos.*;
 import com.bersyte.eventz.features.users.application.usecases.*;

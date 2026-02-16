@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.registrations.infrastructure.configs;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.registrations.application.mappers.EventRegistrationMapper;

@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.presentation.controllers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.features.events.application.dtos.*;
 import com.bersyte.eventz.features.events.application.usecases.*;
 import org.springframework.http.HttpStatus;
