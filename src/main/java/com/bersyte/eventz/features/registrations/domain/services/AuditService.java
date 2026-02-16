@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.registrations.domain.services;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationAuditLog;
 import com.bersyte.eventz.features.registrations.domain.model.AuditAction;

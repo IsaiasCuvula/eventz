@@ -1,11 +1,10 @@
 package com.bersyte.eventz.features.auth.infrastructure.configs;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.auth.application.mappers.AuthMapper;
 import com.bersyte.eventz.features.auth.application.usecases.*;
 import com.bersyte.eventz.features.auth.domain.repository.RefreshTokenRepository;
 import com.bersyte.eventz.features.auth.domain.service.*;
-import com.bersyte.eventz.features.auth.infrastructure.security.BCryptPasswordHasherAdapter;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import org.springframework.context.annotation.Bean;

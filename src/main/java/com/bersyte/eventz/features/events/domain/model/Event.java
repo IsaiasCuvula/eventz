@@ -3,9 +3,10 @@ package com.bersyte.eventz.features.events.domain.model;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Event {
-    private final String id;
+    private final UUID id;
     private String title;
     private String description;
     private String location;
@@ -19,7 +20,7 @@ public class Event {
 //    private final AccessType accessType;
 //    private final BigDecimal price;
   
-    private Event(String id, String title, String description,
+    private Event(UUID id, String title, String description,
                  String location, LocalDateTime date,
                  Integer maxParticipants, LocalDateTime updateAt,
                  LocalDateTime createdAt,
@@ -39,7 +40,7 @@ public class Event {
     }
     
     public static Event create(
-            String id, String title, String description,
+            UUID id, String title, String description,
             String location, LocalDateTime date,
             Integer maxParticipants,
             AppUser organizer
@@ -55,7 +56,7 @@ public class Event {
     }
     
     public static Event restore(
-            String id, String title, String description,
+            UUID id, String title, String description,
             String location, LocalDateTime date,
             Integer maxParticipants,
             LocalDateTime createdAt, LocalDateTime updateAt,
@@ -102,7 +103,7 @@ public class Event {
         this.organizer = organizer;
     }
     
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     

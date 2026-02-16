@@ -1,6 +1,6 @@
 package com.bersyte.eventz.common.infrastructure;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

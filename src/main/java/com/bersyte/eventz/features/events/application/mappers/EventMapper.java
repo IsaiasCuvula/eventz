@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.events.application.mappers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.features.events.application.dtos.CreateEventRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventOrganizer;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "event_registrations")
 public class EventRegistrationEntity {
     @Id
-    private String id;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
     private RegistrationStatus status;

@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.presentation.controllers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
 import com.bersyte.eventz.features.events.application.dtos.*;
 import com.bersyte.eventz.features.events.application.usecases.*;
@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

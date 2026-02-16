@@ -1,6 +1,5 @@
 package com.bersyte.eventz.features.users.infrastructure.config;
 
-import com.bersyte.eventz.common.domain.IdGenerator;
 import com.bersyte.eventz.features.users.application.mappers.UserMapper;
 import com.bersyte.eventz.features.users.application.usecases.*;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
@@ -29,14 +28,7 @@ public class UserConfig {
     ){
         return new FetchUsersUseCase(repository,mapper,validationService);
     }
-    @Bean
-    SaveUserUseCase saveUserUseCase(
-            UserRepository repository,
-            UserMapper mapper,
-            IdGenerator idGenerator
-    ){
-        return new SaveUserUseCase(repository, mapper, idGenerator) ;
-    }
+   
     @Bean
     UpdateUserUseCase updateUserUseCase(
             UserRepository repository,

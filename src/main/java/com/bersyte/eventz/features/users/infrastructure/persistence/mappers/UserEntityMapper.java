@@ -1,9 +1,8 @@
 package com.bersyte.eventz.features.users.infrastructure.persistence.mappers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
-import jakarta.persistence.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

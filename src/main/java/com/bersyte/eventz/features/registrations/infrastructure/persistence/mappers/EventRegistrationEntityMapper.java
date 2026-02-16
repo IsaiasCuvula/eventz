@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.registrations.infrastructure.persistence.mappers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
@@ -9,7 +9,6 @@ import com.bersyte.eventz.features.users.infrastructure.persistence.entities.Use
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
 import com.bersyte.eventz.features.users.infrastructure.persistence.mappers.UserEntityMapper;
-import jakarta.persistence.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.users.domain.repository;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.users.application.mappers;
 
-import com.bersyte.eventz.common.domain.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.features.users.application.dtos.UserResponse;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import java.util.List;

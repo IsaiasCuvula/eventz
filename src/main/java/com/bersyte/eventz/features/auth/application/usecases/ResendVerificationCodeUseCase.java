@@ -1,7 +1,6 @@
 package com.bersyte.eventz.features.auth.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.VoidUseCase;
-import com.bersyte.eventz.features.auth.application.events.UserRegisteredEvent;
 import com.bersyte.eventz.features.auth.application.events.VerificationCodeResentEvent;
 import com.bersyte.eventz.features.auth.domain.service.*;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
@@ -43,9 +42,8 @@ public class ResendVerificationCodeUseCase implements VoidUseCase<String> {
         LocalDateTime verificationExpiration = now.plus(expirationTime);
         AppUser updatedUser = targetUser.updateVerificationCode(now, verificationCode, verificationExpiration);
         AppUser savedUser = userRepository.update(updatedUser);
-        //Send new verification code email (events)
         
-        //User only has access tokens after verifying the email.
+        //Send new verification code email
         authEventPublisher.publishSendVerificationCode(
                 new VerificationCodeResentEvent(
                         savedUser.getEmail(),

@@ -5,9 +5,10 @@ import com.bersyte.eventz.features.auth.domain.exceptions.InvalidVerificationCod
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class AppUser {
-    private final String id;
+    private final UUID id;
     private final String email;
     private String firstName;
     private String lastName;
@@ -26,7 +27,7 @@ public class AppUser {
     private LocalDateTime recoveryCodeExpiresAt;
     
     
-    private AppUser(String id, String email, String firstName,
+    private AppUser(UUID id, String email, String firstName,
                     String lastName, String phone, UserRole role, boolean enabled,
                     boolean verified, LocalDateTime createdAt, LocalDateTime updatedAt,
                     String verificationCode, String password, LocalDateTime verificationExpiration,
@@ -54,7 +55,7 @@ public class AppUser {
      * Defines the initial state: role, and enabled status.
      */
     public static AppUser create(
-            String id, String email, String firstName, String lastName,
+            UUID id, String email, String firstName, String lastName,
             String phone, LocalDateTime createdAt,  String verificationCode,
             String password, LocalDateTime verificationExpiration
     ) {
@@ -69,7 +70,7 @@ public class AppUser {
      * Factory Method to RESTORE an existing user (coming from Infrastructure/Database).
      */
     public static AppUser restore(
-            String id, String email, String firstName, String lastName, String phone,
+            UUID id, String email, String firstName, String lastName, String phone,
             UserRole role, boolean enabled,boolean verified, LocalDateTime createdAt,
             LocalDateTime updatedAt, String verificationCode, String password,
             LocalDateTime verificationExpiration, String recoveryCode,LocalDateTime recoveryCodeExpiresAt
@@ -159,10 +160,6 @@ public class AppUser {
         return verified;
     }
     
-    public String getRecoveryCode() {
-        return recoveryCode;
-    }
-    
     public AppUser verifyCode(String givenCode, LocalDateTime updatedAt){
         boolean isVerified = this.verificationCode.equals(givenCode);
         if(!isVerified){
@@ -175,7 +172,7 @@ public class AppUser {
         return this;
     }
     
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     

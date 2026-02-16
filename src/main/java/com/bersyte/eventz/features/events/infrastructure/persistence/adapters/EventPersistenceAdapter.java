@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.events.infrastructure.persistence.adapters;
 
-import com.bersyte.eventz.common.domain.PagedResult;
-import com.bersyte.eventz.common.domain.Pagination;
+import com.bersyte.eventz.common.domain.dtos.PagedResult;
+import com.bersyte.eventz.common.domain.dtos.Pagination;
 import com.bersyte.eventz.common.domain.exceptions.BusinessException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;

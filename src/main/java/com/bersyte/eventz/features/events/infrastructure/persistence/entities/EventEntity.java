@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Setter
@@ -23,7 +24,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class EventEntity {
     @Id
-    private String id;
+    private UUID id;
     private String title;
     private String description;
     private String location;

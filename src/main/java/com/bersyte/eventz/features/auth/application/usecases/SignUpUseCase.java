@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.auth.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.IdGenerator;
+import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.auth.application.events.UserRegisteredEvent;
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.application.dtos.AuthResponse;
