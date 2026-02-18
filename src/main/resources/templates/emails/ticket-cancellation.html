@@ -1,0 +1,11 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Ticket Cancelled</h3>
+        <p>This is to confirm that your ticket for the event <strong th:text="${eventTitle}">Event</strong> has been cancelled.</p>
+
+        <p><strong>Event Date:</strong> <span th:text="${eventDate}">Date</span></p>
+        <p><strong>Status:</strong> <span style="color: #d32f2f; font-weight: bold;" th:text="${status}">CANCELLED</span></p>
+
+        <p>If you didn't request this cancellation, please contact our support team immediately.</p>
+    </section>
+</div>

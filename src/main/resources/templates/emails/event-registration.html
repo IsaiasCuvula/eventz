@@ -1,0 +1,17 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Registration Confirmed!</h3>
+        <p>Hi <strong th:text="${attendeeName}">Attendee</strong>,</p>
+        <p>You are successfully registered for the event: <strong th:text="${eventTitle}">Event</strong>.</p>
+
+        <div style="background-color: #f4f4f4; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p><strong>📍 Location:</strong> <span th:text="${eventLocation}">Location</span></p>
+            <p><strong>📅 Date:</strong> <span th:text="${eventDate}">Date</span></p>
+        </div>
+
+        <p>To access the event, please use the following Check-in Token:</p>
+        <div class="code-box" th:text="${checkInToken}">TOKEN123</div>
+
+        <p>See you there!</p>
+    </section>
+</div>

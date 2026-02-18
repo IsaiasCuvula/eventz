@@ -1,6 +1,7 @@
 package com.bersyte.eventz.features.notifications.domain.services;
 
+import java.util.Map;
+
 public interface NotificationService {
-    void sendVerificationEmail(String email, String name, String code) throws Exception;
-    void sendEmail(String to, String subject, String body) throws Exception;
+     void sendEmail(String to, String subject, String templateName, Map<String, String> bodyMap) throws Exception;
 }

@@ -129,6 +129,14 @@
 		</dependency>
 		<!-- End Security -->
 
+
+		<!-- Thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!-- End Thymeleaf -->
+
 	</dependencies>
 
 	<build>
