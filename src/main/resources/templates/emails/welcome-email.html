@@ -1,0 +1,8 @@
+<div th:replace="emails/layout :: layout(content=~{::section})">
+    <section>
+        <h3>Welcome, <span th:text="${username}">User</span>!</h3>
+        <p th:text="${message}">Please enter the verification code below to continue:</p>
+        <div class="code-box" th:text="${code}">000000</div>
+        <p>This code is valid for a limited time. If you didn't sign up for Eventz, please ignore this email.</p>
+    </section>
+</div>

@@ -1,0 +1,13 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Welcome to the Event!</h3>
+        <p>Your check-in for <strong th:text="${eventTitle}">Event</strong> has been successfully processed.</p>
+
+        <div style="border-left: 4px solid #6200ee; padding-left: 15px; margin: 20px 0;">
+            <p><strong>📍 Location:</strong> <span th:text="${eventLocation}">Location</span></p>
+            <p><strong>🕒 Check-in Date:</strong> <span th:text="${eventDate}">Date</span></p>
+        </div>
+
+        <p>Enjoy the event!</p>
+    </section>
+</div>

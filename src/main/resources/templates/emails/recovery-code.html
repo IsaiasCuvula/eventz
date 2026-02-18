@@ -1,0 +1,9 @@
+<div th:replace="emails/layout :: layout(content=~{::section})">
+    <section>
+        <h3>Password Reset Request</h3>
+        <p>Hello <span th:text="${username}">User</span>,</p>
+        <p th:text="${message}">If you didn't request it just ignore</p>
+        <div class="code-box" th:text="${code}">000000</div>
+        <p>Use this code to recover your account access. For security reasons, do not share this code with anyone.</p>
+    </section>
+</div>

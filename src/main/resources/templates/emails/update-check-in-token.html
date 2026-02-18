@@ -1,0 +1,12 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Your Ticket was Updated</h3>
+        <p>Hello,</p>
+        <p>The ticket for the event <strong th:text="${eventTitle}">Event</strong> has a new security token.</p>
+
+        <p>Your new Check-in Token is:</p>
+        <div class="code-box" th:text="${newCheckInToken}">NEWTOKEN123</div>
+
+        <p>Please use this new token for access. The previous one is now invalid.</p>
+    </section>
+</div>
