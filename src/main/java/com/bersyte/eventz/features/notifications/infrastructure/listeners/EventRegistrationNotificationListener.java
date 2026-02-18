@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+
+import java.util.Map;
+
 @Component
 public class EventRegistrationNotificationListener {
     private final NotificationService notificationService;
@@ -24,11 +27,21 @@ public class EventRegistrationNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishJoinEvent(EventRegistrationEvent event) {
+        var body = Map.of(
+                "attendeeName", event.attendeeName(),
+                "eventTitle", event.eventTitle(),
+                "eventLocation", event.eventLocation(),
+                "eventDate", event.eventDate().toString(),
+                "checkInToken", event.checkInToken()
+        );
+        
+        
         action.safeExecute(
                 () -> notificationService.sendEmail(
-                        event.attendeeEmail(),event.attendeeName(),
-                        event.eventTitle() + event.eventLocation() + event.eventDate()
-                                + event.eventDescription() + event.status()
+                        event.attendeeEmail(),
+                        "Event Confirmation: " + event.eventTitle(),
+                        "event-registration", //HTML file name
+                        body
                 ),
                 "Join event",
                 event.attendeeEmail()
@@ -38,11 +51,18 @@ public class EventRegistrationNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishUpdateCheckinToken(UpdateCheckinTokenEvent event) {
+        
+        var body = Map.of(
+                "eventTitle", event.eventTitle(),
+                "newCheckInToken", event.newCheckInToken()
+        );
+        
         action.safeExecute(
                 () ->  notificationService.sendEmail(
                         event.attendeeEmail(),
                         "Event Ticket updated",
-                        event.eventTitle() + event.newCheckInToken()
+                        "update-check-in-token",
+                        body
                 ),
                 "Ticket Update",
                 event.attendeeEmail()
@@ -52,11 +72,18 @@ public class EventRegistrationNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishCheckin(CheckinEvent event) {
+        var body = Map.of(
+                "eventTitle", event.eventTitle(),
+                "eventLocation", event.eventLocation(),
+                "eventDate", event.checkInDate().toString()
+        );
+        
         action.safeExecute(
                 () ->  notificationService.sendEmail(
                         event.attendeeEmail(),
                         "Ticket for" + event.eventTitle() + "CheckedIn",
-                        event.eventTitle() + event.eventLocation() + event.checkInDate()
+                        "check-in",
+                        body
                 ),
                 "Event Checkin",
                 event.attendeeEmail()
@@ -66,12 +93,19 @@ public class EventRegistrationNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishTicketCancellation(TicketCancellationEvent event) {
+        
+        var body = Map.of(
+                "eventTitle", event.eventTitle(),
+                "eventDate", event.eventDate().toString(),
+                "status", event.status().name()
+        );
+        
         action.safeExecute(
                 () ->  notificationService.sendEmail(
                         event.attendeeEmail(),
                         "Event " + event.eventTitle() + "Ticket Cancelled",
-                        event.eventTitle() + event.eventDate()
-                                + event.eventDescription() + event.status()
+                        "ticket-cancellation",
+                        body
                 ),
                 "Event Ticket cancellation",
                 event.attendeeEmail()

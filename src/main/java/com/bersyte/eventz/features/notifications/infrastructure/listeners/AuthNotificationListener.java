@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.Map;
+
 @Component
 public class AuthNotificationListener {
     
@@ -23,8 +25,19 @@ public class AuthNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleUserRegistered(UserRegisteredEvent event) {
+        var body = Map.of(
+                "username ", event.fullName(),
+                "message", "Please enter the verification code below to continue:",
+                "code", event.fullName()
+        );
+        
         action.safeExecute(
-                () -> notificationService.sendVerificationEmail(event.email(), event.fullName(), event.verificationCode()),
+                () -> notificationService.sendEmail(
+                        event.email(),
+                        "Welcome to Eventz",
+                        "welcome-email",
+                        body
+                ),
                 "welcome email",
                 event.email()
         );
@@ -33,8 +46,19 @@ public class AuthNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleUserResetPassword(PasswordResetRequestedEvent event) {
+        var body = Map.of(
+                "username", event.fullName(),
+                "message","If you didn't request it just ignore",
+                "code", event.recoveryCode()
+        );
+        
         action.safeExecute(
-                () -> notificationService.sendEmail(event.email(), "Reset Password recovery code", event.recoveryCode()),
+                () -> notificationService.sendEmail(
+                        event.email(),
+                        "Reset Password recovery code",
+                        "recovery-code",
+                        body
+                ),
                 "recovery code",
                 event.email()
         );
@@ -44,9 +68,19 @@ public class AuthNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleSendVerificationCode(VerificationCodeResentEvent event) {
+        
+        var body = Map.of(
+                "username ", event.fullName(),
+                "message", "Please enter the verification code below to continue:",
+                "code", event.fullName()
+        );
+        
         action.safeExecute(
-                ()->  notificationService.sendVerificationEmail(
-                        event.email(),event.fullName(), event.verificationCode()
+                ()->  notificationService.sendEmail(
+                        event.email(),
+                        "Eventz verification Code",
+                        "resend-verification code",
+                        body
                 ),
                 "Send verification code",
                 event.email()
@@ -57,10 +91,16 @@ public class AuthNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleResetPasswordConfirmation(PasswordResetConfirmationEvent event) {
+        var body = Map.of(
+                "message",event.message()
+        );
         action.safeExecute(
                 ()->  notificationService.sendEmail(
-                        event.email(), "Password Changed Successfully",
-                        event.message()
+                        event.email(),
+                        "Password Changed Successfully",
+                        "reset-password-confirmation",
+                        body
+                        
                 ),
                 "Send Password confirmation",
                 event.email()
@@ -70,11 +110,20 @@ public class AuthNotificationListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleEmailVerificationRequest(VerificationEmailEvent event) {
-       action.safeExecute(
-                ()-> notificationService.sendVerificationEmail(
-                    event.email(),"", event.verificationCode()),
+        var body = Map.of(
+                "message", "Please enter the verification code below to continue:",
+                "code", event.verificationCode()
+        );
+        
+        action.safeExecute(
+                ()-> notificationService.sendEmail(
+                    event.email(),
                     "Email verification",
-                    event.email()
+                    "email-verification-request",
+                    body
+                ),
+                "Email Verification Request",
+                event.email()
         );
     }
 }
