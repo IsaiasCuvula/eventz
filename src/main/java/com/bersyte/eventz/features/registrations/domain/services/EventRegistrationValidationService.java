@@ -1,9 +1,12 @@
 package com.bersyte.eventz.features.registrations.domain.services;
 
 import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
+import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationNotFoundException;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.model.RegistrationStatus;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;
+
+import java.util.UUID;
 
 public class EventRegistrationValidationService {
     
@@ -17,21 +20,21 @@ public class EventRegistrationValidationService {
     public EventRegistration getValidRegistrationByCheckInToken(String token){
         return registrationRepository.findRegistrationByCheckInToken(
                 token
-        ).orElseThrow(()-> new ResourceNotFoundException("Ticket", token));
+        ).orElseThrow(()-> new EventRegistrationNotFoundException("Ticket with token " + token + " not found"));
     }
     
     
-    public EventRegistration getValidRegistrationById(String registrationId){
+    public EventRegistration getValidRegistrationById(UUID registrationId){
         return registrationRepository.findById(registrationId)
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", registrationId));
     }
     
-    public EventRegistration getValidActiveRegistration(String eventId, String userId){
+    public EventRegistration getValidActiveRegistration(UUID eventId, UUID userId){
         return getValidRegistrationByStatus(eventId, userId, RegistrationStatus.ACTIVE);
     }
     
     
-    private EventRegistration getValidRegistrationByStatus(String eventId, String userId, RegistrationStatus status){
+    private EventRegistration getValidRegistrationByStatus(UUID eventId, UUID userId, RegistrationStatus status){
         return registrationRepository.findUserRegistrationByStatus(eventId,userId, status)
                        .orElseThrow(()-> new ResourceNotFoundException("Event Registration", eventId));
     }

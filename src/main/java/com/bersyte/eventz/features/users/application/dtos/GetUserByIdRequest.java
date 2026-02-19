@@ -2,8 +2,8 @@ package com.bersyte.eventz.features.users.application.dtos;
 
 import java.util.UUID;
 
-public record DeleteUserRequest(
+public record GetUserByIdRequest(
         UUID requesterId,
-        UUID targetUserId
+        UUID targetId
 ) {
 }

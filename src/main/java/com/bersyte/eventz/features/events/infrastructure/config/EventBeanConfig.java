@@ -30,10 +30,11 @@ public class EventBeanConfig {
     CreateEventUseCase createEventUseCase(
             EventRepository repository,
             UserValidationService userValidationService,
-            EventMapper mapper, IdGenerator idGenerator
+            EventMapper mapper, IdGenerator idGenerator,
+            Clock clock
     ) {
         return new CreateEventUseCase(
-                repository, userValidationService, mapper, idGenerator);
+                repository, userValidationService, mapper, idGenerator, clock);
     }
     
     @Bean

@@ -8,16 +8,16 @@ import java.util.UUID;
 @Component
 public class IdGeneratorImpl implements IdGenerator {
     @Override
-    public String generateUuid() {
+    public UUID generateUuid() {
         return getRandomUUID();
     }
     
     @Override
     public String generateCheckInToken() {
-        return "TKT_" + getRandomUUID().replace("-", "");
+        return "TKT_" + getRandomUUID().toString().replace("-", "");
     }
     
-    private String getRandomUUID(){
-        return UUID.randomUUID().toString();
+    private UUID getRandomUUID(){
+        return UUID.randomUUID();
     }
 }

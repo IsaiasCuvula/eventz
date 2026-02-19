@@ -77,7 +77,7 @@ public class SecurityConfig {
                 List.of("GET", "POST", "PUT", "DELETE")
         );
         config.setAllowedHeaders(
-                List.of("Authorization", "Content-AccessType")
+                List.of("Authorization", "Content-EventAccessType")
         );
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

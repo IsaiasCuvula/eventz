@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserJpaRepository extends JpaRepository<UserEntity, String> {
+public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByEmail(String email);
     
     @Query("SELECT u.id, u.email, u.password, u.role, u.firstName, u.lastName, u.phone, u.verified, u.createdAt FROM UserEntity u WHERE u.email = :email")

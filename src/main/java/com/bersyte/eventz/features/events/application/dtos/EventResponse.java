@@ -1,10 +1,13 @@
 package com.bersyte.eventz.features.events.application.dtos;
 
+import com.bersyte.eventz.features.events.domain.model.EventAccessType;
+
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 public record EventResponse(
-    String id,
+    UUID id,
     String title,
     String description,
     String location,
@@ -12,5 +15,7 @@ public record EventResponse(
     Integer participantsCount,
     EventOrganizer organizer,
     LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    EventAccessType accessType,
+    Integer price
 ) {}

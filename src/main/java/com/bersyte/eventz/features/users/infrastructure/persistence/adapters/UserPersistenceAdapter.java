@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class UserPersistenceAdapter implements UserRepository {
@@ -59,12 +60,12 @@ public class UserPersistenceAdapter implements UserRepository {
     }
     
     @Override
-    public void delete(String userId) {
+    public void delete(UUID userId) {
         userJpaRepository.deleteById(userId);
     }
     
     @Override
-    public Optional<AppUser> findById(String id) {
+    public Optional<AppUser> findById(UUID id) {
         return userJpaRepository.findById(id)
                        .map(userEntityMapper::toDomain);
     }

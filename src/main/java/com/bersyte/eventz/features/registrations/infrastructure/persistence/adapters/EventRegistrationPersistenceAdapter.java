@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class EventRegistrationPersistenceAdapter implements EventRegistrationRepository {
@@ -41,27 +42,27 @@ public class EventRegistrationPersistenceAdapter implements EventRegistrationRep
     }
     
     @Override
-    public Optional<EventRegistration> findById(String id) {
+    public Optional<EventRegistration> findById(UUID id) {
         return registrationJpaRepository.findById(id).map(
                 entityMapper::toDomain
         );
     }
     
     @Override
-    public boolean alreadyRegistered(String eventId, String userId, List<RegistrationStatus> statuses) {
+    public boolean alreadyRegistered(UUID eventId, UUID userId, List<RegistrationStatus> statuses) {
         return registrationJpaRepository.alreadyRegistered(
                 eventId, userId,statuses
         );
     }
     
     @Override
-    public Optional<EventRegistration> findUserRegistrationByStatus(String eventId, String userId, RegistrationStatus status) {
+    public Optional<EventRegistration> findUserRegistrationByStatus(UUID eventId, UUID userId, RegistrationStatus status) {
         return registrationJpaRepository.findRegistrationByStatus(eventId, userId, status)
                        .map(entityMapper::toDomain);
     }
     
     @Override
-    public PagedResult<EventRegistration> fetchParticipants(String eventId, Pagination pagination) {
+    public PagedResult<EventRegistration> fetchParticipants(UUID eventId, Pagination pagination) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size());
         Page<EventRegistrationEntity> result = registrationJpaRepository.findAllByEventId(eventId,pageable);
         return entityMapper.toPagedResult(result);

@@ -1,5 +1,5 @@
 package com.bersyte.eventz.features.events.domain.model;
 
-public enum AccessType {
+public enum EventAccessType {
     FREE, PAID
 }

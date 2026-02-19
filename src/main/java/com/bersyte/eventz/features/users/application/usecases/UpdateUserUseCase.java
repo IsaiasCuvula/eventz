@@ -10,6 +10,8 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
+import java.util.UUID;
+
 public class UpdateUserUseCase implements UseCase<UpdateUserInput, UserResponse> {
     private final UserRepository repository;
     private final UserValidationService validationService;
@@ -23,8 +25,8 @@ public class UpdateUserUseCase implements UseCase<UpdateUserInput, UserResponse>
     
     @Override
     public UserResponse execute(UpdateUserInput input) {
-        String targetId= input.targetUserId();
-        String requestId = input.requesterId();
+        UUID targetId= input.targetUserId();
+        UUID requestId = input.requesterId();
         UpdateUserRequest request = input.request();
         AppUser requester =  validationService.getRequesterById(requestId);
         

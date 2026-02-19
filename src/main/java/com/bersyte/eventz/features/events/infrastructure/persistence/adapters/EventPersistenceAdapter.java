@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class EventPersistenceAdapter implements EventRepository {
@@ -41,19 +42,19 @@ public class EventPersistenceAdapter implements EventRepository {
     }
     
     @Override
-    public void deleteEvent(String id) {
+    public void deleteEvent(UUID id) {
         eventJpaRepository.deleteById(id);
     }
     
     @Override
-    public Optional<Event> findEventById(String id) {
+    public Optional<Event> findEventById(UUID id) {
         return eventJpaRepository.findById(id).map(
                 entityMapper::toDomain
         );
     }
     
     @Override
-    public PagedResult<Event> fetchEventsByOrganizer(String organizerId, Pagination pagination) {
+    public PagedResult<Event> fetchEventsByOrganizer(UUID organizerId, Pagination pagination) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size());
         Page<EventEntity> result = eventJpaRepository.fetchEventsByOrganizer(organizerId, pageable);
         return entityMapper.toPagedResult(result);
@@ -90,7 +91,7 @@ public class EventPersistenceAdapter implements EventRepository {
     }
     
     @Override
-    public void incrementParticipantCount(String eventId) {
+    public void incrementParticipantCount(UUID eventId) {
        int updatedRows = eventJpaRepository.incrementParticipantCount(eventId);
        if (updatedRows == 0) {
             throw new BusinessException("Event is full or does not exist");
@@ -98,7 +99,7 @@ public class EventPersistenceAdapter implements EventRepository {
     }
     
     @Override
-    public void decrementParticipantCount(String eventId) {
+    public void decrementParticipantCount(UUID eventId) {
         int updatedRows = eventJpaRepository.decrementParticipantCount(eventId);
         if (updatedRows == 0) {
             throw new BusinessException("Could not decrement: Event not found or count already at zero");

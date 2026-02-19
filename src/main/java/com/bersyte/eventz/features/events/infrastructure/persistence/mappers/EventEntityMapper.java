@@ -46,7 +46,9 @@ public class EventEntityMapper {
                entity.getMaxParticipants(),
                entity.getCreatedAt(),
                entity.getUpdateAt(), organizer,
-               entity.getParticipantsCount()
+               entity.getParticipantsCount(),
+               entity.getAccessType(),
+               entity.getPrice()
        );
    }
 
@@ -63,6 +65,8 @@ public class EventEntityMapper {
         entity.setDate(event.getDate());
         entity.setOrganizer(organizer);
         entity.setMaxParticipants(event.getMaxParticipants());
+        entity.setPrice(event.getPrice());
+        entity.setAccessType(event.getAccessType());
         return  entity;
     }
 }

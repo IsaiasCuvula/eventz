@@ -9,21 +9,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public interface EventJpaRepository extends JpaRepository<EventEntity, String> {
+public interface EventJpaRepository extends JpaRepository<EventEntity, UUID> {
   
   @Modifying
   @Query("UPDATE EventEntity e SET e.participantsCount = e.participantsCount + 1" +
                  " WHERE e.id = :id AND e.participantsCount < e.maxParticipants")
-  int incrementParticipantCount(@Param("id") String id);
+  int incrementParticipantCount(@Param("id") UUID id);
   
   @Modifying
   @Query("UPDATE EventEntity e SET e.participantsCount = e.participantsCount - 1" +
                  " WHERE e.id = :id AND e.participantsCount > 0")
-  int decrementParticipantCount(@Param("id") String id);
+  int decrementParticipantCount(@Param("id") UUID id);
   
   @Query("SELECT e FROM EventEntity e WHERE (e.organizer.id = :id) order by e.date")
-  Page<EventEntity> fetchEventsByOrganizer(@Param("id") String id, Pageable pageable);
+  Page<EventEntity> fetchEventsByOrganizer(@Param("id") UUID id, Pageable pageable);
   
   @Query(
     "SELECT e FROM EventEntity e " +

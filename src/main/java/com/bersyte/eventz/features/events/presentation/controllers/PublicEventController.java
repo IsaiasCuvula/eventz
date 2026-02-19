@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @RestController
@@ -48,10 +49,10 @@ public class PublicEventController {
         return ResponseEntity.ok(events);
    }
 
-   @GetMapping("{id}")
-   public ResponseEntity<EventResponse> getEventById(@PathVariable String id) {
-       EventByIdInput input = new EventByIdInput("user-email-private-event", id);
-       EventResponse response = getEventByIdUseCase.execute(input);
+   @GetMapping("{eventId}")
+   public ResponseEntity<EventResponse> getEventById(@PathVariable UUID eventId) {
+       EventByIdRequest request = new EventByIdRequest(eventId);
+       EventResponse response = getEventByIdUseCase.execute(request);
        return ResponseEntity.status(HttpStatus.OK).body(response);
    }
    

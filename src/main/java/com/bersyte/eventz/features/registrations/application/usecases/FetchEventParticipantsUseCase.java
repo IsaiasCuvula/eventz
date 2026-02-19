@@ -13,6 +13,8 @@ import com.bersyte.eventz.features.registrations.domain.repository.EventRegistra
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
+import java.util.UUID;
+
 public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticipantsRequest, PagedResult<EventParticipantResponse>> {
     private final EventRegistrationRepository eventRegistrationRepository;
     private final UserValidationService userValidationService;
@@ -32,7 +34,7 @@ public class FetchEventParticipantsUseCase implements UseCase<FetchEventParticip
     
     @Override
     public PagedResult<EventParticipantResponse> execute(FetchEventParticipantsRequest request) {
-        String eventId = request.eventId();
+        UUID eventId = request.eventId();
         AppUser requester = userValidationService.getRequesterById(request.requesterId());
         
         if(!requester.canManageEvents()){

@@ -2,21 +2,22 @@ package com.bersyte.eventz.features.registrations.domain.model;
 
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class RegistrationAuditLog {
-    private final String id;
-    private final String registrationId;
+    private final UUID id;
+    private final UUID registrationId;
     private final AuditAction action;
     private final String oldToken;
     private final String newToken;
-    private final String actorId;
+    private final UUID actorId;
     private final String actorName;
     private final LocalDateTime createdAt;
     
     public RegistrationAuditLog(
-            String id, String registrationId,
+            UUID id, UUID registrationId,
             AuditAction action, String oldToken,
-            String newToken, String actorId, String actorName, LocalDateTime createdAt
+            String newToken, UUID actorId, String actorName, LocalDateTime createdAt
     ) {
         this.id = id;
         this.registrationId = registrationId;
@@ -28,20 +29,12 @@ public class RegistrationAuditLog {
         this.actorName = actorName;
     }
     
-    public String getActorName() {
-        return actorName;
-    }
-    
-    public String getRegistrationId() {
-        return registrationId;
-    }
-    
-    public String getActorId() {
-        return actorId;
-    }
-    
-    public String getId() {
+    public UUID getId() {
         return id;
+    }
+    
+    public UUID getRegistrationId() {
+        return registrationId;
     }
     
     public AuditAction getAction() {
@@ -56,7 +49,13 @@ public class RegistrationAuditLog {
         return newToken;
     }
     
-
+    public UUID getActorId() {
+        return actorId;
+    }
+    
+    public String getActorName() {
+        return actorName;
+    }
     
     public LocalDateTime getCreatedAt() {
         return createdAt;

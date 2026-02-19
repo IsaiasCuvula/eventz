@@ -18,5 +18,6 @@ public record CreateEventRequest(
         LocalDateTime date,
         @NotNull(message = "Max participants is required")
         @Min(value = 2, message = "Must have at least 2 participant")
-        Integer maxParticipants
+        Integer maxParticipants,
+        Integer price
 ) {}

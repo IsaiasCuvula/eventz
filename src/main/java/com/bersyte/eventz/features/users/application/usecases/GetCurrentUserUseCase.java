@@ -6,7 +6,9 @@ import com.bersyte.eventz.features.users.application.mappers.UserMapper;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
-public class GetCurrentUserUseCase implements UseCase<String, UserResponse> {
+import java.util.UUID;
+
+public class GetCurrentUserUseCase implements UseCase<UUID, UserResponse> {
     private final UserMapper userMapper;
     private final UserValidationService validationService;
     
@@ -16,7 +18,7 @@ public class GetCurrentUserUseCase implements UseCase<String, UserResponse> {
     }
     
     @Override
-    public UserResponse execute(String requesterId) {
+    public UserResponse execute(UUID requesterId) {
         AppUser currentUser = validationService.getRequesterById(requesterId);
         return userMapper.toResponse(currentUser);
     }

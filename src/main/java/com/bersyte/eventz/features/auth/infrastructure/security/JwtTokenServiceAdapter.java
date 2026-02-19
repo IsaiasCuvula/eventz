@@ -11,6 +11,7 @@ import com.bersyte.eventz.features.auth.infrastructure.persistence.adapters.Refr
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class JwtTokenServiceAdapter implements TokenService {
@@ -23,7 +24,7 @@ public class JwtTokenServiceAdapter implements TokenService {
     }
     
     @Override
-    public String validateRefreshToken(String refreshToken) {
+    public UUID validateRefreshToken(String refreshToken) {
         boolean isRefreshToken = jwtService.isRefreshToken(refreshToken);
         if(!isRefreshToken){
             throw new JwtAuthenticationException("Invalid token");
@@ -32,7 +33,7 @@ public class JwtTokenServiceAdapter implements TokenService {
             throw new JwtAuthenticationException("The token has expired. Please log in again.");
         }
         
-        String extractedUserId = jwtService.extractUserId(refreshToken);
+        UUID extractedUserId = UUID.fromString(jwtService.extractUserId(refreshToken));
         String tokenId = jwtService.extractTokenId(refreshToken);
         
         RefreshToken savedToken =refreshTokenRepository.getTokenById(tokenId)
@@ -47,10 +48,10 @@ public class JwtTokenServiceAdapter implements TokenService {
     
     @Override
     public TokenPair createAndPersistTokens(AuthUser user) {
-        TokenPair tokens = createUserTokens(user.id());
+        TokenPair tokens = createUserTokens(user.userId());
         String tokenId = extractTokenId(tokens.refreshToken());
         LocalDateTime expiresAt = extractExpiration(tokens.refreshToken());
-        RefreshToken refreshToken = new RefreshToken(tokenId, user.id(), expiresAt);
+        RefreshToken refreshToken = new RefreshToken(tokenId, user.userId(), expiresAt);
         refreshTokenRepository.saveToken(refreshToken);
         return tokens;
     }
@@ -73,9 +74,9 @@ public class JwtTokenServiceAdapter implements TokenService {
         refreshTokenRepository.deleteByTokenId(tokenId);
     }
     
-    private TokenPair createUserTokens(String id) {
-        String token = jwtService.generateToken(id);
-        String refreshToken = jwtService.generateRefreshToken(id);
+    private TokenPair createUserTokens(UUID userId) {
+        String token = jwtService.generateToken(userId);
+        String refreshToken = jwtService.generateRefreshToken(userId);
         LocalDateTime expiration = jwtService.extractExpiration(token);
         return new TokenPair(token, refreshToken, expiration);
     }

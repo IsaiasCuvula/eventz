@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class UpdateTicketCheckInTokenUseCase implements UseCase<UpdateTicketCheckInTokenRequest, TicketResponse> {
     private final EventRegistrationRepository eventRegistrationRepository;
@@ -50,7 +51,7 @@ public class UpdateTicketCheckInTokenUseCase implements UseCase<UpdateTicketChec
     @Transactional
     @Override
     public TicketResponse execute(UpdateTicketCheckInTokenRequest request) {
-        String requesterId = request.requesterId();
+        UUID requesterId = request.requesterId();
         String oldToken = request.oldToken();
         AppUser requester = userValidationService.getRequesterById(requesterId);
         

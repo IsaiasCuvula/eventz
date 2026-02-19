@@ -7,9 +7,10 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class EventRegistration {
-    private final String id;
+    private final UUID id;
     private RegistrationStatus status;
     private final Event event;
     private final AppUser user;
@@ -22,7 +23,7 @@ public class EventRegistration {
     //enum payment status
     
     private EventRegistration(
-            String id, RegistrationStatus status,String checkInToken,
+            UUID id, RegistrationStatus status,String checkInToken,
             Event event, AppUser user, LocalDateTime createdAt,
             LocalDateTime updateAt,AppUser checkedInBy, LocalDateTime checkedInAt
     ){
@@ -38,7 +39,7 @@ public class EventRegistration {
     }
     
     public static EventRegistration create(
-            String id,String checkInToken,
+            UUID id,String checkInToken,
             Event event, AppUser user,  LocalDateTime createdAt
     ){
         return new EventRegistration(
@@ -49,7 +50,7 @@ public class EventRegistration {
     
     
     public static EventRegistration restore(
-            String id, RegistrationStatus status,String checkInToken,
+            UUID id, RegistrationStatus status,String checkInToken,
             Event event, AppUser user, LocalDateTime createdAt,
             LocalDateTime updateAt, AppUser checkedInBy, LocalDateTime checkedInAt
     ){
@@ -126,7 +127,7 @@ public class EventRegistration {
         return checkInToken;
     }
     
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     

@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -63,7 +65,7 @@ public class AuthController {
     }
     
     @PostMapping("/resend-code/{userId}")
-    public ResponseEntity<?> resend(@PathVariable String userId) {
+    public ResponseEntity<?> resend(@PathVariable UUID userId) {
         resendVerificationCodeUseCase.execute(userId);
         return ResponseEntity.noContent().build();
     }

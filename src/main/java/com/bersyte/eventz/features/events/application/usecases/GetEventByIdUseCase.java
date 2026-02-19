@@ -1,14 +1,14 @@
 package com.bersyte.eventz.features.events.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
-import com.bersyte.eventz.features.events.application.dtos.EventByIdInput;
+import com.bersyte.eventz.features.events.application.dtos.EventByIdRequest;
 import com.bersyte.eventz.features.events.application.dtos.EventResponse;
 import com.bersyte.eventz.features.events.application.mappers.EventMapper;
+import com.bersyte.eventz.features.events.domain.exceptions.EventNotFoundException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 
-public class GetEventByIdUseCase implements UseCase<EventByIdInput, EventResponse> {
+public class GetEventByIdUseCase implements UseCase<EventByIdRequest, EventResponse> {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     
@@ -18,11 +18,11 @@ public class GetEventByIdUseCase implements UseCase<EventByIdInput, EventRespons
     }
     
     @Override
-    public EventResponse execute(EventByIdInput input) {
+    public EventResponse execute(EventByIdRequest request) {
         
-        Event event = eventRepository.findEventById(input.eventId())
+        Event event = eventRepository.findEventById(request.eventId())
                               .orElseThrow(
-                                      ()-> new ResourceNotFoundException("Event", input.eventId())
+                                      ()-> new EventNotFoundException("Event with id " + request.eventId() + " not found")
                               );
         return eventMapper.toResponse(event);
     }

@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/v1/registrations")
@@ -51,7 +53,7 @@ public class EventRegistrationController {
     @GetMapping("{eventId}")
     public ResponseEntity<PagedResult<EventParticipantResponse>> fetchEventParticipants(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable  String eventId,
+            @PathVariable UUID eventId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ){
@@ -66,8 +68,8 @@ public class EventRegistrationController {
     @PostMapping("{eventId}/{userId}")
     public ResponseEntity<TicketResponse> joinEvent(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable String eventId,
-            @PathVariable String userId
+            @PathVariable UUID eventId,
+            @PathVariable UUID userId
     ) {
         EventRegistrationRequest request = new EventRegistrationRequest(
                 eventId, userId, currentUser.id()
@@ -79,7 +81,7 @@ public class EventRegistrationController {
     @PostMapping("/cancel/{ticketId}")
     public ResponseEntity<TicketResponse> cancelRegistration(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable String ticketId
+            @PathVariable UUID ticketId
     ) {
         CancelEventRegistrationRequest request = new CancelEventRegistrationRequest(
                 ticketId, currentUser.id()
@@ -91,8 +93,8 @@ public class EventRegistrationController {
     @GetMapping("{eventId}/{userId}")
     public ResponseEntity<TicketResponse> getUserTicket(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable String eventId,
-            @PathVariable String userId
+            @PathVariable UUID eventId,
+            @PathVariable UUID userId
     ){
         GetTicketRequest request = new GetTicketRequest(
                 currentUser.id(), userId, eventId

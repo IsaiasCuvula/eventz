@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -31,13 +32,13 @@ public class JwtService {
         }
     }
     
-    public String generateToken(String userId) {
+    public String generateToken(UUID userId) {
         Map<String, Object> extraClaims = Map.of("type", "access");
         long expirationMs = jwtConfig.getAccessTokenExpiration().toMillis();
         return buildToken(userId, extraClaims, expirationMs);
     }
     
-    public String generateRefreshToken(String userId) {
+    public String generateRefreshToken(UUID userId) {
         Map<String, Object> extraClaims = Map.of("type", "refresh");
         long expirationMs = jwtConfig.getRefreshTokenExpiration().toMillis();
         return buildToken(userId, extraClaims, expirationMs);
@@ -95,7 +96,7 @@ public class JwtService {
     
     
     private String buildToken(
-            String userId, Map<String, Object> claims, long expirationTime
+            UUID userId, Map<String, Object> claims, long expirationTime
     ) {
         try {
             Instant now = Instant.now();
@@ -105,7 +106,7 @@ public class JwtService {
                            .id(java.util.UUID.randomUUID().toString())
                            .claims()
                            .add(claims)
-                           .subject(userId)
+                           .subject(userId.toString())
                            .issuedAt(Date.from(now))
                            .expiration(Date.from(expiry))
                            .and()

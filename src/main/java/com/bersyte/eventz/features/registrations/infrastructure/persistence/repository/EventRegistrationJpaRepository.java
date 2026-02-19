@@ -11,33 +11,34 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface EventRegistrationJpaRepository extends JpaRepository<EventRegistrationEntity, String> {
+public interface EventRegistrationJpaRepository extends JpaRepository<EventRegistrationEntity, UUID> {
 
   @Query(
           "select evReg from EventRegistrationEntity  evReg " +
           "where evReg.user.id = :userId and evReg.event.id = :eventId"
   )
-  Optional<EventRegistrationEntity> findByUserIdAndEventId(String userId, String eventId);
+  Optional<EventRegistrationEntity> findByUserIdAndEventId(UUID userId, UUID eventId);
   
   @Query("SELECT EXISTS (SELECT 1 FROM EventRegistrationEntity r WHERE r.event.id = :eventId " +
                  "AND r.user.id = :userId AND r.status IN :statuses)")
   boolean alreadyRegistered(
-          @Param("eventId") String eventId,
-          @Param("userId") String userId,
+          @Param("eventId") UUID eventId,
+          @Param("userId") UUID userId,
           @Param("statuses")List<RegistrationStatus> statuses
           );
   
   
   @Query("SELECT evReg FROM EventRegistrationEntity evReg WHERE evReg.event.id = :eventId AND evReg.user.id = :userId AND evReg.status != :status")
-  Optional<EventRegistrationEntity> findRegistrationByStatus(@Param("eventId") String eventId, @Param("userId") String userId, @Param("status") RegistrationStatus status);
+  Optional<EventRegistrationEntity> findRegistrationByStatus(@Param("eventId") UUID eventId, @Param("userId") UUID userId, @Param("status") RegistrationStatus status);
   
   @Query("SELECT evReg FROM EventRegistrationEntity  evReg WHERE evReg.checkInToken = :checkInToken")
   Optional<EventRegistrationEntity> findByCheckInToken(@Param("checkInToken") String checkInToken);
   
   
   @Query("SELECT evReg FROM EventRegistrationEntity evReg WHERE evReg.event.id = :eventId")
-  Page<EventRegistrationEntity> findAllByEventId(@Param("eventId") String eventId, Pageable pageable);
+  Page<EventRegistrationEntity> findAllByEventId(@Param("eventId") UUID eventId, Pageable pageable);
   
 }

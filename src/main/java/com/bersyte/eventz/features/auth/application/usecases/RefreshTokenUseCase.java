@@ -11,6 +11,8 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import jakarta.transaction.Transactional;
 
+import java.util.UUID;
+
 public class RefreshTokenUseCase implements UseCase<RefreshTokenRequest, AuthResponse> {
     private final TokenService tokenService;
     private final UserValidationService userValidationService;
@@ -26,7 +28,7 @@ public class RefreshTokenUseCase implements UseCase<RefreshTokenRequest, AuthRes
     @Override
     public AuthResponse execute(RefreshTokenRequest request) {
         String refreshToken = request.refreshToken();
-        String userId = tokenService.validateRefreshToken(refreshToken);
+        UUID userId = tokenService.validateRefreshToken(refreshToken);
         AppUser appUser = userValidationService.getRequesterById(userId);
         AuthUser authUser = authMapper.fromAppUser(appUser);
         tokenService.invalidateToken(refreshToken);

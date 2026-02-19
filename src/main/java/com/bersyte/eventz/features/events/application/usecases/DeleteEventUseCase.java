@@ -2,14 +2,16 @@ package com.bersyte.eventz.features.events.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.VoidUseCase;
 import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
-import com.bersyte.eventz.features.events.application.dtos.DeleteEventInput;
+import com.bersyte.eventz.features.events.application.dtos.DeleteEventRequest;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
-public class DeleteEventUseCase implements VoidUseCase<DeleteEventInput> {
+import java.util.UUID;
+
+public class DeleteEventUseCase implements VoidUseCase<DeleteEventRequest> {
     private final EventRepository repository;
     private  final UserValidationService userValidationService;
     private final EventValidationService eventValidationService;
@@ -21,9 +23,9 @@ public class DeleteEventUseCase implements VoidUseCase<DeleteEventInput> {
     }
     
     @Override
-    public void execute(DeleteEventInput input) {
-        String requesterId = input.requesterId();
-        String eventId = input.eventId();
+    public void execute(DeleteEventRequest request) {
+        UUID requesterId = request.requesterId();
+        UUID eventId = request.eventId();
         AppUser requester = userValidationService.getAuthorizedOrganizerById(requesterId);
         Event event = eventValidationService.getValidEventById(eventId);
         if(!event.canManage(requester)){
