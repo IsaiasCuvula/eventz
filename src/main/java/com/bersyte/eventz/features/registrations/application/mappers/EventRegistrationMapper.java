@@ -39,7 +39,9 @@ public class EventRegistrationMapper {
                 user.getEmail(),
                 registration.getStatus(),
                 registration.getCreatedAt(),
-                registration.getUpdatedAt()
+                registration.getUpdatedAt(),
+                event.getAccessType(),
+                event.getPrice()
         );
     }
     
@@ -59,7 +61,9 @@ public class EventRegistrationMapper {
                 registration.getCheckInToken(),
                 registration.getStatus(),
                 registration.getCreatedAt(),
-                registration.getUpdatedAt()
+                registration.getUpdatedAt(),
+                event.getAccessType(),
+                event.getPrice()
         );
     }
 }

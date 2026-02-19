@@ -8,6 +8,7 @@ import com.bersyte.eventz.features.registrations.domain.repository.RegistrationA
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class AuditService {
     private final RegistrationAuditLogRepository auditLogRepository;
@@ -20,7 +21,7 @@ public class AuditService {
     
     
     public void logTokenRotation(
-            String registrationId, String requesterId,
+            UUID registrationId, UUID requesterId,
             String requesterName, String oldToken,
             String newToken, LocalDateTime createdAt
     ){

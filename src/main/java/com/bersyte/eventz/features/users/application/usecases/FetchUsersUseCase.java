@@ -10,6 +10,8 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
+import java.util.UUID;
+
 public class FetchUsersUseCase implements UseCase<FetchUsersRequest, PagedResult<UserResponse>> {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -23,7 +25,7 @@ public class FetchUsersUseCase implements UseCase<FetchUsersRequest, PagedResult
     
     @Override
     public PagedResult<UserResponse> execute(FetchUsersRequest request) {
-        String requesterId = request.requesterId();
+        UUID requesterId = request.requesterId();
         AppUser requester = validationService.getRequesterById(requesterId);
         if (!requester.isAdmin()){
             throw new UnauthorizedException("You don't have permission");

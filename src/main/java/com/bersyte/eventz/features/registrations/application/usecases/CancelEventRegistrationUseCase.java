@@ -1,7 +1,6 @@
 package com.bersyte.eventz.features.registrations.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
-import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.registrations.application.dtos.CancelEventRegistrationRequest;
@@ -19,6 +18,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegistrationRequest, TicketResponse> {
     private final UserValidationService userValidationService;
@@ -49,8 +49,8 @@ public class CancelEventRegistrationUseCase implements UseCase<CancelEventRegist
     @Transactional
     @Override
     public TicketResponse execute(CancelEventRegistrationRequest request) {
-        String requesterId = request.requesterId();
-        String registrationId = request.registrationId();
+        UUID requesterId = request.requesterId();
+        UUID registrationId = request.registrationId();
         
         AppUser requester = userValidationService.getRequesterById(requesterId);
         EventRegistration registration = registrationValidationService.getValidRegistrationById(registrationId);

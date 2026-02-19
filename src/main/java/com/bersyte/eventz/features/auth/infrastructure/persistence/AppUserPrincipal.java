@@ -8,9 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 public record AppUserPrincipal(
-        String id,
+        UUID id,
         String email,
         String password,
         UserRole role,
@@ -31,7 +32,7 @@ public record AppUserPrincipal(
     @Override
     public String getUsername() { return email; }
     
-    public String getId() { return id; }
+    public UUID getId() { return id; }
     
     @Override
     public String toString() {

@@ -1,5 +1,6 @@
 package com.bersyte.eventz.features.events.infrastructure.persistence.entities;
 
+import com.bersyte.eventz.features.events.domain.model.EventAccessType;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import com.bersyte.eventz.features.registrations.infrastructure.persistence.entities.EventRegistrationEntity;
 import jakarta.persistence.*;
@@ -30,6 +31,10 @@ public class EventEntity {
     private String location;
     private LocalDateTime date;
     private Integer maxParticipants;
+    
+    private EventAccessType accessType;
+    
+    private Integer price;
     
     @LastModifiedDate
     private LocalDateTime updateAt;

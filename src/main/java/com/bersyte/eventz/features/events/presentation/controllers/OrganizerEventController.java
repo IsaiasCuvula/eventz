@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/organizers/events")
 @PreAuthorize("hasAnyRole('ORGANIZER', 'ADMIN')")
@@ -36,33 +38,33 @@ public class OrganizerEventController {
             @Valid @RequestBody CreateEventRequest request
     ) {
         CreateEventInput input = new CreateEventInput(
-                currentUser.email(),request
+                currentUser.id(),request
         );
         EventResponse response = createEventUseCase.execute(input);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
     
-    @PutMapping("{id}")
+    @PutMapping("{eventId}")
     public ResponseEntity<EventResponse> updateEvent(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
             @Valid @RequestBody UpdateEventRequest request,
-            @PathVariable String id
+            @PathVariable UUID eventId
     ) {
         UpdateEventInput input = new UpdateEventInput(
-                request , id,  currentUser.id()
+                request , eventId,  currentUser.id()
         );
         EventResponse response = updateEventUseCase.execute(input);
         return ResponseEntity.ok(response);
     }
     
-    @DeleteMapping("{id}")
+    @DeleteMapping("{eventId}")
     public ResponseEntity<String> deleteEvent(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable String id
+            @PathVariable UUID eventId
     ) {
-        DeleteEventInput input = new DeleteEventInput(
-                id,  currentUser.id()
+        DeleteEventRequest input = new DeleteEventRequest(
+                eventId,  currentUser.id()
         );
         deleteEventUseCase.execute(input);
         return ResponseEntity.noContent().build();
@@ -75,10 +77,10 @@ public class OrganizerEventController {
             @RequestParam(defaultValue = "10") int size
     ) {
         Pagination pagination = new Pagination(page, size);
-        EventsByOrganizerInput input = new EventsByOrganizerInput(
+        EventsByOrganizerRequest request = new EventsByOrganizerRequest(
                 pagination,  currentUser.id()
         );
-        PagedResult<EventResponse>  response = fetchEventsByOrganizerUseCase.execute(input);
+        PagedResult<EventResponse>  response = fetchEventsByOrganizerUseCase.execute(request);
         return ResponseEntity.ok(response);
     }
 }

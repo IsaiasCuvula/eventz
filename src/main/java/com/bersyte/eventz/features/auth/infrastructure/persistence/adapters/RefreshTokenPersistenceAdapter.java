@@ -10,6 +10,7 @@ import com.bersyte.eventz.features.users.infrastructure.persistence.repositories
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class RefreshTokenPersistenceAdapter implements RefreshTokenRepository {
@@ -39,7 +40,7 @@ public class RefreshTokenPersistenceAdapter implements RefreshTokenRepository {
     }
     
     @Override
-    public void revokeAllSessions(String userId) {
+    public void revokeAllSessions(UUID userId) {
         tokenJpaRepository.deleteAllByUserId(userId);
     }
     

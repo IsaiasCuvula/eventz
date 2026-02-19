@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/v1/users")
@@ -55,27 +57,26 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("{id}")
+    @PostMapping("{eventId}")
     public ResponseEntity<UserResponse> updateUser(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
             @Valid @RequestBody UpdateUserRequest request,
-            @PathVariable String id
+            @PathVariable UUID eventId
     ) {
         UpdateUserInput input = new UpdateUserInput(
-                request, currentUser.id(),
-                id
+                request, currentUser.id(), eventId
         );
         final UserResponse response = updateUserUseCase.execute(input);
         return ResponseEntity.ok(response);
     }
     
-    @DeleteMapping("{id}")
+    @DeleteMapping("{userId}")
     public ResponseEntity<String> deleteUser(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
-            @PathVariable String id
+            @PathVariable UUID userId
     ) {
         DeleteUserRequest request = new DeleteUserRequest(
-                currentUser.id(), id
+                currentUser.id(), userId
         );
         deleteUserUseCase.execute(request);
         return ResponseEntity.noContent().build();

@@ -12,6 +12,8 @@ import com.bersyte.eventz.features.events.domain.services.EventValidationService
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
+import java.util.UUID;
+
 
 public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventResponse> {
     private final EventRepository repository;
@@ -28,8 +30,8 @@ public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventRespon
     
     @Override
     public EventResponse execute(UpdateEventInput input) {
-        String eventId = input.eventId();
-        String requesterId = input.requesterId();
+        UUID eventId = input.eventId();
+        UUID requesterId = input.requesterId();
         UpdateEventRequest request  = input.request();
         
         if (isRequestEmpty(request)) {

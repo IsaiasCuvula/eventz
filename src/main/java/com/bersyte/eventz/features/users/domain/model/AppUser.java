@@ -103,7 +103,7 @@ public class AppUser {
         return this.role == UserRole.ORGANIZER;
     }
     
-    public boolean canDeleteOrUpdateUser(String targetId){
+    public boolean canDeleteOrUpdateUser(UUID targetId){
         return this.canManageEvents() || this.id.equals(targetId);
     }
     
@@ -113,7 +113,7 @@ public class AppUser {
     }
     
     
-    public boolean canSeeUserDetails(String targetId){
+    public boolean canSeeUserDetails(UUID targetId){
         return this.isAdmin() || this.id.equals(targetId);
     }
     

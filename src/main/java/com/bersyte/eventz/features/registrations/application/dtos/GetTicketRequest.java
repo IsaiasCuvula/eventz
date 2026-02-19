@@ -1,6 +1,8 @@
 package com.bersyte.eventz.features.registrations.application.dtos;
 
+import java.util.UUID;
+
 public record GetTicketRequest(
-        String requesterId, String targetUserId, String eventId
+        UUID requesterId, UUID targetUserId, UUID eventId
 ) {
 }

@@ -7,6 +7,8 @@ import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.repository.UserRepository;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 
+import java.util.UUID;
+
 public class DeleteUserUseCase implements VoidUseCase<DeleteUserRequest> {
     private final UserRepository repository;
     private final UserValidationService validationService;
@@ -18,8 +20,8 @@ public class DeleteUserUseCase implements VoidUseCase<DeleteUserRequest> {
     
     @Override
     public void execute(DeleteUserRequest request) {
-        String requesterId = request.requesterId();
-        String targetId = request.targetUserId();
+        UUID requesterId = request.requesterId();
+        UUID targetId = request.targetUserId();
         AppUser requester = validationService.getRequesterById(requesterId);
         if(!requester.canDeleteOrUpdateUser(targetId)){
             throw new UnauthorizedException("You don't have permission to perform this operation");

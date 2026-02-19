@@ -11,8 +11,9 @@ import jakarta.transaction.Transactional;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public class ResendVerificationCodeUseCase implements VoidUseCase<String> {
+public class ResendVerificationCodeUseCase implements VoidUseCase<UUID> {
     private final UserValidationService userValidationService;
     private final UserRepository userRepository;
     private final CodeGenerator codeGenerator;
@@ -34,7 +35,7 @@ public class ResendVerificationCodeUseCase implements VoidUseCase<String> {
     
     @Transactional
     @Override
-    public void execute(String userId) {
+    public void execute(UUID userId) {
         AppUser targetUser = userValidationService.getRequesterById(userId);
         LocalDateTime now = LocalDateTime.now(clock);
         String verificationCode = codeGenerator.generate();

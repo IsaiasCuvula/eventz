@@ -1,6 +1,8 @@
 package com.bersyte.eventz.features.registrations.application.dtos;
 
+import java.util.UUID;
+
 public record UpdateTicketCheckInTokenRequest(
-        String requesterId, String oldToken
+        UUID requesterId, String oldToken
 ) {
 }

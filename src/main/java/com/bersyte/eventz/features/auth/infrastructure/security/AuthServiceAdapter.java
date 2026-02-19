@@ -1,11 +1,11 @@
 package com.bersyte.eventz.features.auth.infrastructure.security;
 
-import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
 import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.domain.exceptions.InvalidCredentialsException;
 import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.service.AuthService;
 import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
+import com.bersyte.eventz.features.users.domain.exception.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +42,7 @@ public class AuthServiceAdapter implements AuthService {
        } catch (BadCredentialsException e) {
            throw new InvalidCredentialsException();
        } catch (UsernameNotFoundException e) {
-           throw new ResourceNotFoundException("User", email);
+           throw new UserNotFoundException("User with email " + email + " not found");
        } catch (Exception e) {
            throw new AuthException("Unexpected error during authentication");
        }

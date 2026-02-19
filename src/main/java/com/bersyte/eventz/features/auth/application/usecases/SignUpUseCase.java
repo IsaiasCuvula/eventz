@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
     private final UserRepository userRepository;
@@ -53,8 +54,8 @@ public class SignUpUseCase implements UseCase<SignupRequest, AuthResponse> {
         if(alreadyExists){
             throw new AuthException("Email already in use");
         }
-       
-        String userId = idGenerator.generateUuid();
+        
+        UUID userId = idGenerator.generateUuid();
         LocalDateTime now = LocalDateTime.now(clock);
         String encodedPassword = passwordEncoder.encode(request.password());
         String verificationCode = codeGenerator.generate();

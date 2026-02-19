@@ -16,7 +16,7 @@ public class AuthMapper {
         return new AuthResponse(
                 null, null,
                 null,
-                authUser.id(),
+                authUser.userId(),
                 authUser.email(),
                 authUser.firstName(),
                 authUser.lastName(),
@@ -31,7 +31,7 @@ public class AuthMapper {
         return new AuthResponse(
                 null, null,
                 null,
-                authUser.id(),
+                authUser.userId(),
                 authUser.email(),
                 authUser.firstName(),
                 authUser.lastName(),
@@ -47,7 +47,7 @@ public class AuthMapper {
           return new AuthResponse(
                   tokens.token(), tokens.refreshToken(),
                   tokens.expiration(),
-                  user.id(),
+                  user.userId(),
                   user.email(),
                   user.firstName(),
                   user.lastName(),

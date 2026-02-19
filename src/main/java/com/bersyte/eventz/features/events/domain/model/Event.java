@@ -15,17 +15,17 @@ public class Event {
     private LocalDateTime updateAt;
     private final LocalDateTime createdAt;
     private AppUser organizer;
+    private Integer price; //price in cent
+    private EventAccessType accessType;
     private Integer participantsCount;
     
-//    private final AccessType accessType;
 //    private final BigDecimal price;
   
     private Event(UUID id, String title, String description,
                  String location, LocalDateTime date,
                  Integer maxParticipants, LocalDateTime updateAt,
-                 LocalDateTime createdAt,
-                 AppUser organizer,
-                 Integer participantsCount
+                 LocalDateTime createdAt, AppUser organizer,
+                 Integer participantsCount,EventAccessType access, Integer price
     ) {
         this.id = id;
         this.title = title;
@@ -37,31 +37,31 @@ public class Event {
         this.createdAt = createdAt;
         this.organizer = organizer;
         this.participantsCount = participantsCount;
+        this.price = price;
+        this.accessType = access;
     }
     
     public static Event create(
             UUID id, String title, String description,
             String location, LocalDateTime date,
             Integer maxParticipants,
-            AppUser organizer
+            AppUser organizer,
+            Integer price,LocalDateTime createdAt
     ) {
+     EventAccessType accessType = price == 0? EventAccessType.FREE: EventAccessType.PAID;
      return new Event(
              id,title,description, location,date,
-             maxParticipants,
-             LocalDateTime.now(),
-             LocalDateTime.now(),
-             organizer,
-             0
-     );
+             maxParticipants, createdAt, createdAt,
+             organizer, 0,accessType, price
+         );
     }
     
     public static Event restore(
             UUID id, String title, String description,
             String location, LocalDateTime date,
-            Integer maxParticipants,
-            LocalDateTime createdAt, LocalDateTime updateAt,
-            AppUser organizer,
-            Integer participantsCount
+            Integer maxParticipants,LocalDateTime createdAt, LocalDateTime updateAt,
+            AppUser organizer, Integer participantsCount,EventAccessType access,
+            Integer price
     ){
         return new Event(
                 id,title,description, location,date,
@@ -69,13 +69,22 @@ public class Event {
                 updateAt,
                 createdAt,
                 organizer,
-                participantsCount
+                participantsCount,
+                access, price
         );
     }
     
-//    public boolean isPaid() {
-//        return this.accessType == AccessType.PAID;
-//    }
+    public boolean isPaid() {
+        return this.accessType == EventAccessType.PAID;
+    }
+    
+    public Integer getPrice() {
+        return price;
+    }
+    
+    public EventAccessType getAccessType() {
+        return accessType;
+    }
     
     public boolean canManage(AppUser user) {
         return user.isAdmin() || this.isOwnedBy(user);

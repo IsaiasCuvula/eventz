@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class JoinEventUseCase implements UseCase<EventRegistrationRequest, TicketResponse> {
     private final EventRegistrationRepository eventRegistrationRepository;
@@ -53,9 +54,9 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
     @Transactional
     @Override
     public TicketResponse execute(EventRegistrationRequest request) {
-        String requesterId = request.requesterId();
-        String targetId = request.targetUserId();
-        String eventId = request.eventId();
+        UUID requesterId = request.requesterId();
+        UUID targetId = request.targetUserId();
+        UUID eventId = request.eventId();
         
         AppUser requester = userValidationService.getRequesterById(requesterId);
         
@@ -74,7 +75,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         }
         
         AppUser target;
-        String registrationId = idGenerator.generateUuid();
+        UUID registrationId = idGenerator.generateUuid();
         String checkInToken = idGenerator.generateCheckInToken();
         LocalDateTime createdAt = LocalDateTime.now(clock);
         

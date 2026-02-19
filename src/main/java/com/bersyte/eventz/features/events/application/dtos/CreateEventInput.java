@@ -1,6 +1,8 @@
 package com.bersyte.eventz.features.events.application.dtos;
 
+import java.util.UUID;
+
 public record CreateEventInput(
-        String requesterId,
+        UUID requesterId,
         CreateEventRequest request
 ) {}
