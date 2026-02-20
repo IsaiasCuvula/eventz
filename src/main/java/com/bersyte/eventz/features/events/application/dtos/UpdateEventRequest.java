@@ -12,6 +12,7 @@ public record UpdateEventRequest(
         @Future(message = "Date must be in the future")
         LocalDateTime date,
         @Min(value = 2, message = "Must have at least 2 participants")
-        Integer maxParticipants
+        Integer maxParticipants,
+        Integer price
 ) {
 }

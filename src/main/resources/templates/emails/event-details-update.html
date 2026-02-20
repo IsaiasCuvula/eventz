@@ -1,0 +1,14 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Event Update: <span th:text="${eventTitle}">Event</span></h3>
+        <p>Hi <strong th:text="${attendeeName}">Attendee</strong>,</p>
+        <p>The organizer has updated the details for an event you are attending.</p>
+
+        <div style="background-color: #fff9c4; padding: 15px; border-left: 5px solid #fbc02d; margin: 20px 0;">
+            <p><strong>📍 New Location:</strong> <span th:text="${eventLocation}">Location</span></p>
+            <p><strong>📅 New Date/Time:</strong> <span th:text="${eventDate}">Date</span></p>
+        </div>
+
+        <p>Please update your calendar. We look forward to seeing you!</p>
+    </section>
+</div>

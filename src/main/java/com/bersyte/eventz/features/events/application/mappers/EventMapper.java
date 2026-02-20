@@ -34,7 +34,7 @@ public class EventMapper {
                 event.getParticipantsCount(),
                 organizer,
                 event.getCreatedAt(),
-                event.getUpdateAt(),
+                event.getUpdatedAt(),
                 event.getAccessType(),
                 event.getPrice()
         );

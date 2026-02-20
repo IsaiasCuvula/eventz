@@ -1,5 +1,6 @@
 package com.bersyte.eventz.features.events.domain.model;
 
+import com.bersyte.eventz.features.events.application.dtos.UpdateEventRequest;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
@@ -12,14 +13,14 @@ public class Event {
     private String location;
     private LocalDateTime date;
     private Integer maxParticipants;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
     private final LocalDateTime createdAt;
     private AppUser organizer;
     private Integer price; //price in cent
     private EventAccessType accessType;
     private Integer participantsCount;
     
-//    private final BigDecimal price;
+
   
     private Event(UUID id, String title, String description,
                  String location, LocalDateTime date,
@@ -33,7 +34,7 @@ public class Event {
         this.location = location;
         this.date = date;
         this.maxParticipants = maxParticipants;
-        this.updateAt = updateAt;
+        this.updatedAt = updateAt;
         this.createdAt = createdAt;
         this.organizer = organizer;
         this.participantsCount = participantsCount;
@@ -74,6 +75,21 @@ public class Event {
         );
     }
     
+    public Event updateDetails(UpdateEventRequest request, LocalDateTime updatedAt){
+        if(request.title() != null) this.title = request.title();
+        if(request.description() != null) this.description = request.description();
+        if(request.location() != null) this.location = request.location();
+        if(request.date() != null) this.date = request.date();
+        if(request.maxParticipants() != null) this.maxParticipants = request.maxParticipants();
+        
+        //Update only if the event is already paid
+        if(request.price() != null && request.price() >= 0 && this.isPaid()){
+            this.price = request.price();
+        }
+        this.updatedAt = updatedAt;
+        return this;
+    }
+    
     public boolean isPaid() {
         return this.accessType == EventAccessType.PAID;
     }
@@ -98,18 +114,12 @@ public class Event {
         return this.organizer.getId().equals(owner.getId());
     }
     
-    
-    
     public AppUser getOrganizer() {
         return organizer;
     }
     
     public Integer getParticipantsCount() {
         return participantsCount;
-    }
-    
-    public void setOrganizer(AppUser organizer) {
-        this.organizer = organizer;
     }
     
     public UUID getId() {
@@ -136,31 +146,12 @@ public class Event {
         return maxParticipants;
     }
     
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
     
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-    
-    public void setMaxParticipants(Integer maxParticipants) {
-        this.maxParticipants = maxParticipants;
-    }
 }
