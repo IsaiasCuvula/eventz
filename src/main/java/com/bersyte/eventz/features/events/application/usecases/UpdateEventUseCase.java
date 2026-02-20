@@ -11,7 +11,10 @@ import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
+import jakarta.transaction.Transactional;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -20,14 +23,17 @@ public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventRespon
     private final EventMapper mapper;
     private final UserValidationService userValidationService;
     private final EventValidationService eventValidationService;
+    private final Clock clock;
     
-    public UpdateEventUseCase(EventRepository repository, EventMapper mapper, UserValidationService userValidationService, EventValidationService eventValidationService) {
+    public UpdateEventUseCase(EventRepository repository, EventMapper mapper, UserValidationService userValidationService, EventValidationService eventValidationService, Clock clock) {
         this.repository = repository;
         this.mapper = mapper;
         this.userValidationService = userValidationService;
         this.eventValidationService = eventValidationService;
+        this.clock = clock;
     }
     
+    @Transactional
     @Override
     public EventResponse execute(UpdateEventInput input) {
         UUID eventId = input.eventId();
@@ -43,21 +49,16 @@ public class UpdateEventUseCase implements UseCase<UpdateEventInput, EventRespon
         if(!requester.isAdmin() && !event.isOwnedBy(requester)){
             throw new UnauthorizedException("You don't own this event");
         }
-
-        if(request.title() != null) event.setTitle(request.title());
-        if(request.description() != null) event.setDescription(request.description());
-        if(request.location() != null) event.setLocation(request.location());
-        if(request.date() != null) event.setDate(request.date());
-        if(request.maxParticipants() != null) event.setMaxParticipants(request.maxParticipants());
-        Event updatedEvent = repository.updateEvent(event);
-        return mapper.toResponse(updatedEvent);
+        LocalDateTime updatedAt = LocalDateTime.now(clock);
+        Event updatedDetails = event.updateDetails(request, updatedAt);
+        
+        Event savedUpdatedEvent = repository.updateEvent(updatedDetails);
+        return mapper.toResponse(savedUpdatedEvent);
     }
     
     private boolean isRequestEmpty(UpdateEventRequest request){
-        return request.title() == null &&
-        request.description() == null &&
-        request.location() == null &&
-        request.date() == null &&
+        return request.title() == null && request.description() == null &&
+        request.location() == null && request.date() == null && request.price() == null &&
         request.maxParticipants() == null;
     }
 }
