@@ -1,0 +1,14 @@
+<div th:replace="~{emails/layout :: layout(content=~{::section})}">
+    <section>
+        <h3>Something New is Happening! 🚀</h3>
+        <p>Hello <strong th:text="${username}">User</strong>,</p>
+        <p>A new event has just been published on <strong>Eventz</strong> that might interest you:</p>
+
+        <h2 th:text="${eventTitle}" style="color: #6200ee;">Event Title</h2>
+        <p th:text="${eventDescription}">Description of the event goes here...</p>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="#" class="btn">Check Event Details</a>
+        </div>
+    </section>
+</div>
