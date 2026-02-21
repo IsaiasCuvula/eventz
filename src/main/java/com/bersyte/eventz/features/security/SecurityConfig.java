@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.security;
+package com.bersyte.eventz.features.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

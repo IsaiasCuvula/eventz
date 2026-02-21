@@ -1,4 +1,4 @@
-package com.bersyte.eventz.common.security;
+package com.bersyte.eventz.features.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

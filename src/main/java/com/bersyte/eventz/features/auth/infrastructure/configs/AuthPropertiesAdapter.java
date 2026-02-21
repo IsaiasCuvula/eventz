@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.auth.infrastructure.configs;
 
-import com.bersyte.eventz.common.security.JwtConfiguration;
+import com.bersyte.eventz.features.security.JwtConfiguration;
 import com.bersyte.eventz.features.auth.domain.service.AuthProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
