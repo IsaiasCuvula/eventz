@@ -33,12 +33,9 @@ public class GlobalExceptionHandler {
     
     
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessException(
-            EventNotFoundException exception,
-            HttpServletRequest request
-    ) {
-        logger.error("EventNotFoundException", exception);
-        return createErrorResponse(request,exception.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException exception, HttpServletRequest request) {
+        logger.error("Business rule violation", exception);
+        return createErrorResponse(request, exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(EventNotFoundException.class)
@@ -46,7 +43,7 @@ public class GlobalExceptionHandler {
             EventNotFoundException exception,
             HttpServletRequest request
     ) {
-        logger.error("EventNotFoundException", exception);
+        logger.error("Event Not Found", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.NOT_FOUND);
     }
     
@@ -56,17 +53,14 @@ public class GlobalExceptionHandler {
             EventRegistrationNotFoundException exception,
             HttpServletRequest request
     ) {
-        logger.error("EventRegistrationNotFoundException", exception);
+        logger.error("Event Registration Not Found", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.NOT_FOUND);
     }
     
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedException(
-            UnauthorizedException exception,
-            HttpServletRequest request
-    ) {
-        logger.error("UnauthorizedException", exception);
-        return createErrorResponse(request,exception.getMessage(),HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException exception, HttpServletRequest request) {
+        logger.error("Permission denied", exception);
+        return createErrorResponse(request, exception.getMessage(), HttpStatus.FORBIDDEN);
     }
     
     @ExceptionHandler(InvalidCredentialsException.class)
@@ -74,7 +68,7 @@ public class GlobalExceptionHandler {
             InvalidCredentialsException exception,
             HttpServletRequest request
     ) {
-        logger.error("InvalidVerificationCodeException", exception);
+        logger.error("Invalid Credentials", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.BAD_REQUEST);
     }
     
@@ -83,7 +77,7 @@ public class GlobalExceptionHandler {
             InvalidVerificationCodeException exception,
             HttpServletRequest request
     ) {
-        logger.error("InvalidVerificationCodeException", exception);
+        logger.error("Invalid Verification Code", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.BAD_REQUEST);
     }
     
@@ -93,28 +87,22 @@ public class GlobalExceptionHandler {
             UserNotFoundException exception,
             HttpServletRequest request
     ) {
-        logger.error("UserNotFoundException", exception);
+        logger.error("User Not Found", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.NOT_FOUND);
     }
     
     
     @ExceptionHandler(EventRegistrationAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleEventRegistrationAlreadyExistsException(
-            EventRegistrationAlreadyExistsException exception,
-            HttpServletRequest request
-    ) {
-        logger.error("EventRegistrationAlreadyExistsException", exception);
-        return createErrorResponse(request,exception.getMessage(),HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponse> handleEventRegistrationAlreadyExistsException(EventRegistrationAlreadyExistsException exception, HttpServletRequest request) {
+        logger.error("Registration conflict", exception);
+        return createErrorResponse(request, exception.getMessage(), HttpStatus.CONFLICT);
     }
     
     
     @ExceptionHandler(EventRegistrationException.class)
-    public ResponseEntity<ErrorResponse> handleEventRegistrationException(
-            EventRegistrationException exception,
-            HttpServletRequest request
-    ) {
-        logger.error("EventRegistrationException", exception);
-        return createErrorResponse(request,exception.getMessage(),HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponse> handleEventRegistrationException(EventRegistrationException exception, HttpServletRequest request) {
+        logger.error("Registration failed", exception);
+        return createErrorResponse(request, exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(JwtAuthenticationException.class)
@@ -122,7 +110,7 @@ public class GlobalExceptionHandler {
             JwtAuthenticationException exception,
             HttpServletRequest request
     ) {
-        logger.error("JwtAuthenticationException", exception);
+        logger.error("Jwt Authentication Exception", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.UNAUTHORIZED);
     }
 
@@ -131,12 +119,14 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception,
             HttpServletRequest request
     ){
-        //get the default msg defined in the [EventEntity] entity
-        AtomicReference<String> defaultMessage = new AtomicReference<>("");
-        for (ObjectError objectError : exception.getBindingResult().getAllErrors()) {
-            defaultMessage.set(objectError.getDefaultMessage());
-        }
-        logger.error(defaultMessage.toString(), exception);
+        String errorMessage = exception.getBindingResult()
+                                      .getFieldErrors()
+                                      .stream()
+                                      .map(ObjectError::getDefaultMessage)
+                                      .findFirst()
+                                      .orElse("Validation failed");
+        
+        logger.error("Validation error: {}", errorMessage);
         return createErrorResponse(request,"Something went wrong",HttpStatus.BAD_REQUEST);
     }
 
@@ -146,7 +136,7 @@ public class GlobalExceptionHandler {
             DatabaseOperationException exception,
             HttpServletRequest request
     ) {
-        logger.error("DatabaseOperationException", exception);
+        logger.error("Database Operation Exception", exception);
         return createErrorResponse(request,exception.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
