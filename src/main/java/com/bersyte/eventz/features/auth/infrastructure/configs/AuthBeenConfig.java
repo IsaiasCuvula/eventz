@@ -108,4 +108,9 @@ public class AuthBeenConfig {
                 authSettings, clock, authEventPublisher
         );
     }
+    
+    @Bean
+    public RevokeAllTokensUseCase revokeAllTokensUseCase(RefreshTokenRepository refreshTokenRepository, UserValidationService userValidationService) {
+        return new RevokeAllTokensUseCase(refreshTokenRepository, userValidationService);
+    }
 }
