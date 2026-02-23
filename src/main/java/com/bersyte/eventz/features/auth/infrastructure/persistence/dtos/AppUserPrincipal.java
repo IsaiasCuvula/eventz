@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.auth.infrastructure.persistence;
+package com.bersyte.eventz.features.auth.infrastructure.persistence.dtos;
 
 import com.bersyte.eventz.features.users.domain.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;

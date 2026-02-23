@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.users.infrastructure.persistence.repositories;
 
-import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.dtos.AppUserPrincipal;
 import com.bersyte.eventz.features.users.infrastructure.persistence.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
