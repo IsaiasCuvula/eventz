@@ -2,7 +2,9 @@ package com.bersyte.eventz.features.users.presentation.controllers;
 
 import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.common.domain.dtos.Pagination;
-import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
+import com.bersyte.eventz.features.auth.application.dtos.RevokeAllTokensRequest;
+import com.bersyte.eventz.features.auth.application.usecases.RevokeAllTokensUseCase;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.dtos.AppUserPrincipal;
 import com.bersyte.eventz.features.users.application.dtos.*;
 import com.bersyte.eventz.features.users.application.usecases.*;
 import jakarta.validation.Valid;
@@ -21,17 +23,19 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final GetCurrentUserUseCase getCurrentUserUseCase;
+    private final RevokeAllTokensUseCase  revokeAllTokensUseCase;
     
     public UserController(
             FetchUsersUseCase fetchUsersUseCase,
             UpdateUserUseCase updateUserUseCase,
             DeleteUserUseCase deleteUserUseCase,
-            GetCurrentUserUseCase getCurrentUserUseCase
+            GetCurrentUserUseCase getCurrentUserUseCase, RevokeAllTokensUseCase revokeAllTokensUseCase
     ) {
         this.fetchUsersUseCase = fetchUsersUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
+        this.revokeAllTokensUseCase = revokeAllTokensUseCase;
     }
 
 
@@ -57,21 +61,21 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("{eventId}")
+    @PostMapping("{userId}")
     public ResponseEntity<UserResponse> updateUser(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
             @Valid @RequestBody UpdateUserRequest request,
-            @PathVariable UUID eventId
+            @PathVariable UUID userId
     ) {
         UpdateUserInput input = new UpdateUserInput(
-                request, currentUser.id(), eventId
+                request, currentUser.id(), userId
         );
         final UserResponse response = updateUserUseCase.execute(input);
         return ResponseEntity.ok(response);
     }
     
     @DeleteMapping("{userId}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<Void> deleteUser(
             @AuthenticationPrincipal AppUserPrincipal currentUser,
             @PathVariable UUID userId
     ) {
@@ -79,6 +83,18 @@ public class UserController {
                 currentUser.id(), userId
         );
         deleteUserUseCase.execute(request);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @PostMapping("/me/revoke-sessions/{userId}")
+    public ResponseEntity<Void> revokeMySessions(
+            @AuthenticationPrincipal AppUserPrincipal currentUser,
+            @PathVariable UUID userId
+    ) {
+        RevokeAllTokensRequest request = new RevokeAllTokensRequest(
+                currentUser.id(), userId
+        );
+        revokeAllTokensUseCase.execute(request);
         return ResponseEntity.noContent().build();
     }
 

@@ -172,6 +172,10 @@ public class AppUser {
         return this;
     }
     
+    public boolean canRevokeTokens(UUID targetId) {
+        return this.isAdmin() || this.id.equals(targetId);
+    }
+    
     public UUID getId() {
         return id;
     }
@@ -239,4 +243,6 @@ public class AppUser {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+   
 }

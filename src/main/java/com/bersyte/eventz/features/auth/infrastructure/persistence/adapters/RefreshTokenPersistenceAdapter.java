@@ -40,7 +40,7 @@ public class RefreshTokenPersistenceAdapter implements RefreshTokenRepository {
     }
     
     @Override
-    public void revokeAllSessions(UUID userId) {
+    public void revokeAllTokens(UUID userId) {
         tokenJpaRepository.deleteAllByUserId(userId);
     }
     

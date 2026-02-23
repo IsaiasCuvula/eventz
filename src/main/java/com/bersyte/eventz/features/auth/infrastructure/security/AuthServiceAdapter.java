@@ -4,7 +4,7 @@ import com.bersyte.eventz.features.auth.domain.exceptions.AuthException;
 import com.bersyte.eventz.features.auth.domain.exceptions.InvalidCredentialsException;
 import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.service.AuthService;
-import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.dtos.AppUserPrincipal;
 import com.bersyte.eventz.features.users.domain.exception.UserNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
