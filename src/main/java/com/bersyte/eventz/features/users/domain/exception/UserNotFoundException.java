@@ -1,7 +1,10 @@
 package com.bersyte.eventz.features.users.domain.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import com.bersyte.eventz.common.domain.exceptions.DomainException;
+import com.bersyte.eventz.common.domain.exceptions.ErrorCode;
+
+public class UserNotFoundException extends DomainException {
     public UserNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.USER_NOT_FOUND);
     }
 }

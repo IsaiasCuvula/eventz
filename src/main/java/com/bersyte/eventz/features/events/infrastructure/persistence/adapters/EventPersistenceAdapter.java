@@ -2,12 +2,14 @@ package com.bersyte.eventz.features.events.infrastructure.persistence.adapters;
 
 import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.common.domain.dtos.Pagination;
-import com.bersyte.eventz.common.domain.exceptions.BusinessException;
+import com.bersyte.eventz.common.domain.exceptions.ErrorCode;
+import com.bersyte.eventz.features.events.domain.exceptions.InvalidEventOperationException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 import com.bersyte.eventz.features.events.infrastructure.persistence.entities.EventEntity;
 import com.bersyte.eventz.features.events.infrastructure.persistence.mappers.EventEntityMapper;
 import com.bersyte.eventz.features.events.infrastructure.persistence.repositories.EventJpaRepository;
+import com.bersyte.eventz.features.registrations.domain.exceptions.EventAlreadyFullException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -94,7 +96,7 @@ public class EventPersistenceAdapter implements EventRepository {
     public void incrementParticipantCount(UUID eventId) {
        int updatedRows = eventJpaRepository.incrementParticipantCount(eventId);
        if (updatedRows == 0) {
-            throw new BusinessException("Event is full or does not exist");
+            throw new EventAlreadyFullException("Event is full");
        }
     }
     
@@ -102,7 +104,10 @@ public class EventPersistenceAdapter implements EventRepository {
     public void decrementParticipantCount(UUID eventId) {
         int updatedRows = eventJpaRepository.decrementParticipantCount(eventId);
         if (updatedRows == 0) {
-            throw new BusinessException("Could not decrement: Event not found or count already at zero");
+            throw new InvalidEventOperationException(
+                    "Cannot decrement participant count: it is already at zero.",
+                    ErrorCode.EVENT_COUNT_ALREADY_ZERO
+            );
         }
     }
     

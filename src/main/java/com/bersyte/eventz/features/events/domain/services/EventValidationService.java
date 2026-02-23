@@ -1,6 +1,6 @@
 package com.bersyte.eventz.features.events.domain.services;
 
-import com.bersyte.eventz.common.domain.exceptions.ResourceNotFoundException;
+import com.bersyte.eventz.features.events.domain.exceptions.EventNotFoundException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
 
@@ -15,7 +15,7 @@ public class EventValidationService {
     
     public Event getValidEventById(UUID eventId){
         return eventRepository.findEventById(eventId)
-                       .orElseThrow(()-> new ResourceNotFoundException("Event", eventId));
+                       .orElseThrow(()-> new EventNotFoundException(eventId));
         
     }
 }
