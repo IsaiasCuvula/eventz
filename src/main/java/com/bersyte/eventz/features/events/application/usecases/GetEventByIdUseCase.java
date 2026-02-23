@@ -22,7 +22,7 @@ public class GetEventByIdUseCase implements UseCase<EventByIdRequest, EventRespo
         
         Event event = eventRepository.findEventById(request.eventId())
                               .orElseThrow(
-                                      ()-> new EventNotFoundException("Event with id " + request.eventId() + " not found")
+                                      ()-> new EventNotFoundException(request.eventId())
                               );
         return eventMapper.toResponse(event);
     }

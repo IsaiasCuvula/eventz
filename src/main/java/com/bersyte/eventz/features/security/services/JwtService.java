@@ -1,5 +1,7 @@
-package com.bersyte.eventz.common.security;
+package com.bersyte.eventz.features.security.services;
 
+import com.bersyte.eventz.features.security.config.JwtConfiguration;
+import com.bersyte.eventz.features.security.exceptions.JwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
