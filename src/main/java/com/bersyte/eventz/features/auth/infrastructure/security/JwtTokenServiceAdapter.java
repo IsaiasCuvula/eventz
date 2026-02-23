@@ -1,7 +1,7 @@
 package com.bersyte.eventz.features.auth.infrastructure.security;
 
-import com.bersyte.eventz.features.security.JwtAuthenticationException;
-import com.bersyte.eventz.features.security.JwtService;
+import com.bersyte.eventz.features.security.exceptions.JwtAuthenticationException;
+import com.bersyte.eventz.features.security.services.JwtService;
 import com.bersyte.eventz.features.auth.domain.model.AuthUser;
 import com.bersyte.eventz.features.auth.domain.model.RefreshToken;
 import com.bersyte.eventz.features.auth.domain.model.TokenPair;

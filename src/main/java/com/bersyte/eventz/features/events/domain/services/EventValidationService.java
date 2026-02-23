@@ -15,7 +15,7 @@ public class EventValidationService {
     
     public Event getValidEventById(UUID eventId){
         return eventRepository.findEventById(eventId)
-                       .orElseThrow(()-> new EventNotFoundException("Event with id: " + eventId + " not found."));
+                       .orElseThrow(()-> new EventNotFoundException(eventId));
         
     }
 }

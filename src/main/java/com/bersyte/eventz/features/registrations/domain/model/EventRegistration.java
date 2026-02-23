@@ -1,8 +1,8 @@
 package com.bersyte.eventz.features.registrations.domain.model;
 
-import com.bersyte.eventz.common.domain.exceptions.BusinessException;
 import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
+import com.bersyte.eventz.features.registrations.domain.exceptions.InvalidRegistrationStateException;
 import com.bersyte.eventz.features.users.domain.model.AppUser;
 
 import java.time.LocalDateTime;
@@ -74,10 +74,10 @@ public class EventRegistration {
     
     public EventRegistration markAsUsed(AppUser staff, LocalDateTime checkedInAt){
         if (this.status == RegistrationStatus.CANCELLED) {
-            throw new BusinessException("Cannot check-in a cancelled ticket.");
+            throw new InvalidRegistrationStateException("Cannot check-in a cancelled ticket.");
         }
         if (this.status == RegistrationStatus.USED) {
-            throw new BusinessException("This ticket has already been used.");
+            throw new InvalidRegistrationStateException("This ticket has already been used.");
         }
         this.status = RegistrationStatus.USED;
         this.updatedAt = checkedInAt;
@@ -88,7 +88,7 @@ public class EventRegistration {
     
     public EventRegistration updateCheckInToken(String newCheckInToken, AppUser requester,LocalDateTime updatedAt) {
         if(!this.canCheckIn(requester) && !this.isTheUserItself(requester)){
-            throw new BusinessException("You don't have permission to update this token.");
+            throw new UnauthorizedException("You don't have permission to update this token.");
         }
         this.checkInToken = newCheckInToken;
         this.updatedAt =updatedAt;
@@ -101,10 +101,10 @@ public class EventRegistration {
         }
         
         if(this.status == RegistrationStatus.USED){
-            throw new BusinessException("Cannot cancel a ticket that has already been used.");
+            throw new InvalidRegistrationStateException("Cannot cancel a ticket that has already been used.");
         }
         if(this.status == RegistrationStatus.CANCELLED){
-            throw new BusinessException("Cannot cancel a ticket that has already been canceled.");
+            throw new InvalidRegistrationStateException("Cannot cancel a ticket that has already been canceled.");
         }
         this.status = RegistrationStatus.CANCELLED;
         this.updatedAt = now;

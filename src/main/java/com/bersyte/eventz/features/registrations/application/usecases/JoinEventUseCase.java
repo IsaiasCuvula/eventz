@@ -2,7 +2,6 @@ package com.bersyte.eventz.features.registrations.application.usecases;
 
 import com.bersyte.eventz.common.application.usecases.UseCase;
 import com.bersyte.eventz.common.domain.services.IdGenerator;
-import com.bersyte.eventz.common.domain.exceptions.BusinessException;
 import com.bersyte.eventz.common.domain.exceptions.UnauthorizedException;
 import com.bersyte.eventz.features.events.domain.model.Event;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
@@ -11,6 +10,7 @@ import com.bersyte.eventz.features.registrations.application.dtos.EventRegistrat
 import com.bersyte.eventz.features.registrations.application.dtos.TicketResponse;
 import com.bersyte.eventz.features.registrations.application.events.EventRegistrationEvent;
 import com.bersyte.eventz.features.registrations.application.mappers.EventRegistrationMapper;
+import com.bersyte.eventz.features.registrations.domain.exceptions.EventAlreadyFullException;
 import com.bersyte.eventz.features.registrations.domain.exceptions.EventRegistrationAlreadyExistsException;
 import com.bersyte.eventz.features.registrations.domain.model.EventRegistration;
 import com.bersyte.eventz.features.registrations.domain.repository.EventRegistrationRepository;
@@ -63,7 +63,7 @@ public class JoinEventUseCase implements UseCase<EventRegistrationRequest, Ticke
         Event event = eventValidationService.getValidEventById(eventId);
         
         if(!event.canAcceptMoreParticipants()){
-            throw new BusinessException("The event is already full");
+            throw new EventAlreadyFullException("The event is already full");
         }
        
         boolean registered = eventRegistrationRepository.alreadyRegistered(

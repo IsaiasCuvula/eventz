@@ -1,5 +1,6 @@
-package com.bersyte.eventz.features.security;
+package com.bersyte.eventz.features.security.config;
 
+import com.bersyte.eventz.features.security.services.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

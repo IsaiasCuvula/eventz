@@ -3,8 +3,8 @@ package com.bersyte.eventz.features.registrations.domain.exceptions;
 import com.bersyte.eventz.common.domain.exceptions.DomainException;
 import com.bersyte.eventz.common.domain.exceptions.ErrorCode;
 
-public class EventRegistrationNotFoundException extends DomainException {
-    public EventRegistrationNotFoundException(String message) {
-        super(message, ErrorCode.REGISTRATION_NOT_FOUND);
+public class EventAlreadyFullException extends DomainException {
+    public EventAlreadyFullException(String message) {
+        super(message, ErrorCode.EVENT_ALREADY_FULL);
     }
 }

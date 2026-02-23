@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.security;
+package com.bersyte.eventz.features.security.services;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

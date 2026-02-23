@@ -1,4 +1,4 @@
-package com.bersyte.eventz.features.security;
+package com.bersyte.eventz.features.security.config;
 
 import java.time.Duration;
 

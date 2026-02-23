@@ -4,6 +4,7 @@ import com.bersyte.eventz.common.domain.services.IdGenerator;
 import com.bersyte.eventz.features.events.application.mappers.EventMapper;
 import com.bersyte.eventz.features.events.application.usecases.*;
 import com.bersyte.eventz.features.events.domain.repository.EventRepository;
+import com.bersyte.eventz.features.events.domain.services.EventPublisher;
 import com.bersyte.eventz.features.events.domain.services.EventValidationService;
 import com.bersyte.eventz.features.users.domain.services.UserValidationService;
 import org.springframework.context.annotation.Bean;
@@ -31,10 +32,12 @@ public class EventBeanConfig {
             EventRepository repository,
             UserValidationService userValidationService,
             EventMapper mapper, IdGenerator idGenerator,
-            Clock clock
+            Clock clock,  EventPublisher eventPublisher
     ) {
         return new CreateEventUseCase(
-                repository, userValidationService, mapper, idGenerator, clock);
+                repository, userValidationService, mapper, idGenerator,
+                clock, eventPublisher
+        );
     }
     
     @Bean
@@ -93,10 +96,14 @@ public class EventBeanConfig {
     UpdateEventUseCase updateEventUseCase(
             EventRepository repository, EventMapper mapper,
             UserValidationService userValidationService,
-            EventValidationService eventValidationService
+            EventValidationService eventValidationService,
+            Clock clock,  EventPublisher eventPublisher
+                
     ){
-        return new UpdateEventUseCase(repository, mapper,
-                userValidationService, eventValidationService);
+        return new UpdateEventUseCase(
+                repository, mapper, userValidationService,
+                eventValidationService,clock, eventPublisher
+        );
     }
 
     @Bean
