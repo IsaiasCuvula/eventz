@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface RefreshTokenRepository {
     void deleteByTokenId(String tokenId);
     void saveToken(RefreshToken tokenId);
-    void revokeAllSessions(UUID userId);
+    void revokeAllTokens(UUID userId);
     Optional<RefreshToken> getTokenById(String tokenId);
 }

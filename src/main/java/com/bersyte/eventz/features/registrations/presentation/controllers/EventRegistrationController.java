@@ -2,7 +2,7 @@ package com.bersyte.eventz.features.registrations.presentation.controllers;
 
 import com.bersyte.eventz.common.domain.dtos.PagedResult;
 import com.bersyte.eventz.common.domain.dtos.Pagination;
-import com.bersyte.eventz.features.auth.infrastructure.persistence.AppUserPrincipal;
+import com.bersyte.eventz.features.auth.infrastructure.persistence.dtos.AppUserPrincipal;
 import com.bersyte.eventz.features.registrations.application.dtos.*;
 import com.bersyte.eventz.features.registrations.application.usecases.*;
 import org.springframework.http.HttpStatus;
