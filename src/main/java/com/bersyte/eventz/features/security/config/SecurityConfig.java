@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 .disable()
                                 .authorizeHttpRequests(
                                         auth -> auth
+                                                 .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                                                 .requestMatchers("/v1/auth/**")
                                                 .permitAll()
                                                 .anyRequest()
